@@ -1,0 +1,5 @@
+C:\JRICO\JRICO\bin\JRICO.dll
+C:\JRICO\JRICO\bin\JRICO.pdb
+C:\JRICO\JRICO\obj\Debug\ResolveAssemblyReference.cache
+C:\JRICO\JRICO\obj\Debug\JRICO.dll
+C:\JRICO\JRICO\obj\Debug\JRICO.pdb
