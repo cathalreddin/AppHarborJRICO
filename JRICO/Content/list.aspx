@@ -9,95 +9,59 @@
 <body>
     <form id="form1" runat="server">
     <div>
-        * <asp:TextBox ID="TextBox1" runat="server">        
-        </asp:TextBox> *
-        <asp:GridView ID="GridView1" runat="server">
+    Create New | Search 
+        <asp:DropDownList ID="DropDownList1" runat="server">
+            <asp:ListItem value="ContractReference">Contract Reference</asp:ListItem>
+            <asp:ListItem value="ContractTitle">Contract Title</asp:ListItem>
+            <asp:ListItem value="LinkedContractReference">Associated Ref</asp:ListItem>
+            <asp:ListItem value="RecordType">Record Type</asp:ListItem>
+            <asp:ListItem value="ContractSystemPriceList">System Price List</asp:ListItem>
+            <asp:ListItem value="ContactName">Name</asp:ListItem>
+            <asp:ListItem value="ContactEmail">Email</asp:ListItem>
+            <asp:ListItem value="ContactNo">Phone</asp:ListItem>
+            <asp:ListItem value="ContractStatus">Contract Status</asp:ListItem>
+            <asp:ListItem value="HospitalName">Hospital Name</asp:ListItem>
+        </asp:DropDownList> for
+        <asp:TextBox ID="TextSearch" runat="server"></asp:TextBox>
+        <asp:Button ID="Button1" runat="server" Text="Go" />
+        <asp:SqlDataSource ID="SqlDataSource1" runat="server" 
+            ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
+            SelectCommand="sp_getContractList" SelectCommandType="StoredProcedure">
+            <SelectParameters>
+                <asp:ControlParameter ControlID="DropDownList1" Name="Column" 
+                    PropertyName="SelectedValue" Type="String" DefaultValue="None" />
+                <asp:FormParameter FormField="TextSearch" Name="TextSearch" Type="String" DefaultValue="%" />
+            </SelectParameters>
+        </asp:SqlDataSource>
+        <asp:GridView ID="GridView1" runat="server" AllowSorting="True" 
+            AutoGenerateColumns="False" DataSourceID="SqlDataSource1">
+            <Columns>
+                <asp:BoundField DataField="Contract Reference" HeaderText="Contract Reference" 
+                    SortExpression="Contract Reference" />
+                <asp:BoundField DataField="Associated Ref" HeaderText="Associated Ref" 
+                    SortExpression="Associated Ref" />
+                <asp:BoundField DataField="Record Type" HeaderText="Record Type" 
+                    SortExpression="Record Type" />
+                <asp:BoundField DataField="System Price List" HeaderText="System Price List" 
+                    SortExpression="System Price List" />
+                <asp:BoundField DataField="Contract Title" HeaderText="Contract Title" 
+                    SortExpression="Contract Title" />
+                <asp:BoundField DataField="Name" HeaderText="Name" 
+                    SortExpression="Name" />
+                <asp:BoundField DataField="Email" HeaderText="Email" 
+                    SortExpression="Email" />
+                <asp:BoundField DataField="Phone" HeaderText="Phone" 
+                    SortExpression="Phone" />
+                <asp:BoundField DataField="Start Date" HeaderText="Start Date" 
+                    SortExpression="Start Date" />
+                <asp:BoundField DataField="End Date" HeaderText="End Date" 
+                    SortExpression="End Date" />
+                <asp:BoundField DataField="Submission Date" HeaderText="Submission Date" 
+                    SortExpression="Submission Date" />
+                <asp:BoundField DataField="Contract Status" HeaderText="Contract Status" 
+                    SortExpression="Contract Status" />
+            </Columns>
         </asp:GridView>
-   <%-- <table>
-        <tr>
-            <th> 
-                Contract Reference
-            </th>
-            <th>
-                Associated Ref 
-            </th>
-            <th>
-                Record Type
-            </th>
-            <th>
-                System Price List
-            </th>        
-            <th>
-                Contract Title
-            </th>
-            <th>
-                Name
-            </th>
-            <th>
-                Email
-            </th>
-            <th>
-                Phone
-            </th>
-            <th>
-                Start Date
-            </th>
-            <th>
-                End Date
-            </th>
-            <th>
-                Submission Date
-            </th>
-            <th>
-                Contract Status
-            </th>
-            <th></th>
-        </tr>
-
-        <tr>
-            <td>
-                ContractReference
-            </td>
-            <td>
-                LinkedContractReference
-            </td>
-            <td>
-                RecordType.Name
-            </td>
-            <td>
-                ContractSystemPriceList
-            </td>
-            <td>
-                ContractTitle
-            </td>
-            <td>
-                ContactName
-            </td>
-            <td>
-                ContactEmail
-            </td>
-            <td>
-                ContactNo
-            </td>
-            <td>
-                StartDate
-            </td>
-            <td>
-                EndDate
-            </td>
-            <td>
-                DateUploaded
-            </td>
-            <td>
-                ContractStatus.Name
-            </td>
-            <td>
-                @*@Html.ActionLink("Edit", "Edit", new { id=item.ContractID }) |*@
-                @Html.ActionLink("Details", "One", new { id=item.ContractID }) @*|
-                @Html.ActionLink("Delete", "Delete", new { id=item.ContractID })*@
-            </td>
-        </tr>
-    </table>--%>
     </div>
     </form>
 </body>

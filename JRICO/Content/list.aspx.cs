@@ -16,10 +16,8 @@ namespace JRICO.Content
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-           Database db = EnterpriseLibraryContainer.Current.GetInstance<Database>("SQLConnectionString");
-           DataSet ds = db.ExecuteDataSet(CommandType.StoredProcedure, "sp_getContractList");
-           GridView1.DataSource = ds.Tables[0];
-           GridView1.DataBind();            
+           
         }
+
     }
 }
