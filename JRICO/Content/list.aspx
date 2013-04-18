@@ -9,83 +9,87 @@
 <body>
     <form id="form1" runat="server">
     <div>
-    <table>
+        * <asp:TextBox ID="TextBox1" runat="server">        
+        </asp:TextBox> *
+        <asp:GridView ID="GridView1" runat="server">
+        </asp:GridView>
+   <%-- <table>
         <tr>
-            <th>
-                ContractReference
+            <th> 
+                Contract Reference
             </th>
             <th>
                 Associated Ref 
             </th>
             <th>
-                RecordType
+                Record Type
             </th>
             <th>
-                ContractSystemPriceList
+                System Price List
             </th>        
             <th>
-                ContractTitle
+                Contract Title
             </th>
             <th>
-                ContactName
+                Name
             </th>
             <th>
-                ContactEmail
+                Email
             </th>
             <th>
-                ContactNo
+                Phone
             </th>
             <th>
-                StartDate
+                Start Date
             </th>
             <th>
-                EndDate
+                End Date
             </th>
             <th>
-                DateUploaded
+                Submission Date
             </th>
             <th>
-                ContractStatus
+                Contract Status
             </th>
             <th></th>
         </tr>
 
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ContractReference)
+                ContractReference
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LinkedContractReference)
+                LinkedContractReference
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RecordType.Name)
+                RecordType.Name
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContractSystemPriceList)
+                ContractSystemPriceList
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContractTitle)
+                ContractTitle
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContactName)
+                ContactName
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContactEmail)
+                ContactEmail
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContactNo)
+                ContactNo
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
+                StartDate
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
+                EndDate
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DateUploaded)
+                DateUploaded
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ContractStatus.Name)
+                ContractStatus.Name
             </td>
             <td>
                 @*@Html.ActionLink("Edit", "Edit", new { id=item.ContractID }) |*@
@@ -93,7 +97,7 @@
                 @Html.ActionLink("Delete", "Delete", new { id=item.ContractID })*@
             </td>
         </tr>
-    </table>
+    </table>--%>
     </div>
     </form>
 </body>
