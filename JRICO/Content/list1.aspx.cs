@@ -45,6 +45,7 @@ namespace JRICO.Content
             e.Row.Cells[1].Visible = false;
             GridViewRow row = e.Row;
             List<TableCell> cells = new List<TableCell>();
+
             foreach (DataControlField column in GridView1.Columns)
             {
                 //Getting first Column of the Gridview
@@ -55,10 +56,23 @@ namespace JRICO.Content
 
                 //Adding that cell as the last cell in the gridview
                 cells.Add(cell);
+
             }
             // Add cells
-            row.Cells.AddRange(cells.ToArray()); 
-            
+            row.Cells.AddRange(cells.ToArray());
+
+            if (e.Row.Cells[9].Text.Length > 10)
+            {
+                e.Row.Cells[9].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Start Date")));
+            }
+            if (e.Row.Cells[10].Text.Length > 10)
+            {
+                e.Row.Cells[10].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "End Date")));
+            }
+            if (e.Row.Cells[11].Text.Length > 10)
+            {
+                e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
+            }
         }
 
         private void BindData(string column, string textSearch)

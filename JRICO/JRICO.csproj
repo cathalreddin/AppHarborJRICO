@@ -79,6 +79,7 @@
     <Content Include="Account\Register.aspx" />
     <Content Include="Content\list.aspx" />
     <Content Include="Content\list1.aspx" />
+    <Content Include="Content\list2.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -142,6 +143,13 @@
     </Compile>
     <Compile Include="Content\list1.aspx.designer.cs">
       <DependentUpon>list1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Content\list2.aspx.cs">
+      <DependentUpon>list2.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\list2.aspx.designer.cs">
+      <DependentUpon>list2.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
