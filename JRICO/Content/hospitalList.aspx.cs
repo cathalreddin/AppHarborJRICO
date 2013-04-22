@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 
 namespace JRICO.Content
 {
-    public partial class list1 : System.Web.UI.Page
+    public partial class hospitalList : System.Web.UI.Page
     {
         string _connStr = ConfigurationManager.ConnectionStrings["SQLConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)
@@ -18,28 +18,10 @@ namespace JRICO.Content
             if (!IsPostBack)
             {
                 BindData("none", " ");
-                Writelog("User_accessed_List_Page", "cathal");
+                Writelog("User_accessed_Hospital_List_Page", "cathal");
             }
         }
 
-        public void Writelog(string LogData, string LogUser) 
-        {
-            SqlConnection conn = new SqlConnection(_connStr);
-            try
-            {
-                conn.Open();
-                String MyString = @"INSERT INTO Log(LogData, LogUser) VALUES('"+LogData+"','"+LogUser+"')";
-                //String MyString = "INSERT INTO Log(LogData, LogUser, LogDate) VALUES( " + LogData + " ,1,1/1/1)";
-                SqlCommand MyCmd = new SqlCommand(MyString, conn);
-                MyCmd.ExecuteScalar();
-                conn.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-            
-        }
         protected void GridView_RowDataBound(object sender, GridViewRowEventArgs e)
         {
             e.Row.Cells[1].Visible = false;
@@ -61,33 +43,51 @@ namespace JRICO.Content
             // Add cells
             row.Cells.AddRange(cells.ToArray());
 
-            if (e.Row.Cells[9].Text.Length > 10)
-            {
-                e.Row.Cells[9].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Start Date")));
-            }
-            if (e.Row.Cells[10].Text.Length > 10)
-            {
-                e.Row.Cells[10].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "End Date")));
-            }
-            if (e.Row.Cells[11].Text.Length > 10)
-            {
-                e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
-            }
+            //if (e.Row.Cells[9].Text.Length > 10)
+            //{
+            //    e.Row.Cells[9].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Start Date")));
+            //}
+            //if (e.Row.Cells[10].Text.Length > 10)
+            //{
+            //    e.Row.Cells[10].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "End Date")));
+            //}
+            //if (e.Row.Cells[11].Text.Length > 10)
+            //{
+            //    e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
+            //}
         }
+        public void Writelog(string LogData, string LogUser)
+        {
+            SqlConnection conn = new SqlConnection(_connStr);
+            try
+            {
+                conn.Open();
+                String MyString = @"INSERT INTO Log(LogData, LogUser) VALUES('" + LogData + "','" + LogUser + "')";
+                //String MyString = "INSERT INTO Log(LogData, LogUser, LogDate) VALUES( " + LogData + " ,1,1/1/1)";
+                SqlCommand MyCmd = new SqlCommand(MyString, conn);
+                MyCmd.ExecuteScalar();
+                conn.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
 
+        }
         private void BindData(string column, string textSearch)
         {
             GridView1.DataSource = this.GetData(column, textSearch);
-            GridView1.DataBind();         
+            GridView1.DataBind();
         }
 
-          
+
         private DataTable GetData(string column, string textSearch)
         {
             DataTable table = new DataTable();
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
-                string sqlSP = "sp_getContractList";
+                string sqlSP = "sp_getHospitalList";
+
 
                 using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                 {
@@ -118,18 +118,18 @@ namespace JRICO.Content
                 sortDirection = SortDirection.Ascending;
                 direction = " ASC ";
             }
-            DataTable table = this.GetData(DropDownList1.SelectedValue, TextSearch.Text);
+            DataTable table = this.GetData("None", "");
             table.DefaultView.Sort = sortExpression + direction;
 
             GridView1.DataSource = table;
             GridView1.DataBind();
 
-            Writelog("User_Sorts_on_" + sortExpression + "_" + direction, "cathal");
+            Writelog("User_Sorts_Hospital_List_on_" + sortExpression + "_" + direction, "cathal");
         }
 
         public SortDirection sortDirection
         {
-            get 
+            get
             {
                 if (ViewState["SortDirection"] == null)
                 {
@@ -142,15 +142,5 @@ namespace JRICO.Content
                 ViewState["SortDirection"] = value;
             }
         }
-
-
-        protected void Button1_Click(object sender, EventArgs e)
-        {
-            BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            Writelog("User_Searched_on_dropdown_" + DropDownList1.SelectedValue + "_for_Text_" + TextSearch.Text, "cathal");
-  
-        }
-
-
     }
 }

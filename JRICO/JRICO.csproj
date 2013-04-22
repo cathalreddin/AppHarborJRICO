@@ -77,9 +77,9 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
-    <Content Include="Content\list.aspx" />
-    <Content Include="Content\list1.aspx" />
-    <Content Include="Content\list2.aspx" />
+    <Content Include="Content\contractlist.aspx" />
+    <Content Include="Content\hospitalList1.aspx" />
+    <Content Include="Content\hospitalList.aspx" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -130,26 +130,26 @@
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Content\list.aspx.cs">
-      <DependentUpon>list.aspx</DependentUpon>
+    <Compile Include="Content\contractlist.aspx.cs">
+      <DependentUpon>contractlist.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Content\list.aspx.designer.cs">
-      <DependentUpon>list.aspx</DependentUpon>
+    <Compile Include="Content\contractlist.aspx.designer.cs">
+      <DependentUpon>contractlist.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Content\list1.aspx.cs">
-      <DependentUpon>list1.aspx</DependentUpon>
+    <Compile Include="Content\hospitalList1.aspx.cs">
+      <DependentUpon>hospitalList1.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Content\list1.aspx.designer.cs">
-      <DependentUpon>list1.aspx</DependentUpon>
+    <Compile Include="Content\hospitalList1.aspx.designer.cs">
+      <DependentUpon>hospitalList1.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Content\list2.aspx.cs">
-      <DependentUpon>list2.aspx</DependentUpon>
+    <Compile Include="Content\hospitalList.aspx.cs">
+      <DependentUpon>hospitalList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Content\list2.aspx.designer.cs">
-      <DependentUpon>list2.aspx</DependentUpon>
+    <Compile Include="Content\hospitalList.aspx.designer.cs">
+      <DependentUpon>hospitalList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

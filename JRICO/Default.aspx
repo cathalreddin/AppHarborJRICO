@@ -8,7 +8,7 @@
         Welcome to ASP.NET!
     </h2>
     <p>
-        To learn more about ASP.NET visit <a href="/content/list1.aspx" title="the List">List Page</a>.
+        To learn more about ASP.NET visit <a href="/content/contractlist.aspx" title="the List">List Page</a>.
     </p>
     <p>
         with style <a href="/content/list2.aspx" title="the List">styles</a>.

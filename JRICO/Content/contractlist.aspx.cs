@@ -7,9 +7,14 @@ using System.Web.UI.WebControls;
 
 namespace JRICO.Content
 {
-    public partial class list2 : System.Web.UI.Page
+    public partial class contractlist : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
         {
 
         }
