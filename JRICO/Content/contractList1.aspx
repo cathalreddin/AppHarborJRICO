@@ -1,6 +1,5 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
-    CodeBehind="contractlist.aspx.cs" Inherits="JRICO.Content.contractlist" %>
-
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" 
+CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
@@ -30,11 +29,20 @@
             <asp:FormParameter FormField="TextSearch" Name="TextSearch" Type="String" DefaultValue="%" />
         </SelectParameters>
     </asp:SqlDataSource>--%>
+    <asp:SqlDataSource ID="sdsRecordType" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
+        SelectCommand="SELECT [RecordTypeID], [Name] FROM [RecordTypes]"></asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="sdsContractStatus" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
+        SelectCommand="SELECT [ContractStatusID], [Name] FROM [ContractStatus]"></asp:SqlDataSource>
+
+    <asp:SqlDataSource ID="sdsAssociatedRef" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
+        SelectCommand="SELECT [ContractReference] FROM [Contracts]"></asp:SqlDataSource>
+
     <asp:GridView ID="GridView1" runat="server" AllowSorting="True" OnSorting="SortRecords" AutoGenerateColumns="False"
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="ContractID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit"> 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel"> 
         <Columns>
             <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />                  
             <asp:TemplateField HeaderText="ContractID" Visible="false">
@@ -50,12 +58,17 @@
                     <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("[Contract Reference]") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("[Contract Reference]") %>'></asp:Label>
+                   <asp:HyperLink ID="HyperLink1" runat="server" NavigateUrl='<%# Eval("[ContractID]", "details.aspx?id={0}") %>' Text='<%# Eval("[Contract Reference]") %>'></asp:HyperLink>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Associated Ref" SortExpression="Associated Ref">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("[Associated Ref]") %>'></asp:TextBox>
+                    <asp:DropDownList ID="ddlAssociatedRef" runat="server"
+                    DataTextField="ContractReference" 
+                    DataValueField="ContractReference"
+                    DataSourceID="sdsAssociatedRef"
+                    SelectedValue='<%# Bind("[Associated Ref]") %>'>
+                    </asp:DropDownList>
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label2" runat="server" Text='<%# Bind("[Associated Ref]") %>'></asp:Label>
@@ -63,7 +76,12 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Record Type" SortExpression="Record Type">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox3" runat="server" Text='<%# Bind("[Record Type]") %>'></asp:TextBox>
+                    <asp:DropDownList ID="ddlRecordType" runat="server"
+                    DataTextField="Name" 
+                    DataValueField="RecordTypeID"
+                    DataSourceID="sdsRecordType"
+                    SelectedValue='<%# Bind("[RecordTypeID]") %>'>
+                    </asp:DropDownList>
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label3" runat="server" Text='<%# Bind("[Record Type]") %>'></asp:Label>
@@ -119,15 +137,15 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="End Date" SortExpression="End Date">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox10" runat="server" Text='<%# Bind("[End Date]") %>'></asp:TextBox>
-                </EditItemTemplate>
+                   <asp:TextBox ID="TextBox10" runat="server" Text='<%# Bind("[End Date]") %>'></asp:TextBox>
+                     </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label10" runat="server" Text='<%# Bind("[End Date]") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Submission Date" SortExpression="Submission Date">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox11" runat="server" Text='<%# Bind("[Submission Date]") %>'></asp:TextBox>
+                    <asp:TextBox ID="TextBox11" runat="server" Text='<%# Bind("[Submission Date]") %>' Visible="false"></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Submission Date]") %>'></asp:Label>
@@ -135,7 +153,12 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Contract Status" SortExpression="Contract Status">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox12" runat="server" Text='<%# Bind("[Contract Status]") %>'></asp:TextBox>
+                    <asp:DropDownList ID="ddlContractStatus" runat="server"
+                    DataTextField="Name" 
+                    DataValueField="ContractStatusID"
+                    DataSourceID="sdsContractStatus"
+                    SelectedValue='<%# Bind("[ContractStatusID]") %>'>
+                    </asp:DropDownList>
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label12" runat="server" Text='<%# Bind("[Contract Status]") %>'></asp:Label>
@@ -154,3 +177,4 @@
         <SortedDescendingHeaderStyle BackColor="#383838" />
     </asp:GridView>
 </asp:Content>
+
