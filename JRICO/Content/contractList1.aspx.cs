@@ -99,7 +99,7 @@ namespace JRICO.Content
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@ContractReference", SqlDbType.NVarChar).Value = ContractReference.Text;
-                        cmd.Parameters.Add("@AssociatedRef", SqlDbType.NVarChar).Value = AssociatedRef.Text;
+                        cmd.Parameters.Add("@AssociatedRef", SqlDbType.Int).Value = Convert.ToInt32(AssociatedRef.Text);
                         cmd.Parameters.Add("@RecordType", SqlDbType.Int).Value = Convert.ToInt32(RecordType.Text);
                         cmd.Parameters.Add("@SystemPriceList", SqlDbType.NVarChar).Value = SystemPriceList.Text;
                         cmd.Parameters.Add("@ContractTitle", SqlDbType.NVarChar).Value = ContractTitle.Text;
@@ -109,6 +109,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = Convert.ToDateTime(StartDate.Text);
                         cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = Convert.ToDateTime(EndDate.Text);
                         cmd.Parameters.Add("@ContractStatus", SqlDbType.Int).Value = Convert.ToInt32(ContractStatus.Text);
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal Re";
                         cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = Convert.ToInt32(ContractID);
                         conn.Open();
                         cmd.ExecuteNonQuery();
@@ -172,39 +173,39 @@ namespace JRICO.Content
             }
         }
 
-        protected void RowDataBound(object sender, GridViewRowEventArgs e)
-        {
-            e.Row.Cells[1].Visible = false;
-            GridViewRow row = e.Row;
-            List<TableCell> cells = new List<TableCell>();
+        //protected void RowDataBound(object sender, GridViewRowEventArgs e)
+        //{
+        //    e.Row.Cells[1].Visible = false;
+        //    GridViewRow row = e.Row;
+        //    List<TableCell> cells = new List<TableCell>();
 
-            foreach (DataControlField column in GridView1.Columns)
-            {
-                //Getting first Column of the Gridview
-                TableCell cell = row.Cells[0];
+        //    foreach (DataControlField column in GridView1.Columns)
+        //    {
+        //        //Getting first Column of the Gridview
+        //        TableCell cell = row.Cells[0];
 
-                //Remove that cell from the gridview
-                row.Cells.Remove(cell);
+        //        //Remove that cell from the gridview
+        //        row.Cells.Remove(cell);
 
-                //Adding that cell as the last cell in the gridview
-                cells.Add(cell);
+        //        //Adding that cell as the last cell in the gridview
+        //        cells.Add(cell);
 
-            }
-            // Add cells
-            row.Cells.AddRange(cells.ToArray());
+        //    }
+        //    // Add cells
+        //    row.Cells.AddRange(cells.ToArray());
 
-            if (e.Row.Cells[9].Text.Length > 10)
-            {
-                e.Row.Cells[9].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Start Date")));
-            }
-            if (e.Row.Cells[10].Text.Length > 10)
-            {
-                e.Row.Cells[10].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "End Date")));
-            }
-            if (e.Row.Cells[11].Text.Length > 10)
-            {
-                e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
-            }
-        }
+        //    if (e.Row.Cells[9].Text.Length > 10)
+        //    {
+        //        e.Row.Cells[9].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Start Date")));
+        //    }
+        //    if (e.Row.Cells[10].Text.Length > 10)
+        //    {
+        //        e.Row.Cells[10].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "End Date")));
+        //    }
+        //    if (e.Row.Cells[11].Text.Length > 10)
+        //    {
+        //        e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
+        //    }
+        //}
     }
 }

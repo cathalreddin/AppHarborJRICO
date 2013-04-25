@@ -77,6 +77,7 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="Content\addContract.aspx" />
     <Content Include="Content\contractlist.aspx" />
     <Content Include="Content\contractList1.aspx" />
     <Content Include="Content\hospitalList1.aspx" />
@@ -136,6 +137,13 @@
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
     <Compile Include="CodeArea\WriteToLog.cs" />
+    <Compile Include="Content\addContract.aspx.cs">
+      <DependentUpon>addContract.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\addContract.aspx.designer.cs">
+      <DependentUpon>addContract.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Content\contractlist.aspx.cs">
       <DependentUpon>contractlist.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -13,7 +13,7 @@
     <div class="page">
         <div class="header">
             <div class="site-title">
-                    JRI
+            JRI
             </div>
             <div class="loginDisplay">
                 <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">

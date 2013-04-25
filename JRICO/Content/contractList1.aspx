@@ -7,23 +7,33 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
     
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-    <a href="hospitalList1.aspx">Hospital Admin</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search
-    &nbsp;&nbsp;
-    <asp:DropDownList ID="DropDownList1" runat="server">
-        <asp:ListItem Value="ContractReference">Contract Reference</asp:ListItem>
-        <asp:ListItem Value="ContractTitle">Contract Title</asp:ListItem>
-        <asp:ListItem Value="LinkedContractReference">Associated Ref</asp:ListItem>
-        <asp:ListItem Value="RecordType">Record Type</asp:ListItem>
-        <asp:ListItem Value="ContractSystemPriceList">System Price List</asp:ListItem>
-        <asp:ListItem Value="ContactName">Name</asp:ListItem>
-        <asp:ListItem Value="ContactEmail">Email</asp:ListItem>
-        <asp:ListItem Value="ContactNo">Phone</asp:ListItem>
-        <asp:ListItem Value="ContractStatus">Contract Status</asp:ListItem>
-        <asp:ListItem Value="HospitalName">Hospital Name</asp:ListItem>
-    </asp:DropDownList>
-    &nbsp;&nbsp;for&nbsp;&nbsp;
-    <asp:TextBox ID="TextSearch" runat="server"></asp:TextBox>
-    <asp:Button ID="Button1" runat="server" Text="Go" OnClick="Button1_Click" />
+    <table border="0" width="100%">
+        <tr>
+            <td>
+                <a href="addContract.aspx">Add New Contract</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search &nbsp;&nbsp;
+                    <asp:DropDownList ID="DropDownList1" runat="server">
+                    <asp:ListItem Value="ContractReference">Contract Reference</asp:ListItem>
+                    <asp:ListItem Value="ContractTitle">Contract Title</asp:ListItem>
+                    <asp:ListItem Value="AssociatedContractReference">Associated Ref</asp:ListItem>
+                    <asp:ListItem Value="RecordType">Record Type</asp:ListItem>
+                    <asp:ListItem Value="ContractSystemPriceList">System Price List</asp:ListItem>
+                    <asp:ListItem Value="ContactName">Name</asp:ListItem>
+                    <asp:ListItem Value="ContactEmail">Email</asp:ListItem>
+                    <asp:ListItem Value="ContactNo">Phone</asp:ListItem>
+                    <asp:ListItem Value="ContractStatus">Contract Status</asp:ListItem>
+                    <asp:ListItem Value="HospitalName">Hospital Name</asp:ListItem>
+                </asp:DropDownList>
+                &nbsp;&nbsp;for&nbsp;&nbsp;
+                <asp:TextBox ID="TextSearch" runat="server"></asp:TextBox>
+                <asp:Button ID="Button1" runat="server" Text="Go" OnClick="Button1_Click" />
+           </td>
+           <td align="right">
+               <a href="hospitalList1.aspx">Hospital Admin</a>
+           </td>
+        </tr>
+
+    </table>
+    
     <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>"
         SelectCommand="sp_getContractList" SelectCommandType="StoredProcedure" UpdateCommand="sp_updateContractList"
         UpdateCommandType="StoredProcedure">
@@ -40,13 +50,13 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
         SelectCommand="SELECT [ContractStatusID], [Name] FROM [ContractStatus]"></asp:SqlDataSource>
 
     <asp:SqlDataSource ID="sdsAssociatedRef" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
-        SelectCommand="SELECT [ContractReference] FROM [Contracts]"></asp:SqlDataSource>
+        SelectCommand="SELECT [AssociatedContractReferenceID], [Name] FROM [AssociatedContractReference] ORDER BY [Name]"></asp:SqlDataSource>
 
     <asp:GridView ID="GridView1" runat="server" AllowSorting="True" OnSorting="SortRecords" AutoGenerateColumns="False"
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="ContractID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" onrowdatabound="RowDataBound"> 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel"> 
         <Columns>
             <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />                  
             <asp:TemplateField HeaderText="ContractID" Visible="false">
@@ -68,10 +78,10 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
             <asp:TemplateField HeaderText="Associated Ref" SortExpression="Associated Ref">
                 <EditItemTemplate>
                     <asp:DropDownList ID="ddlAssociatedRef" runat="server"
-                    DataTextField="ContractReference" 
-                    DataValueField="ContractReference"
+                    DataTextField="Name" 
+                    DataValueField="AssociatedContractReferenceID"
                     DataSourceID="sdsAssociatedRef"
-                    SelectedValue='<%# Bind("[Associated Ref]") %>'>
+                    SelectedValue='<%# Bind("[AssociatedContractReferenceID]") %>'>
                     </asp:DropDownList>
                 </EditItemTemplate>
                 <ItemTemplate>
