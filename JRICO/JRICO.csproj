@@ -80,8 +80,12 @@
     <Content Include="Content\addContract.aspx" />
     <Content Include="Content\contractlist.aspx" />
     <Content Include="Content\contractList1.aspx" />
+    <Content Include="Content\details.aspx" />
     <Content Include="Content\hospitalList.aspx" />
     <Content Include="Content\hospitalList1.aspx" />
+    <Content Include="Images\InitialImage.png" />
+    <Content Include="Images\SelectedButton.png" />
+    <Content Include="Content\SimpleTabControl.aspx" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.custom.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.custom.min.js" />
@@ -158,6 +162,13 @@
     <Compile Include="Content\contractList1.aspx.designer.cs">
       <DependentUpon>contractList1.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Content\details.aspx.cs">
+      <DependentUpon>details.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\details.aspx.designer.cs">
+      <DependentUpon>details.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Content\hospitalList.aspx.cs">
       <DependentUpon>hospitalList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -171,6 +182,13 @@
     </Compile>
     <Compile Include="Content\hospitalList1.aspx.designer.cs">
       <DependentUpon>hospitalList1.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Content\SimpleTabControl.aspx.cs">
+      <DependentUpon>SimpleTabControl.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\SimpleTabControl.aspx.designer.cs">
+      <DependentUpon>SimpleTabControl.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

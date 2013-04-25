@@ -30,10 +30,8 @@ namespace JRICO.Content
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
-            Response.Write("button pressed");
-            //BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            //writeToLog.WriteLog("Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
-
+            BindData(DropDownList1.SelectedValue, TextSearch.Text);
+            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
         }
 
         private DataTable GetData(string column, string textSearch)
@@ -132,8 +130,7 @@ namespace JRICO.Content
                 sortDirection = SortDirection.Ascending;
                 direction = " ASC ";
             }
-            //DataTable table = this.GetData(DropDownList1.SelectedValue, TextSearch.Text);
-            DataTable table = this.GetData("", "");
+            DataTable table = this.GetData(DropDownList1.SelectedValue, TextSearch.Text);
             table.DefaultView.Sort = sortExpression + direction;
 
             GridView1.DataSource = table;
