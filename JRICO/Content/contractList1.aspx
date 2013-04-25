@@ -28,7 +28,7 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
                 <asp:Button ID="Button1" runat="server" Text="Go" OnClick="Button1_Click" />
            </td>
            <td align="right">
-               <a href="hospitalList1.aspx">Hospital Admin</a>
+               <a href="hospitalList.aspx">Hospital Admin</a>
            </td>
         </tr>
 
@@ -56,7 +56,7 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="ContractID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel"> 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%"> 
         <Columns>
             <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />                  
             <asp:TemplateField HeaderText="ContractID" Visible="false">

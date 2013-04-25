@@ -64,8 +64,7 @@ namespace JRICO.Content
                 SqlDataSource1.UpdateParameters["AccountNumber"].DefaultValue = AccountNumber;
 
                 SqlDataSource1.UpdateParameters["HospitalID"].DefaultValue = HospitalID;
-
-                SqlDataSource1.UpdateParameters["DateUploaded"].DefaultValue = DateTime.Now.ToString();
+                
                 SqlDataSource1.UpdateParameters["User"].DefaultValue = "cathal reddin";
 
                 SqlDataSource1.Update();

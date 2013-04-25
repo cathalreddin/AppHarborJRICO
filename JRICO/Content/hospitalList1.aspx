@@ -8,16 +8,14 @@
     
     <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>"
         SelectCommand="SELECT DISTINCT [HospitalID], [HospitalName], [Address1], [Postcode], [AccountNumber], [DateUploaded], [UserID] FROM [Hospitals]"
-        UpdateCommand="UPDATE [hospitals] Set [HospitalName] = @HospitalName, [Address1] = @Address1, [Postcode] = @Postcode, [AccountNumber] = @AccountNumber, [DateUploaded] = @DateUploaded, [UserID] = @User Where [HospitalID] = @HospitalID"
+        UpdateCommand="sp_updateHospitalList" UpdateCommandType="StoredProcedure"
         InsertCommand="INSERT INTO [hospitals] ([HospitalName], [Address1], [Postcode], [AccountNumber], [DateUploaded], [UserID]) VALUES (@HospitalName, @Address1, @Postcode, @AccountNumber, @DateUploaded, @User)">
         <UpdateParameters>
             <asp:Parameter Type="String" Name="HospitalName"></asp:Parameter>
             <asp:Parameter Type="String" Name="Address1"></asp:Parameter>
             <asp:Parameter Type="String" Name="Postcode"></asp:Parameter>
             <asp:Parameter Type="String" Name="AccountNumber"></asp:Parameter>
-            <asp:Parameter Type="DateTime" Name="DateUploaded"></asp:Parameter>
             <asp:Parameter Type="String" Name="User"></asp:Parameter>
-            <asp:Parameter Type="Int32" Name="HospitalID"></asp:Parameter>
         </UpdateParameters>
 
         <InsertParameters>
@@ -148,7 +146,7 @@
 
 <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="UserID" SortExpression="UserID" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
+            <asp:TemplateField HeaderText="Uploaded By" SortExpression="Uploaded By" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
                 <EditItemTemplate>
                     <asp:Label ID="lblEditUser" runat="server" Text='<%# Bind("UserID") %>'></asp:Label>
                 </EditItemTemplate>

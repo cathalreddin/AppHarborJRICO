@@ -8,8 +8,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using JRICO.CodeArea;
-using System.Globalization;
-using System.Threading;
 
 
 namespace JRICO.Content
@@ -20,10 +18,6 @@ namespace JRICO.Content
         WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
-            //const string culture = "en-GB";
-            //CultureInfo ci = CultureInfo.GetCultureInfo(culture);
-            //Thread.CurrentThread.CurrentCulture = ci;
-
             if (!IsPostBack)
             {
                 BindData("none", " ");
