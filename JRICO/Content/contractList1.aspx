@@ -1,6 +1,10 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" 
 CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+    <script src="../Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="../Scripts/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
+    <link href="../Styles/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <a href="hospitalList1.aspx">Hospital Admin</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search
@@ -32,7 +36,7 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
     <asp:SqlDataSource ID="sdsRecordType" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
         SelectCommand="SELECT [RecordTypeID], [Name] FROM [RecordTypes]"></asp:SqlDataSource>
 
-    <asp:SqlDataSource ID="sdsContractStatus" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
+     <asp:SqlDataSource ID="sdsContractStatus" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
         SelectCommand="SELECT [ContractStatusID], [Name] FROM [ContractStatus]"></asp:SqlDataSource>
 
     <asp:SqlDataSource ID="sdsAssociatedRef" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>" 
@@ -42,7 +46,7 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="ContractID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel"> 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" onrowdatabound="RowDataBound"> 
         <Columns>
             <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />                  
             <asp:TemplateField HeaderText="ContractID" Visible="false">
@@ -129,26 +133,26 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Start Date" SortExpression="Start Date">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox9" runat="server" Text='<%# Bind("[Start Date]") %>'></asp:TextBox>
+                  <asp:TextBox ID="TextBox9" runat="server" Text='<%# Bind("[Start Date]", "{0:dd/MM/yyyy}") %>' CssClass="datepickersd"></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label9" runat="server" Text='<%# Bind("[Start Date]") %>'></asp:Label>
+                    <asp:Label ID="Label9" runat="server" Text='<%# Bind("[Start Date]", "{0:dd/MM/yyyy}") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="End Date" SortExpression="End Date">
                 <EditItemTemplate>
-                   <asp:TextBox ID="TextBox10" runat="server" Text='<%# Bind("[End Date]") %>'></asp:TextBox>
-                     </EditItemTemplate>
+                   <asp:TextBox ID="TextBox10" runat="server" Text='<%# Bind("[End Date]", "{0:dd/MM/yyyy}") %>' CssClass="datepickered"></asp:TextBox>
+                </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label10" runat="server" Text='<%# Bind("[End Date]") %>'></asp:Label>
+                    <asp:Label ID="Label10" runat="server" Text='<%# Bind("[End Date]", "{0:dd/MM/yyyy}") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Submission Date" SortExpression="Submission Date">
                 <EditItemTemplate>
-                    <asp:TextBox ID="TextBox11" runat="server" Text='<%# Bind("[Submission Date]") %>' Visible="false"></asp:TextBox>
+                    <asp:TextBox ID="TextBox11" runat="server" Text='<%# Bind("[Submission Date]", "{0:dd/MM/yyyy}") %>' Visible="false"></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Submission Date]") %>'></asp:Label>
+                    <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Submission Date]", "{0:dd/MM/yyyy}") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Contract Status" SortExpression="Contract Status">
@@ -176,5 +180,17 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
         <SortedDescendingCellStyle BackColor="#CAC9C9" />
         <SortedDescendingHeaderStyle BackColor="#383838" />
     </asp:GridView>
+
+    <script language="javascript" type="text/javascript">
+        $(function () {
+            $(".datepickered").datepicker({ dateFormat: 'dd/mm/yy' }); ;
+        });
+
+        $(function () {
+            $(".datepickersd").datepicker({ dateFormat: 'dd/mm/yy' }); ;
+        });
+    </script>
+   
 </asp:Content>
+
 

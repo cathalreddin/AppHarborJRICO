@@ -13,5 +13,10 @@ namespace JRICO.Account
         {
             RegisterHyperLink.NavigateUrl = "Register.aspx?ReturnUrl=" + HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
         }
+
+        protected void LoginButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -7,25 +7,28 @@ using System.Web.UI.WebControls;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using JRICO.CodeArea;
+
 
 namespace JRICO.Content
 {
     public partial class contractList1 : System.Web.UI.Page
     {
         string _connStr = ConfigurationManager.ConnectionStrings["SQLConnectionString"].ConnectionString;
+        WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 BindData("none", " ");
-                //Writelog("User_accessed_List_Page", "cathal");
+                writeToLog.WriteLog("List populated on first page", "cathal");
             }
         }
 
         protected void Button1_Click(object sender, EventArgs e)
         {
             BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            //Writelog("User_Searched_on_dropdown_" + DropDownList1.SelectedValue + "_for_Text_" + TextSearch.Text, "cathal");
+            writeToLog.WriteLog("Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
         }
         private void BindData(string column, string textSearch)
         {
@@ -59,11 +62,13 @@ namespace JRICO.Content
         {
             GridView1.EditIndex = e.NewEditIndex;
             BindData("none", " ");
+            writeToLog.WriteLog("Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
         }
         protected void RowEditCancel(object sender, GridViewCancelEditEventArgs e)
         {
             GridView1.EditIndex = -1; // reseting grid view
-            BindData("none", " ");
+            BindData("none", " "); 
+            writeToLog.WriteLog("Row cancelled for edit", "cathal");      
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)
         {
@@ -107,9 +112,15 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = Convert.ToInt32(ContractID);
                         conn.Open();
                         cmd.ExecuteNonQuery();
+                        string query = "sp_updateContractList:";
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
                         GridView1.EditIndex = -1;
                         BindData("none", " ");
                         conn.Close();
+                        writeToLog.WriteLog("Row updated with SP : " + query, "cathal");
                     }
                 }
             }
@@ -121,12 +132,6 @@ namespace JRICO.Content
         }
 
 
-
-        //protected void RowCancelEdit(object sender, GridViewCancelEditEventArgs e)
-        //{
-        //    GridView1.EditIndex = -1;
-        //    BindData("none", " "); 
-        //} 
 
         protected void SortRecords(object sender, GridViewSortEventArgs e)
         {
@@ -148,7 +153,7 @@ namespace JRICO.Content
             GridView1.DataSource = table;
             GridView1.DataBind();
 
-            //Writelog("User_Sorts_on_" + sortExpression + "_" + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
         }
 
         public SortDirection sortDirection
@@ -167,6 +172,39 @@ namespace JRICO.Content
             }
         }
 
+        protected void RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            e.Row.Cells[1].Visible = false;
+            GridViewRow row = e.Row;
+            List<TableCell> cells = new List<TableCell>();
 
+            foreach (DataControlField column in GridView1.Columns)
+            {
+                //Getting first Column of the Gridview
+                TableCell cell = row.Cells[0];
+
+                //Remove that cell from the gridview
+                row.Cells.Remove(cell);
+
+                //Adding that cell as the last cell in the gridview
+                cells.Add(cell);
+
+            }
+            // Add cells
+            row.Cells.AddRange(cells.ToArray());
+
+            if (e.Row.Cells[9].Text.Length > 10)
+            {
+                e.Row.Cells[9].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Start Date")));
+            }
+            if (e.Row.Cells[10].Text.Length > 10)
+            {
+                e.Row.Cells[10].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "End Date")));
+            }
+            if (e.Row.Cells[11].Text.Length > 10)
+            {
+                e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
+            }
+        }
     }
 }

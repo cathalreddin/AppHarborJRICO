@@ -7,18 +7,20 @@ using System.Web.UI.WebControls;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using JRICO.CodeArea;
 
 namespace JRICO.Content
 {
     public partial class hospitalList : System.Web.UI.Page
     {
         string _connStr = ConfigurationManager.ConnectionStrings["SQLConnectionString"].ConnectionString;
+        WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
                 BindData("none", " ");
-                Writelog("User_accessed_Hospital_List_Page", "cathal");
+                writeToLog.WriteLog("Hospital List populated", "cathal");
             }
         }
 
@@ -55,24 +57,6 @@ namespace JRICO.Content
             //{
             //    e.Row.Cells[11].Text = string.Format("{0:d}", Convert.ToDateTime(DataBinder.Eval(e.Row.DataItem, "Submission Date")));
             //}
-        }
-        public void Writelog(string LogData, string LogUser)
-        {
-            SqlConnection conn = new SqlConnection(_connStr);
-            try
-            {
-                conn.Open();
-                String MyString = @"INSERT INTO Log(LogData, LogUser) VALUES('" + LogData + "','" + LogUser + "')";
-                //String MyString = "INSERT INTO Log(LogData, LogUser, LogDate) VALUES( " + LogData + " ,1,1/1/1)";
-                SqlCommand MyCmd = new SqlCommand(MyString, conn);
-                MyCmd.ExecuteScalar();
-                conn.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
-
         }
         private void BindData(string column, string textSearch)
         {
@@ -124,7 +108,7 @@ namespace JRICO.Content
             GridView1.DataSource = table;
             GridView1.DataBind();
 
-            Writelog("User_Sorts_Hospital_List_on_" + sortExpression + "_" + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
         }
 
         public SortDirection sortDirection

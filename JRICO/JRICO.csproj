@@ -81,6 +81,10 @@
     <Content Include="Content\contractList1.aspx" />
     <Content Include="Content\hospitalList1.aspx" />
     <Content Include="Content\hospitalList.aspx" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-ui-1.10.2.custom.js" />
+    <Content Include="Scripts\jquery-ui-1.10.2.custom.min.js" />
+    <Content Include="Styles\jquery-ui-1.10.2.custom.css" />
     <Content Include="Styles\Site.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
@@ -131,6 +135,7 @@
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CodeArea\WriteToLog.cs" />
     <Compile Include="Content\contractlist.aspx.cs">
       <DependentUpon>contractlist.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

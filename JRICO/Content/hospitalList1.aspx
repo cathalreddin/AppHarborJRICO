@@ -17,6 +17,7 @@
             <asp:Parameter Type="String" Name="AccountNumber"></asp:Parameter>
             <asp:Parameter Type="DateTime" Name="DateUploaded"></asp:Parameter>
             <asp:Parameter Type="String" Name="User"></asp:Parameter>
+            <asp:Parameter Type="Int32" Name="HospitalID"></asp:Parameter>
         </UpdateParameters>
 
         <InsertParameters>
@@ -33,7 +34,7 @@
         DataSourceID="SqlDataSource1" ShowFooter="True" DataKeyNames="HospitalID" BackColor="White" BorderColor="#999999" 
          BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical"
          AlternatingRowStyles-CssClass="alt" CssClass="mGrid"  
-    PagerStyle-CssClass="pgr" ForeColor="Black">
+    PagerStyle-CssClass="pgr" ForeColor="Black" OnRowUpdating="RowUpdate">
 
         <Columns>
             <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle" ItemStyle-Wrap="false">
@@ -50,13 +51,15 @@
                 <footertemplate>
                     <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_Click">Insert</asp:LinkButton>
                 </footertemplate>
+
+               <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="HospitalID" SortExpression="HospitalID" Visible="false">
                 <EditItemTemplate>
-                    <asp:label ID="LblHospitalID" runat="server" Text='<%# Eval("HospitalID") %>'></asp:Label>
+                    <asp:TextBox ID="txtHospitalID" runat="server" Text='<%# Eval("HospitalID") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="LblHospitalID" runat="server" Text='<%# Bind("HospitalID") %>'></asp:Label>
+                    <asp:TextBox ID="txtHospitalID" runat="server" Text='<%# Bind("HospitalID") %>'></asp:TextBox>
                 </ItemTemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="HospitalName" SortExpression="HospitalName" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
@@ -75,6 +78,8 @@
                         ControlToValidate="txtHospitalName" Text="*" ForeColor="Red">
                     </asp:RequiredFieldValidator>
                 </FooterTemplate>
+
+<ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Address1" SortExpression="Address1" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
                 <EditItemTemplate>
@@ -92,6 +97,8 @@
                         ControlToValidate="txtAddress1" Text="*" ForeColor="Red">
                     </asp:RequiredFieldValidator>
                 </FooterTemplate>
+
+<ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Postcode" SortExpression="Postcode" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
                 <EditItemTemplate>
@@ -109,6 +116,8 @@
                         ControlToValidate="txtPostcode" Text="*" ForeColor="Red">
                     </asp:RequiredFieldValidator>
                 </FooterTemplate>
+
+<ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="AccountNumber" SortExpression="AccountNumber" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
                 <EditItemTemplate>
@@ -126,14 +135,18 @@
                         ControlToValidate="txtAccountNumber" Text="*" ForeColor="Red">
                     </asp:RequiredFieldValidator>
                 </FooterTemplate>
+
+<ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="DateUploaded" SortExpression="DateUploaded" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
                 <EditItemTemplate>
-                    <asp:Label ID="lblEditDateUploaded" runat="server" Text='<%# Bind("DateUploaded") %>'></asp:Label>
+                    <asp:Label ID="lblEditDateUploaded" runat="server" Text='<%# Bind("[DateUploaded]", "{0:dd/MM/yyyy}") %>' Visible="false"></asp:Label>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label5" runat="server" Text='<%# Bind("DateUploaded") %>'></asp:Label>
+                    <asp:Label ID="Label5" runat="server" Text='<%# Bind("[DateUploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label>
                 </ItemTemplate>
+
+<ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="UserID" SortExpression="UserID" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle">
                 <EditItemTemplate>
@@ -142,6 +155,8 @@
                 <ItemTemplate>
                     <asp:Label ID="Label6" runat="server" Text='<%# Bind("UserID") %>'></asp:Label>
                 </ItemTemplate>
+
+<ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
         </Columns>
             <AlternatingRowStyle BackColor="#e2e2e2" />
