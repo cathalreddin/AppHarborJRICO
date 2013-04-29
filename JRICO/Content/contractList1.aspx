@@ -3,8 +3,7 @@ CodeBehind="contractList1.aspx.cs" Inherits="JRICO.Content.contractList1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
     <script src="../Scripts/jquery-1.9.1.js" type="text/javascript"></script>
     <script src="../Scripts/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
-    <link href="../Styles/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />
-    
+    <link href="../Styles/jquery-ui-1.10.2.custom.css" rel="stylesheet" type="text/css" />    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <table border="0" width="100%">
