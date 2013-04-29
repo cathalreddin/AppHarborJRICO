@@ -7,7 +7,7 @@
           <td>
               <a href="contractList1.aspx">Contract List</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search &nbsp;&nbsp;
                     <asp:DropDownList ID="DropDownList1" runat="server">
-                    <asp:ListItem Value="Hospital Name">Hospital Name</asp:ListItem>
+                    <asp:ListItem Value="HospitalName">Hospital Name</asp:ListItem>
                     <asp:ListItem Value="Address1">Address</asp:ListItem>
                     <asp:ListItem Value="Postcode">Postcode</asp:ListItem>
                     <asp:ListItem Value="AccountNumber">Account Number</asp:ListItem>
@@ -130,4 +130,6 @@
         <SortedDescendingCellStyle BackColor="#CAC9C9" />
         <SortedDescendingHeaderStyle BackColor="#383838" />
     </asp:GridView>
+    <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="insert" runat="server" ForeColor="Red" />
+    <asp:ValidationSummary ID="ValidationSummary2" runat="server" ForeColor="Red" />
 </asp:Content>
