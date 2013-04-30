@@ -18,3 +18,6 @@ C:\JRICO\JRICO\bin\Microsoft.Practices.Unity.Interception.Configuration.xml
 C:\JRICO\JRICO\obj\Debug\ResolveAssemblyReference.cache
 C:\JRICO\JRICO\obj\Debug\JRICO.dll
 C:\JRICO\JRICO\obj\Debug\JRICO.pdb
+C:\JRICO\JRICO\bin\RestSharp.dll
+C:\JRICO\JRICO\bin\SendGridMail.dll
+C:\JRICO\JRICO\bin\RestSharp.xml

@@ -8,6 +8,11 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using JRICO.CodeArea;
+using SendGridMail;
+using SendGridMail.Transport;
+using System.Net.Mail;
+using System.Net;
+using RestSharp;
 
 namespace JRICO.Content
 {
@@ -18,7 +23,7 @@ namespace JRICO.Content
         int id = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
-            id = Convert.ToInt32(Request.QueryString["id"]); 
+            id = Convert.ToInt32(Request.QueryString["id"]);
             if (!IsPostBack)
             {
                 Tab1.CssClass = "Clicked";
@@ -26,7 +31,7 @@ namespace JRICO.Content
                 if (id != 0)
                 {
                     getSingleContract(id);
-                    BindDataPrice(id, "none", " "); 
+                    BindDataPrice(id, "none", " ");
                     BindDataAccountNumber(id, "none", " ");
                     BindDataNote(id);
                     EmailViewData();
@@ -88,9 +93,9 @@ namespace JRICO.Content
             { // Retrieve the row being edited.                
                 using (SqlConnection conn = new SqlConnection(_connStr))
                 {
+                    string sqlSP = "sp_updateEmail";
                     if (lblEmailID.Text != "")
                     {
-                        string sqlSP = "sp_updateEmail";
                         using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
@@ -115,7 +120,7 @@ namespace JRICO.Content
                     }
                     else
                     {
-                        string sqlSP = "sp_insertEmail";
+                        sqlSP = "sp_insertEmail";
                         using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                         {
                             cmd.CommandType = CommandType.StoredProcedure;
@@ -138,6 +143,8 @@ namespace JRICO.Content
                             writeToLog.WriteLog("Insert Email Row with SP : " + query, "cathal");
                         }
                     }
+                    string result = SendEmailToCathal(txtEmailTo.Text, txtEmailSubject.Text, sqlSP + ": " + txtEmailContent.Text, Convert.ToDateTime(txtEmailDate.Text), id);
+                    Response.Write("result: "+result);
                 }
             }
             catch (Exception ex)
@@ -145,10 +152,43 @@ namespace JRICO.Content
                 Response.Write(ex.Message);
             }
         }
+        //Send Email when Email Details Updated or Inserted
+        public string SendEmailToCathal(string EmailTo, string EmailSubject, string EmailContent, DateTime SendDate, int ContractID = 0)
+        {
+            string result;
+            try
+            {
+                // Create the email object first, then add the properties.
+                SendGrid myMessage = SendGrid.GetInstance();
+                List<String> EmailToInList = new List<String>(EmailTo.Split(';'));
+                myMessage.AddTo(EmailToInList);
+                myMessage.AddBcc("cathal.reddin@gmail.com");
+                myMessage.From = new MailAddress("cathal.reddin@bt.com", "cathal");
+                myMessage.Subject = EmailSubject;
+                myMessage.Text = EmailContent;
+
+                var credentials = new NetworkCredential("4cad11dc-27e7-4d92-8b48-b5335424d368@apphb.com", "htmy0jzx");
+
+                // Create an SMTP transport for sending email.
+                var transportSMTP = SMTP.GetInstance(credentials);
+
+                // Send the email.
+                transportSMTP.Deliver(myMessage);
+                result = "Email Sent";
+            }
+            catch (Exception ex)
+            {
+                result = "Error: " + ex.Message;
+                result = "<br />: " + ex.InnerException;                
+                return result;
+            }
+            return result;
+        }
+
         protected void lbCancel_Email(object sender, EventArgs e)
         {
-            getEmailDetails(id); 
-            EmailViewData();   
+            getEmailDetails(id);
+            EmailViewData();
         }
         protected void getEmailDetails(int ContractID)
         {
@@ -208,7 +248,7 @@ namespace JRICO.Content
         }
         private void BindDataNote(int contractID)
         {
-            GridView3.DataSource = this.GetDataNote(contractID);           
+            GridView3.DataSource = this.GetDataNote(contractID);
             GridView3.DataBind();
             //if (GridView3.Rows.Count == 0)
             //{
@@ -240,7 +280,7 @@ namespace JRICO.Content
 
             return table;
         }
-        
+
         protected void SortRecordsNote(object sender, GridViewSortEventArgs e)
         {
             string sortExpressionNote = e.SortExpression;
@@ -321,7 +361,7 @@ namespace JRICO.Content
         }
         private void BindDataAccountNumber(int contractID, string column, string textSearch)
         {
-            GridView5.DataSource = this.GetDataAccountNumber(contractID ,column, textSearch);
+            GridView5.DataSource = this.GetDataAccountNumber(contractID, column, textSearch);
             GridView5.DataBind();
         }
         private DataTable GetDataAccountNumber(int contractID, string column, string textSearch)
@@ -489,7 +529,7 @@ namespace JRICO.Content
             GridView4.DataBind();
         }
 
-        private DataTable GetData(int contractID ,string column, string textSearch)
+        private DataTable GetData(int contractID, string column, string textSearch)
         {
             DataTable table = new DataTable();
             using (SqlConnection conn = new SqlConnection(_connStr))
@@ -514,13 +554,13 @@ namespace JRICO.Content
         protected void RowEditPrice(object sender, GridViewEditEventArgs e)
         {
             GridView4.EditIndex = e.NewEditIndex;
-            BindDataPrice(id,"none", " ");
+            BindDataPrice(id, "none", " ");
             //writeToLog.WriteLog("Hospital Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
         }
         protected void RowEditCancelPrice(object sender, GridViewCancelEditEventArgs e)
         {
             GridView4.EditIndex = -1; // reseting grid view
-            BindDataPrice(id,"none", " ");
+            BindDataPrice(id, "none", " ");
             //writeToLog.WriteLog("Hospital Row cancelled for edit", "cathal");
         }
 
@@ -632,7 +672,7 @@ namespace JRICO.Content
                         query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                     }
                     GridView4.EditIndex = -1;
-                    BindDataPrice(id,"none", " ");
+                    BindDataPrice(id, "none", " ");
                     conn.Close();
                     //writeToLog.WriteLog("Hospital Row inserted with SP : " + query, "cathal");
                 }
@@ -640,7 +680,7 @@ namespace JRICO.Content
             //writeToLog.WriteLog("Hospital Row Inserted : " + query, "cathal insert");
         }
         // *** END OF TAB 4 ***
-       
+
 
         protected void Tab1_Click(object sender, EventArgs e)
         {
