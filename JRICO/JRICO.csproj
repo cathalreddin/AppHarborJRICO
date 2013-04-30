@@ -148,6 +148,7 @@
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CodeArea\Email.cs" />
     <Compile Include="CodeArea\WriteToLog.cs" />
     <Compile Include="Content\addContract.aspx.cs">
       <DependentUpon>addContract.aspx</DependentUpon>

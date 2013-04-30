@@ -22,6 +22,8 @@ namespace JRICO.Content
             {
                 BindData("none", " ");
                 writeToLog.WriteLog("List populated on first page", "cathal");
+                Email sendEmail = new Email();
+                string result = sendEmail.SendEmail("cathal.reddin@bt.com", "test2", "test3", 1);                    
             }
         }
 

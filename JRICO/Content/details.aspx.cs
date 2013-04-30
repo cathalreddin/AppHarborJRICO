@@ -12,7 +12,6 @@ using SendGridMail;
 using SendGridMail.Transport;
 using System.Net.Mail;
 using System.Net;
-using RestSharp;
 
 namespace JRICO.Content
 {
