@@ -22,8 +22,76 @@ namespace JRICO.Content
             {
                 BindData("none", " ");
                 writeToLog.WriteLog("List populated on first page", "cathal");
-                Email sendEmail = new Email();
-                string result = sendEmail.SendEmail("cathal.reddin@bt.com", "test2", "test3", 1);                    
+                CheckForEmailTriggers();
+                
+            }
+        }
+        protected void CheckForEmailTriggers()
+        {       
+            Email newEmail = new Email();
+            //loop through sending emails
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                string sqlSP = "sp_getListEmailsToSendNow";
+                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    try
+                    {
+                        conn.Open();
+                        SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                        while (dr.Read())
+                        {
+                            //Send Email                            
+                            int EmailID = Convert.ToInt32(dr["EmailID"]);
+                            string emailTo = dr["EmailTo"].ToString();
+                            string EmailFrom = dr["EmailFrom"].ToString();
+                            string EmailSubject = dr["EmailSubject"].ToString();
+                            string EmailContent = dr["EmailContent"].ToString();
+                            int ContractID = Convert.ToInt32(dr["ContractID"]);
+                            string result = newEmail.SendEmail(emailTo, EmailSubject, EmailContent, ContractID);
+
+                            using (SqlConnection connEmail = new SqlConnection(_connStr))
+                            {
+                                using (SqlCommand cmdEmail = new SqlCommand("sp_updateTriggerEmailSent", connEmail))
+                                {
+                                    try
+                                    {//Update Sent Status
+                                        cmdEmail.CommandType = CommandType.StoredProcedure;
+                                        cmdEmail.Parameters.Add("@EmailID", SqlDbType.Int).Value = Convert.ToInt32(EmailID);
+                                        cmdEmail.Parameters.Add("@SentMessage", SqlDbType.NVarChar).Value = result;
+                                        connEmail.Open();
+                                        cmdEmail.ExecuteNonQuery();
+                                        connEmail.Close();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Response.Write(ex.Message);
+                                    }
+                                    finally
+                                    {
+                                        // Close data reader object and database connection
+                                        if (connEmail != null)
+                                            connEmail.Close();
+                                    }
+                                }
+                            }
+                            //Write to Log
+                            writeToLog.WriteLog("Trigger Email attempted for EmailID:" + EmailID + " - result : " + result, "cathal");
+                            
+                       }
+                    }
+                    catch (Exception ex)
+                    {
+                        Response.Write(ex.Message);
+                    }
+                    finally
+                    {
+                        // Close data reader object and database connection
+                        if (conn != null)
+                            conn.Close(); 
+                    }
+                }
             }
         }
 

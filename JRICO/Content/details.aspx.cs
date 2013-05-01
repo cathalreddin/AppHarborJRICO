@@ -326,6 +326,7 @@ namespace JRICO.Content
                             getEmailDetails(id);
                             EmailViewData();
                             writeToLog.WriteLog("Update Email Row with SP : " + query, "cathal");
+                            writeToLog.WriteLog("Admin Updated Email attempted - result : " + result, "cathal");
                         }
                     }
                     else
@@ -352,6 +353,7 @@ namespace JRICO.Content
                             getEmailDetails(id);
                             EmailViewData();
                             writeToLog.WriteLog("Insert Email Row with SP : " + query, "cathal");
+                            writeToLog.WriteLog("Admin New Email attempted - result : " + result, "cathal");
                         }
                     }
                  }
@@ -455,7 +457,6 @@ namespace JRICO.Content
                     }
                 }
             }
-
             return table;
         }
 
