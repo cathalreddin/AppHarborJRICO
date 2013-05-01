@@ -212,7 +212,7 @@
                             border-style: solid; vertical-align: middle;">
                             <asp:TableRow>
                                 <asp:TableCell Text="Email Reminder" ColumnSpan="4" Font-Bold="true">
-                                    <asp:Label ID="lblEmailID" runat="server"></asp:Label></asp:TableCell><asp:TableCell
+                                    <asp:Label ID="lblEmailID" runat="server" Visible="false"></asp:Label></asp:TableCell><asp:TableCell
                                         HorizontalAlign="right">
                                         <asp:LinkButton ID="lbEditEmail" runat="server" OnClick="lbEdit_Email">Edit</asp:LinkButton>
                                         <asp:LinkButton ID="lbUpdateEmail" runat="server" OnClick="lbUpdate_Email">Update</asp:LinkButton>&nbsp;&nbsp;
