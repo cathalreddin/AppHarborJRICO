@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
@@ -25,8 +26,9 @@ namespace JRICO.Content
         private const string accessKey = "AKIAI6URINAZNMO2P3CQ";
         private const string secretKey = "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";
         int id = 0;
+        
         protected void Page_Load(object sender, EventArgs e)
-        {
+        {            
             id = Convert.ToInt32(Request.QueryString["id"]);
             if (!IsPostBack)
             {
@@ -42,6 +44,7 @@ namespace JRICO.Content
                     EmailViewData();
                     getEmailDetails(id);
                     hlMessage.Visible = false;
+                    writeToLog.WriteLog("Contract ID: "+id.ToString()+" selected", "cathal");
                 }
                 else
                 {
@@ -50,7 +53,7 @@ namespace JRICO.Content
                     hlMessage.Font.Italic = true;
                     hlMessage.Font.Bold = true;
                     hlMessage.ForeColor = System.Drawing.Color.Red;
-                    hlMessage.NavigateUrl = "contractList1.aspx";
+                    hlMessage.NavigateUrl = "contractList.aspx";
                     lblContractReferenceHeading.Visible = false;
                     lblContractTitleHeading.Visible = false;
                     lblContractReferenceLabel.Visible = false;
@@ -66,7 +69,6 @@ namespace JRICO.Content
             {
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 cmd.Parameters.Add("@ContractID", SqlDbType.Int);
                 cmd.Parameters["@ContractID"].Value = ContractID;
                 try
@@ -96,7 +98,7 @@ namespace JRICO.Content
                 }
                 catch (Exception ex)
                 {
-                    Response.Write(ex.Message);
+                    Response.Write("ERROR 6: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
                 }
                 finally
                 {
@@ -121,7 +123,6 @@ namespace JRICO.Content
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_getAttachmentList";
-
                 try
                 {
                     using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
@@ -138,7 +139,13 @@ namespace JRICO.Content
                 }
                 catch (Exception ex)
                 {
-                    Response.Write(ex.Message);
+                    Response.Write("ERROR 7: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
             return table;
@@ -147,7 +154,7 @@ namespace JRICO.Content
         protected void Button_Attachment(object sender, EventArgs e)
         {
             BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
-            //writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
+            writeToLog.WriteLog("Attachment Row returned results for dropdwn: " + DropDownListAttachment.SelectedValue + " and for TextSearch: " + txtAttachmentSearch.Text, "cathal");
         }
         protected void SortRecordsAttachment(object sender, GridViewSortEventArgs e)
         {
@@ -169,7 +176,7 @@ namespace JRICO.Content
             GridView2.DataSource = table;
             GridView2.DataBind();
 
-            //writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionAttachment + " " + directionAttachment, "cathal");
         }
         public SortDirection sortDirectionAttachment
         {
@@ -189,71 +196,92 @@ namespace JRICO.Content
 
         protected void DownloadApplicationFile(object sender, CommandEventArgs e)
         {
-            string keyn = "333-" + id.ToString() + "/";
-            string attachment = e.CommandArgument.ToString();
-            string dest = Path.Combine(HttpRuntime.CodegenDir, attachment);
-           
-            AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(
-                    accessKey, secretKey);
-            keyn = keyn + attachment;
-            GetObjectRequest request = new GetObjectRequest()
-                        .WithBucketName("JRIFiles").WithKey(keyn);
-
-            using (GetObjectResponse response = client.GetObject(request))
+            try
             {
-                response.WriteResponseStreamToFile(dest, false);
-            }
-            HttpContext.Current.Response.Clear();
-            HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + attachment);
-            HttpContext.Current.Response.ContentType = "application/octet-stream";
-            HttpContext.Current.Response.TransmitFile(dest);
-            HttpContext.Current.Response.Flush();
-            HttpContext.Current.Response.End();
+                string keyn = "333-" + id.ToString() + "/";
+                string attachment = e.CommandArgument.ToString();
+                string dest = Path.Combine(HttpRuntime.CodegenDir, attachment);
 
-            // Clean up temporary file.
-            System.IO.File.Delete(dest);
+                AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(
+                        accessKey, secretKey);
+                keyn = keyn + attachment;
+                GetObjectRequest request = new GetObjectRequest()
+                            .WithBucketName("JRIFiles").WithKey(keyn);
+
+                using (GetObjectResponse response = client.GetObject(request))
+                {
+                    response.WriteResponseStreamToFile(dest, false);
+                }
+                HttpContext.Current.Response.Clear();
+                HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + attachment);
+                HttpContext.Current.Response.ContentType = "application/octet-stream";
+                HttpContext.Current.Response.TransmitFile(dest);
+                HttpContext.Current.Response.Flush();
+                HttpContext.Current.Response.End();
+
+                // Clean up temporary file.
+                System.IO.File.Delete(dest);
+                writeToLog.WriteLog("file " + keyn + attachment + " downloaded", "cathal");        
+            }
+            catch (Exception ex)
+            {
+                Response.Write("ERROR 21: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+            }
         }
         protected void lbInsert_Attachment(object sender, EventArgs e)
         {
             string query = "sp_insertAttachmentList: ";
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
-                string sqlSP = "sp_insertAttachmentList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@AttachmentTitle", SqlDbType.NVarChar).Value = ((TextBox)GridView2.FooterRow.FindControl("txtAttachmentTitleInsert")).Text;
-                    cmd.Parameters.Add("@AttachmentName", SqlDbType.NVarChar).Value = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
-                    cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalAttachmentinsert";
-                    cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    foreach (SqlParameter p in cmd.Parameters)
+                    string sqlSP = "sp_insertAttachmentList";
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
-                    }
-                   
-                    if (((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileContent.Length > 0) // accept the file
-                    {
-                        AmazonS3 client;
-                        using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKey, secretKey))
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@AttachmentTitle", SqlDbType.NVarChar).Value = ((TextBox)GridView2.FooterRow.FindControl("txtAttachmentTitleInsert")).Text;
+                        cmd.Parameters.Add("@AttachmentName", SqlDbType.NVarChar).Value = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalAttachmentinsert";
+                        cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        foreach (SqlParameter p in cmd.Parameters)
                         {
-                            //int c = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName.LastIndexOf('\\');
-                            //string AName = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName.Substring(c + 1);
-                            string AName = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
-                            MemoryStream ms = new MemoryStream();
-                            PutObjectRequest request = new PutObjectRequest();
-                            request.WithBucketName("JRIFiles")
-                           .WithCannedACL(S3CannedACL.PublicRead)
-                           .WithKey("333-"+id.ToString() + "/" + AName).InputStream = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).PostedFile.InputStream;
-                            S3Response response = client.PutObject(request);
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                         }
+
+                        if (((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileContent.Length > 0) // accept the file
+                        {
+                            AmazonS3 client;
+                            using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKey, secretKey))
+                            {
+                                //int c = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName.LastIndexOf('\\');
+                                //string AName = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName.Substring(c + 1);
+                                string AName = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
+                                MemoryStream ms = new MemoryStream();
+                                PutObjectRequest request = new PutObjectRequest();
+                                request.WithBucketName("JRIFiles")
+                               .WithCannedACL(S3CannedACL.PublicRead)
+                               .WithKey("333-" + id.ToString() + "/" + AName).InputStream = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).PostedFile.InputStream;
+                                S3Response response = client.PutObject(request);
+                                writeToLog.WriteLog("file 333-" + id.ToString() + "/" + AName  +" uploaded", "cathal");  
+                            }
+                        }
+                        GridView2.EditIndex = -1;
+                        BindDataAttachment(id, "none", " ");
+                        conn.Close();
+                        writeToLog.WriteLog("Attachment Row inserted with SP : " + query, "cathal");
                     }
-                    GridView2.EditIndex = -1;
-                    BindDataAttachment(id, "none", " ");
-                    conn.Close();
-                    writeToLog.WriteLog("Attachment Row inserted with SP : " + query, "cathal");
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 8: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
         }
@@ -277,6 +305,10 @@ namespace JRICO.Content
             lbUpdateEmail.Visible = true;
             lbCancelEmail.Visible = true;
             lbEditEmail.Visible = false;
+            lblEmailDateRFC.Text = "";
+            lblEmailToRFC.Text = "";
+            lblEmailSubjectRFC.Text = "";
+            lblEmailContentRFC.Text = "";
         }
         protected void EmailViewData()
         {
@@ -284,83 +316,131 @@ namespace JRICO.Content
             lblEmailDate.Visible = true;
             lblEmailSubject.Visible = true;
             lblEmailContent.Visible = true;
+            lblEmailStatus.Visible = true;
+            lblEmailStatusHeading.Visible = true;
             txtEmailTo.Visible = false;
             txtEmailDate.Visible = false;
             txtEmailSubject.Visible = false;
             txtEmailContent.Visible = false;
             lbUpdateEmail.Visible = false;
             lbCancelEmail.Visible = false;
-            lbEditEmail.Visible = true;
+            lbEditEmail.Visible = true; 
+            lblEmailDateRFC.Text = "";
+            lblEmailToRFC.Text = "";
+            lblEmailSubjectRFC.Text = "";
+            lblEmailContentRFC.Text = "";
         }
 
         protected void lbUpdate_Email(object sender, EventArgs e)
         {
-            try
-            { // Retrieve the row being edited.                
+            if ((txtEmailDate.Text != "*") && (txtEmailDate.Text != "") && (txtEmailTo.Text != "") && (txtEmailSubject.Text != "") && (txtEmailContent.Text != ""))
+            {
+                // Retrieve the row being edited.                
                 using (SqlConnection conn = new SqlConnection(_connStr))
                 {
-                    Email newEmail = new Email();
-                    string result = newEmail.SendEmailToCathal(txtEmailTo.Text, "New Email Trigger Set", "EmailID: [" + lblEmailID.Text + " ]: " + txtEmailContent.Text, Convert.ToDateTime(txtEmailDate.Text), id);
-                    string sqlSP = "sp_updateEmail"; 
-                    
-                    if (lblEmailID.Text != "")
+                    try
                     {
-                        using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                        Email newEmail = new Email();
+                        string result = newEmail.SendEmailToCathal(txtEmailTo.Text, "New Email Trigger Set", "EmailID: [" + lblEmailID.Text + " ]: " + txtEmailContent.Text, Convert.ToDateTime(txtEmailDate.Text), id);
+                        string sqlSP = "sp_updateEmail";
+
+                        if (lblEmailID.Text != "")
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("@EmailTo", SqlDbType.NVarChar).Value = txtEmailTo.Text;
-                            cmd.Parameters.Add("@EmailDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
-                            cmd.Parameters.Add("@EmailSubject", SqlDbType.NVarChar).Value = txtEmailSubject.Text;
-                            cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
-                            cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
-                            cmd.Parameters.Add("@EmailID", SqlDbType.Int).Value = Convert.ToInt32(lblEmailID.Text);
-                            cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalEmailUpdate";
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            string query = "sp_updateEmail:";
-                            foreach (SqlParameter p in cmd.Parameters)
+                            using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                             {
-                                query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("@EmailTo", SqlDbType.NVarChar).Value = txtEmailTo.Text;
+                                cmd.Parameters.Add("@EmailDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
+                                cmd.Parameters.Add("@EmailSubject", SqlDbType.NVarChar).Value = txtEmailSubject.Text;
+                                cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
+                                cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
+                                cmd.Parameters.Add("@EmailID", SqlDbType.Int).Value = Convert.ToInt32(lblEmailID.Text);
+                                cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalEmailUpdate";
+                                conn.Open();
+                                cmd.ExecuteNonQuery();
+                                string query = "sp_updateEmail:";
+                                foreach (SqlParameter p in cmd.Parameters)
+                                {
+                                    query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                                }
+                                conn.Close();
+                                getEmailDetails(id);
+                                EmailViewData();
+                                writeToLog.WriteLog("Update Email Row with SP : " + query, "cathal");
+                                writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, "cathal");
                             }
-                            conn.Close();
-                            getEmailDetails(id);
-                            EmailViewData();
-                            writeToLog.WriteLog("Update Email Row with SP : " + query, "cathal");
-                            writeToLog.WriteLog("Admin Updated Email attempted - result : " + result, "cathal");
+                        }
+                        else
+                        {
+                            sqlSP = "sp_insertEmail";
+                            using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                            {
+                                cmd.CommandType = CommandType.StoredProcedure;
+                                cmd.Parameters.Add("@EmailTo", SqlDbType.NVarChar).Value = txtEmailTo.Text;
+                                cmd.Parameters.Add("@EmailDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
+                                cmd.Parameters.Add("@EmailSubject", SqlDbType.NVarChar).Value = txtEmailSubject.Text;
+                                cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
+                                cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
+                                cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
+                                cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalEmailInsert";
+                                conn.Open();
+                                cmd.ExecuteNonQuery();
+                                string query = "sp_insertEmail:";
+                                foreach (SqlParameter p in cmd.Parameters)
+                                {
+                                    query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                                }
+                                conn.Close();
+                                getEmailDetails(id);
+                                EmailViewData();
+                                writeToLog.WriteLog("Insert Email Row with SP : " + query, "cathal");
+                                writeToLog.WriteLog("Admin New Email attempted - result : " + result, "cathal");
+                            }
                         }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        sqlSP = "sp_insertEmail";
-                        using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
-                        {
-                            cmd.CommandType = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("@EmailTo", SqlDbType.NVarChar).Value = txtEmailTo.Text;
-                            cmd.Parameters.Add("@EmailDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
-                            cmd.Parameters.Add("@EmailSubject", SqlDbType.NVarChar).Value = txtEmailSubject.Text;
-                            cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
-                            cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
-                            cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
-                            cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalEmailInsert";
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                            string query = "sp_insertEmail:";
-                            foreach (SqlParameter p in cmd.Parameters)
-                            {
-                                query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
-                            }
-                            conn.Close();
-                            getEmailDetails(id);
-                            EmailViewData();
-                            writeToLog.WriteLog("Insert Email Row with SP : " + query, "cathal");
-                            writeToLog.WriteLog("Admin New Email attempted - result : " + result, "cathal");
-                        }
+                        Response.Write("ERROR 9: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
                     }
-                 }
+                    finally
+                    {
+                        // Close data reader object and database connection
+                        if (conn != null)
+                            conn.Close();
+                    }
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Response.Write(ex.Message);
+                lblEmailDateRFC.Text = "";
+                lblEmailToRFC.Text = "";
+                lblEmailSubjectRFC.Text = "";
+                lblEmailContentRFC.Text = "";
+
+                if ((txtEmailDate.Text == "*") || (txtEmailDate.Text == ""))
+                {
+                    lblEmailDateRFC.Text = "*";
+                    lblEmailDateRFC.Font.Bold = true;
+                    lblEmailDateRFC.ForeColor = System.Drawing.Color.Red;
+                }
+                if (txtEmailTo.Text == "")
+                {
+                    lblEmailToRFC.Text = "*";
+                    lblEmailToRFC.Font.Bold = true;
+                    lblEmailToRFC.ForeColor = System.Drawing.Color.Red;
+                }
+                if (txtEmailSubject.Text == "")
+                {
+                    lblEmailSubjectRFC.Text = "*";
+                    lblEmailSubjectRFC.Font.Bold = true;
+                    lblEmailSubjectRFC.ForeColor = System.Drawing.Color.Red;
+                }
+                if (txtEmailContent.Text == "")
+                {
+                    lblEmailContentRFC.Text = "*";
+                    lblEmailContentRFC.Font.Bold = true;
+                    lblEmailContentRFC.ForeColor = System.Drawing.Color.Red;
+                }
             }
         }
        
@@ -377,7 +457,6 @@ namespace JRICO.Content
             {
                 SqlCommand cmd = new SqlCommand(sql, conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 cmd.Parameters.Add("@ContractID", SqlDbType.Int);
                 cmd.Parameters["@ContractID"].Value = ContractID;
                 try
@@ -397,6 +476,19 @@ namespace JRICO.Content
                             txtEmailDate.Text = Convert.ToDateTime(dr["EmailDate"].ToString()).ToShortDateString();
                             txtEmailSubject.Text = dr["EmailSubject"].ToString();
                             txtEmailContent.Text = dr["EmailContent"].ToString();
+                            string emailStatus = dr["SentMessage"].ToString();
+                            if (emailStatus == "Email Sent")
+                            {
+                               lblEmailStatus.Text = "Email Sent"; 
+                            }
+                            else if (emailStatus == "")
+                            {
+                                lblEmailStatus.Text = "Awaiting Trigger Date";
+                            }
+                            else 
+                            {
+                                lblEmailStatus.Text = "Error Sending Email - Contact Administrator";                             
+                            }
                         }
                     }
                     else
@@ -409,6 +501,7 @@ namespace JRICO.Content
                         txtEmailDate.Visible = true;
                         txtEmailSubject.Visible = true;
                         txtEmailContent.Visible = true;
+                        lblEmailStatusHeading.Visible = false;
                         lbUpdateEmail.Visible = true;
                         lbCancelEmail.Visible = true;
                         lbEditEmail.Visible = false;
@@ -416,7 +509,7 @@ namespace JRICO.Content
                 }
                 catch (Exception ex)
                 {
-                    Response.Write(ex.Message);
+                    Response.Write("ERROR 10: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
                 }
                 finally
                 {
@@ -430,31 +523,40 @@ namespace JRICO.Content
         {
             GridView3.DataSource = this.GetDataNote(contractID);
             GridView3.DataBind();
-            //if (GridView3.Rows.Count == 0)
-            //{
-            //    //int TotalColumns = 2;
-            //    //GridView3.Rows[0].Cells.Clear();
-            //    GridView3.Rows[0].Cells.Add(new TableCell());
-            //    //GridView3.Rows[0].Cells[0].ColumnSpan = TotalColumns;
-            //    GridView3.Rows[0].Cells[0].Text = "No Records Found";
-            //}
         }
-
+        protected IEnumerable GridView3_MustAddARow(IEnumerable data) 
+        {
+		    List<int> dds = (List<int>)data;
+		    dds.Add(new int());
+		    return dds;
+	    }
         private DataTable GetDataNote(int contractID)
         {
             DataTable table = new DataTable();
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_getNoteList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        ad.Fill(table);
+                        cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                        {
+                            ad.Fill(table);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 11: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
             return table;
@@ -480,7 +582,7 @@ namespace JRICO.Content
             GridView3.DataSource = table;
             GridView3.DataBind();
 
-            //writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionNote + " " + directionNote, "cathal");
         }
         public SortDirection sortDirectionNote
         {
@@ -503,85 +605,109 @@ namespace JRICO.Content
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_insertNoteList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Title", SqlDbType.NVarChar).Value = ((TextBox)GridView3.FooterRow.FindControl("txtNoteTitleInsert")).Text;
-                    cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = ((TextBox)GridView3.FooterRow.FindControl("txtNoteDescriptionInsert")).Text;
-                    cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalNoteinsert";
-                    cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    foreach (SqlParameter p in cmd.Parameters)
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@Title", SqlDbType.NVarChar).Value = ((TextBox)GridView3.FooterRow.FindControl("txtNoteTitleInsert")).Text;
+                        cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = ((TextBox)GridView3.FooterRow.FindControl("txtNoteDescriptionInsert")).Text;
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalNoteinsert";
+                        cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
+                        GridView3.EditIndex = -1;
+                        BindDataNote(id);
+                        conn.Close();
+                        writeToLog.WriteLog("Note Row inserted with SP : " + query, "cathal");
                     }
-                    GridView3.EditIndex = -1;
-                    BindDataNote(id);
-                    conn.Close();
-                    //writeToLog.WriteLog("Hospital Row inserted with SP : " + query, "cathal");
+                }
+
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 12: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
-            //writeToLog.WriteLog("Hospital Row Inserted : " + query, "cathal insert");
         }
         // *** END OF TAB 3 ***             
         //******************************************************************************************************************
         // *** START OF TAB 4 ***
         private void BindDataPrice(int contractID, string column, string textSearch)
         {
-            GridView4.DataSource = this.GetData(contractID, column, textSearch);
+            GridView4.DataSource = this.GetDataPrice(contractID, column, textSearch);
             GridView4.DataBind();
         }
 
-        private DataTable GetData(int contractID, string column, string textSearch)
+        private DataTable GetDataPrice(int contractID, string column, string textSearch)
         {
             DataTable table = new DataTable();
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_getPriceList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
-                    cmd.Parameters.Add(new SqlParameter("@Column", column));
-                    cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        ad.Fill(table);
+                        cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
+                        cmd.Parameters.Add(new SqlParameter("@Column", column));
+                        cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                        {
+                            ad.Fill(table);
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 13: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
             }
-
             return table;
         }
         protected void RowEditPrice(object sender, GridViewEditEventArgs e)
         {
             GridView4.EditIndex = e.NewEditIndex;
             BindDataPrice(id, "none", " ");
-            //writeToLog.WriteLog("Hospital Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
+            writeToLog.WriteLog("Price Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
         }
         protected void RowEditCancelPrice(object sender, GridViewCancelEditEventArgs e)
         {
             GridView4.EditIndex = -1; // reseting grid view
             BindDataPrice(id, "none", " ");
-            //writeToLog.WriteLog("Hospital Row cancelled for edit", "cathal");
+            writeToLog.WriteLog("Price Row cancelled for edit", "cathal");
         }
 
         protected void RowUpdatePrice(object sender, GridViewUpdateEventArgs e)
         {
 
-            try
-            { // Retrieve the row being edited. 
-                int index = GridView4.EditIndex;
-                GridViewRow row = GridView4.Rows[index];
-                TextBox Subject = row.FindControl("txtSubject") as TextBox;
-                TextBox Description = row.FindControl("txtDescription") as TextBox;
-                TextBox Price = row.FindControl("txtPrice") as TextBox;
-                string PriceID = GridView4.DataKeys[e.RowIndex].Value.ToString();
+            // Retrieve the row being edited. 
+            int index = GridView4.EditIndex;
+            GridViewRow row = GridView4.Rows[index];
+            TextBox Subject = row.FindControl("txtSubject") as TextBox;
+            TextBox Description = row.FindControl("txtDescription") as TextBox;
+            TextBox Price = row.FindControl("txtPrice") as TextBox;
+            string PriceID = GridView4.DataKeys[e.RowIndex].Value.ToString();
 
-                using (SqlConnection conn = new SqlConnection(_connStr))
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                try
                 {
                     string sqlSP = "sp_updatePriceList";
 
@@ -603,20 +729,26 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, "none", " ");
                         conn.Close();
-                        //writeToLog.WriteLog("Hospital Row updated with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Price Row updated with SP : " + query, "cathal");
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                Response.Write(ex.Message);
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 14: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
             }
         }
 
         protected void Button_Price(object sender, EventArgs e)
         {
             BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
-            //writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
+            writeToLog.WriteLog("Price Row returned results for dropdwn: " + DropDownListPrice.SelectedValue + " and for TextSearch: " + txtPriceSearch.Text, "cathal");
         }
         protected void SortRecordsPrice(object sender, GridViewSortEventArgs e)
         {
@@ -632,13 +764,11 @@ namespace JRICO.Content
                 sortDirectionPrice = SortDirection.Ascending;
                 directionPrice = " ASC ";
             }
-            DataTable table = this.GetData(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
+            DataTable table = this.GetDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
             table.DefaultView.Sort = sortExpressionPrice + directionPrice;
-
             GridView4.DataSource = table;
             GridView4.DataBind();
-
-            //writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionPrice + " " + directionPrice, "cathal");
         }
         public SortDirection sortDirectionPrice
         {
@@ -661,28 +791,39 @@ namespace JRICO.Content
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_insertPriceList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@Subject", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtSubjectInsert")).Text;
-                    cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtDescriptionInsert")).Text;
-                    cmd.Parameters.Add("@Price", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtPriceInsert")).Text;
-                    cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalPriceinsert";
-                    cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
-                    conn.Open();
-                    cmd.ExecuteNonQuery();
-                    foreach (SqlParameter p in cmd.Parameters)
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@Subject", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtSubjectInsert")).Text;
+                        cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtDescriptionInsert")).Text;
+                        cmd.Parameters.Add("@Price", SqlDbType.Decimal).Value = Convert.ToDecimal(((TextBox)GridView4.FooterRow.FindControl("txtPriceInsert")).Text);
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalPriceinsert";
+                        cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
+                        GridView4.EditIndex = -1;
+                        BindDataPrice(id, "none", " ");
+                        conn.Close();
+                        writeToLog.WriteLog("Price Row inserted with SP : " + query, "cathal");
                     }
-                    GridView4.EditIndex = -1;
-                    BindDataPrice(id, "none", " ");
-                    conn.Close();
-                    //writeToLog.WriteLog("Hospital Row inserted with SP : " + query, "cathal");
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 15: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
-            //writeToLog.WriteLog("Hospital Row Inserted : " + query, "cathal insert");
         }
         // *** END OF TAB 4 ***
         //******************************************************************************************************************
@@ -708,17 +849,29 @@ namespace JRICO.Content
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_getContractHospitalList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.Parameters.Add(new SqlParameter("@Column", column));
-                    cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
-                    cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        ad.Fill(table);
+                        cmd.Parameters.Add(new SqlParameter("@Column", column));
+                        cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
+                        cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                        {
+                            ad.Fill(table);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 16: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
 
@@ -789,10 +942,9 @@ namespace JRICO.Content
                         writeToLog.WriteLog("Hospital / AccountNumber Row inserted with SP : " + query, "cathal");
                     }
                 }
-
                 catch (Exception ex)
                 {
-                    Response.Write(ex.Message);
+                    Response.Write("ERROR 17: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
                 }
                 finally
                 {
@@ -806,7 +958,7 @@ namespace JRICO.Content
         protected void Button_AccountNumber(object sender, EventArgs e)
         {
             BindDataAccountNumber(id, DropDownListAccountNumber.SelectedValue, txtAccountNumberSearch.Text);
-            //writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
+            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownListAccountNumber.SelectedValue + " and for TextSearch: " + txtAccountNumberSearch.Text, "cathal");
         }
         //*** END OF TAB 5 ***
 

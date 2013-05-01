@@ -130,9 +130,9 @@ first child of the left and right table columns */
 .footer
 {
     color: #4e5766;
-    padding: 8px 0px 0px 0px;
+    padding: 0px 0px 0px 30px;
     margin: 0px auto;
-    text-align: center;
+    text-align: left;
     line-height: normal;
 }
 

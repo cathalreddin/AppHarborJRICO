@@ -21,7 +21,7 @@ namespace JRICO.CodeArea
                 List<String> EmailToInList = new List<String>(EmailTo.Split(';'));
                 myMessage.AddTo(EmailToInList);
                 //myMessage.AddBcc("cathal.reddin@gmail.com");
-                myMessage.From = new MailAddress("cathal_r@yahoo.com", "JRI");
+                myMessage.From = new MailAddress("noreply@jricontractorganiser.com", "JRI");
                 myMessage.Subject = EmailSubject;
                 myMessage.Text = EmailContent;
 
@@ -55,7 +55,7 @@ namespace JRICO.CodeArea
                 List<String> EmailToInList = new List<String>(EmailTo.Split(';'));
                 myMessage.AddTo(EmailToInList);
                 //myMessage.AddBcc("cathal.reddin@gmail.com"); 
-                myMessage.From = new MailAddress("cathal_r@yahoo.com", "JRI");
+                myMessage.From = new MailAddress("noreply@jricontractorganiser.com", "JRI");
                 myMessage.Subject = EmailSubject;
                 myMessage.Text = EmailContent;
 

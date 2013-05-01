@@ -40,16 +40,28 @@ namespace JRICO.Content
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_getHospitalList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.Parameters.Add(new SqlParameter("@Column", column));
-                    cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        ad.Fill(table);
+                        cmd.Parameters.Add(new SqlParameter("@Column", column));
+                        cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                        {
+                            ad.Fill(table);
+                        }
                     }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 18: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
 
@@ -69,21 +81,20 @@ namespace JRICO.Content
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)
         {
+            // Retrieve the row being edited. 
+            int index = GridView1.EditIndex;
+            GridViewRow row = GridView1.Rows[index];
+            TextBox HospitalName = row.FindControl("txtHospitalName") as TextBox;
+            TextBox Address1 = row.FindControl("txtAddress1") as TextBox;
+            TextBox Postcode = row.FindControl("txtPostcode") as TextBox;
+            TextBox AccountNumber = row.FindControl("txtAccountNumber") as TextBox;
+            string HospitalID = GridView1.DataKeys[e.RowIndex].Value.ToString();
 
-            try
-            { // Retrieve the row being edited. 
-                int index = GridView1.EditIndex;
-                GridViewRow row = GridView1.Rows[index];
-                TextBox HospitalName = row.FindControl("txtHospitalName") as TextBox;
-                TextBox Address1 = row.FindControl("txtAddress1") as TextBox;
-                TextBox Postcode = row.FindControl("txtPostcode") as TextBox;
-                TextBox AccountNumber = row.FindControl("txtAccountNumber") as TextBox;
-                string HospitalID = GridView1.DataKeys[e.RowIndex].Value.ToString();
-
-                using (SqlConnection conn = new SqlConnection(_connStr))
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                string sqlSP = "sp_updateHospitalList";
+                try
                 {
-                    string sqlSP = "sp_updateHospitalList";
-
                     using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
                         cmd.CommandType = CommandType.StoredProcedure;
@@ -106,12 +117,17 @@ namespace JRICO.Content
                         writeToLog.WriteLog("Hospital Row updated with SP : " + query, "cathal");
                     }
                 }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 19: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
             }
-            catch (Exception ex)
-            {
-                Response.Write(ex.Message);
-            }
-
         }
 
 
@@ -161,29 +177,39 @@ namespace JRICO.Content
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_insertHospitalList";
-
-                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                try
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.Add("@HospitalName", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtHospitalNameInsert")).Text;
-                    cmd.Parameters.Add("@Address1", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtAddress1Insert")).Text;
-                    cmd.Parameters.Add("@Postcode", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtPostcodeInsert")).Text;
-                    cmd.Parameters.Add("@AccountNumber", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtAccountNumberInsert")).Text;
-                    cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal Rehhinsert";
-                    conn.Open();
-                    cmd.ExecuteNonQuery();                    
-                    foreach (SqlParameter p in cmd.Parameters)
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
-                        query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@HospitalName", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtHospitalNameInsert")).Text;
+                        cmd.Parameters.Add("@Address1", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtAddress1Insert")).Text;
+                        cmd.Parameters.Add("@Postcode", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtPostcodeInsert")).Text;
+                        cmd.Parameters.Add("@AccountNumber", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtAccountNumberInsert")).Text;
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal Rehhinsert";
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
+                        GridView1.EditIndex = -1;
+                        BindData("none", " ");
+                        conn.Close();
+                        writeToLog.WriteLog("Hospital Row inserted with SP : " + query, "cathal");
                     }
-                    GridView1.EditIndex = -1;
-                    BindData("none", " ");
-                    conn.Close();
-                    writeToLog.WriteLog("Hospital Row inserted with SP : " + query, "cathal");
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 20: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
                 }
             }
-            writeToLog.WriteLog("Hospital Row Inserted : " + query, "cathal insert");
-        }
-     
+        }     
     }
 }

@@ -5,7 +5,7 @@
      <table border="0" width="100%">
         <tr>
           <td>
-              <a href="contractList1.aspx">Contract List</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search &nbsp;&nbsp;
+              <a href="contractList.aspx">Contract List</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search &nbsp;&nbsp;
                     <asp:DropDownList ID="DropDownList1" runat="server">
                     <asp:ListItem Value="HospitalName">Hospital Name</asp:ListItem>
                     <asp:ListItem Value="Address1">Address</asp:ListItem>

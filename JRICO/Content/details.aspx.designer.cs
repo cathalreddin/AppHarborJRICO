@@ -298,7 +298,7 @@ namespace JRICO.Content {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView2;
+        protected global::JRICO.CodeArea.GridViewAlwaysShow GridView2;
         
         /// <summary>
         /// ValidationSummary1 control.
@@ -391,6 +391,15 @@ namespace JRICO.Content {
         protected global::System.Web.UI.WebControls.TextBox txtEmailTo;
         
         /// <summary>
+        /// lblEmailToRFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailToRFC;
+        
+        /// <summary>
         /// lblEmailDateHeading control.
         /// </summary>
         /// <remarks>
@@ -416,6 +425,15 @@ namespace JRICO.Content {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtEmailDate;
+        
+        /// <summary>
+        /// lblEmailDateRFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailDateRFC;
         
         /// <summary>
         /// lblEmailSubjectHeading control.
@@ -445,6 +463,33 @@ namespace JRICO.Content {
         protected global::System.Web.UI.WebControls.TextBox txtEmailSubject;
         
         /// <summary>
+        /// lblEmailSubjectRFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailSubjectRFC;
+        
+        /// <summary>
+        /// lblEmailStatusHeading control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailStatusHeading;
+        
+        /// <summary>
+        /// lblEmailStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailStatus;
+        
+        /// <summary>
         /// lblEmailContentHeading control.
         /// </summary>
         /// <remarks>
@@ -472,13 +517,22 @@ namespace JRICO.Content {
         protected global::System.Web.UI.WebControls.TextBox txtEmailContent;
         
         /// <summary>
+        /// lblEmailContentRFC control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblEmailContentRFC;
+        
+        /// <summary>
         /// GridView3 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView3;
+        protected global::JRICO.CodeArea.GridViewAlwaysShow GridView3;
         
         /// <summary>
         /// ValidationSummary3 control.
@@ -541,7 +595,7 @@ namespace JRICO.Content {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView4;
+        protected global::JRICO.CodeArea.GridViewAlwaysShow GridView4;
         
         /// <summary>
         /// ValidationSummary41 control.
@@ -622,7 +676,7 @@ namespace JRICO.Content {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView GridView5;
+        protected global::JRICO.CodeArea.GridViewAlwaysShow GridView5;
         
         /// <summary>
         /// ValidationSummary5 control.

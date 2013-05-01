@@ -82,20 +82,16 @@
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About.aspx" />
     <Content Include="Account\ChangePassword.aspx" />
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
     <Content Include="Content\addContract.aspx" />
-    <Content Include="Content\contractlist.aspx" />
-    <Content Include="Content\contractList1.aspx" />
+    <Content Include="Content\contractList.aspx" />
     <Content Include="Content\details.aspx" />
     <Content Include="Content\hospitalList.aspx" />
-    <Content Include="Content\hospitalList1.aspx" />
     <Content Include="Images\InitialImage.png" />
     <Content Include="Images\SelectedButton.png" />
-    <Content Include="Content\SimpleTabControl.aspx" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.custom.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.custom.min.js" />
@@ -117,13 +113,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="About.aspx.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="About.aspx.designer.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Account\ChangePassword.aspx.cs">
       <DependentUpon>ChangePassword.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -153,6 +142,7 @@
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
     <Compile Include="CodeArea\Email.cs" />
+    <Compile Include="CodeArea\GridViewAlwaysShow.cs" />
     <Compile Include="CodeArea\WriteToLog.cs" />
     <Compile Include="Content\addContract.aspx.cs">
       <DependentUpon>addContract.aspx</DependentUpon>
@@ -161,19 +151,12 @@
     <Compile Include="Content\addContract.aspx.designer.cs">
       <DependentUpon>addContract.aspx</DependentUpon>
     </Compile>
-    <Compile Include="Content\contractlist.aspx.cs">
-      <DependentUpon>contractlist.aspx</DependentUpon>
+    <Compile Include="Content\contractList.aspx.cs">
+      <DependentUpon>contractList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Content\contractlist.aspx.designer.cs">
-      <DependentUpon>contractlist.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Content\contractList1.aspx.cs">
-      <DependentUpon>contractList1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Content\contractList1.aspx.designer.cs">
-      <DependentUpon>contractList1.aspx</DependentUpon>
+    <Compile Include="Content\contractList.aspx.designer.cs">
+      <DependentUpon>contractList.aspx</DependentUpon>
     </Compile>
     <Compile Include="Content\details.aspx.cs">
       <DependentUpon>details.aspx</DependentUpon>
@@ -188,20 +171,6 @@
     </Compile>
     <Compile Include="Content\hospitalList.aspx.designer.cs">
       <DependentUpon>hospitalList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Content\hospitalList1.aspx.cs">
-      <DependentUpon>hospitalList1.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Content\hospitalList1.aspx.designer.cs">
-      <DependentUpon>hospitalList1.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Content\SimpleTabControl.aspx.cs">
-      <DependentUpon>SimpleTabControl.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Content\SimpleTabControl.aspx.designer.cs">
-      <DependentUpon>SimpleTabControl.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

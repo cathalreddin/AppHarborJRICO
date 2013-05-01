@@ -17,12 +17,12 @@ namespace JRICO.Content
         WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            writeToLog.WriteLog("Add New Contract Selected ", "cathal");            
         }
         protected void Cancel(object sender, EventArgs e)
         {
             writeToLog.WriteLog("Add New Contract Cancelled: ", "cathal");
-            Response.Redirect("/content/contractList1.aspx");
+            Response.Redirect("/content/contractList.aspx");
         }
         protected void AddContract(object sender, EventArgs e)
         {
@@ -49,6 +49,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal R";
                         conn.Open();
                         cmd.ExecuteNonQuery();
+                        conn.Close();
                         string query = "sp_insertContractList: ";
                         foreach (SqlParameter p in cmd.Parameters)
                         {
@@ -61,9 +62,9 @@ namespace JRICO.Content
             }
             catch (Exception ex)
             {
-                Response.Write(ex.Message);
+                Response.Write("ERROR 1: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
             }
-            Response.Redirect("/content/contractList1.aspx");
+            Response.Redirect("/content/contractList.aspx");
         }
     }
 }

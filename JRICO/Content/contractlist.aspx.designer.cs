@@ -10,7 +10,7 @@
 namespace JRICO.Content {
     
     
-    public partial class contractlist {
+    public partial class contractList {
         
         /// <summary>
         /// DropDownList1 control.
@@ -38,6 +38,33 @@ namespace JRICO.Content {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button Button1;
+        
+        /// <summary>
+        /// sdsRecordType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource sdsRecordType;
+        
+        /// <summary>
+        /// sdsContractStatus control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource sdsContractStatus;
+        
+        /// <summary>
+        /// sdsAssociatedRef control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource sdsAssociatedRef;
         
         /// <summary>
         /// GridView1 control.

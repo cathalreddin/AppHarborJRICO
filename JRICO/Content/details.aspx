@@ -1,6 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true"
     CodeBehind="details.aspx.cs" Inherits="JRICO.Content.details" %>
 
+<%@ Register Assembly="JRICO" TagPrefix="Custom" Namespace="JRICO.CodeArea" %>
+
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
     <script src="../Scripts/jquery-1.9.1.js" type="text/javascript"></script>
     <script src="../Scripts/jquery-ui-1.10.2.custom.js" type="text/javascript"></script>
@@ -36,7 +38,7 @@
     <table border="0" width="100%">
         <tr>
             <td>
-                <a href="contractList1.aspx">Contract List</a>
+                <a href="contractList.aspx">Contract List</a>
             </td>
             <td align="center">
                 <asp:Label ID="lblContractReferenceLabel" runat="server" Text="&nbsp;&nbsp; Contract Reference: " />
@@ -144,7 +146,7 @@
                                 </asp:TableCell>
                             </asp:TableRow>
                         </asp:Table>
-                        <asp:GridView ID="GridView2" runat="server" AllowSorting="True" OnSorting="SortRecordsAttachment"
+                        <Custom:GridViewAlwaysShow ID="GridView2" runat="server" AllowSorting="True" OnSorting="SortRecordsAttachment"
                             AutoGenerateColumns="False" ShowFooter="True" BackColor="White" BorderColor="#999999"
                             DataKeyNames="AttachmentID" BorderStyle="Solid" BorderWidth="1px" CellPadding="3"
                             GridLines="Vertical" AlternatingRowStyles-CssClass="alt" CssClass="mGrid" PagerStyle-CssClass="pgr"
@@ -162,14 +164,14 @@
                                         <asp:Label ID="lblAttachmentID" runat="server" Text='<%# Bind("[AttachmentID]") %>'></asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Title" SortExpression="AttachmentTitle">
+                                <asp:TemplateField HeaderText="Attachment Title" SortExpression="AttachmentTitle">
                                     <ItemTemplate>
                                         <asp:Label ID="lblAttachmentTitle" runat="server" Text='<%# Bind("[AttachmentTitle]") %>'></asp:Label>
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtAttachmentTitleInsert" runat="server"></asp:TextBox>
-                                        <asp:RequiredFieldValidator ValidationGroup="insertAttachment" ID="rfcInsertAttachmentTitle" runat="server"
-                                            ErrorMessage="Title is a required field!" ControlToValidate="txtAttachmentTitleInsert"
+                                        <asp:RequiredFieldValidator ValidationGroup="insertAttachment" ID="rfcInsertAttachmentTitle"
+                                            runat="server" ErrorMessage="Title is a required field!" ControlToValidate="txtAttachmentTitleInsert"
                                             Text="*" ForeColor="Red">
                                         </asp:RequiredFieldValidator>
                                     </FooterTemplate>
@@ -177,10 +179,15 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Attachment Name" SortExpression="AttachmentName">
                                     <ItemTemplate>
-                                        <asp:LinkButton ID="lbAttachmentName" runat="server" Text='<%# Bind("[AttachmentName]") %>' OnCommand="DownloadApplicationFile" CommandArgument='<%# Bind("[AttachmentName]") %>'></asp:LinkButton>
+                                        <asp:LinkButton ID="lbAttachmentName" runat="server" Text='<%# Bind("[AttachmentName]") %>'
+                                            OnCommand="DownloadApplicationFile" CommandArgument='<%# Bind("[AttachmentName]") %>'></asp:LinkButton>
                                     </ItemTemplate>
                                     <FooterTemplate>
                                         <asp:FileUpload ID="fAttachmentNameInsert" runat="server" />
+                                        <asp:RequiredFieldValidator ValidationGroup="insertAttachment" ID="rfcInsertAttachmentName"
+                                            runat="server" ErrorMessage="Please select a file!" ControlToValidate="fAttachmentNameInsert"
+                                            Text="*" ForeColor="Red">
+                                        </asp:RequiredFieldValidator>
                                     </FooterTemplate>
                                     <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
                                 </asp:TemplateField>
@@ -203,9 +210,9 @@
                             <SortedAscendingHeaderStyle BackColor="#808080" />
                             <SortedDescendingCellStyle BackColor="#CAC9C9" />
                             <SortedDescendingHeaderStyle BackColor="#383838" />
-                        </asp:GridView>
-                        <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="insertAttachment" runat="server"
-                            ForeColor="Red" />
+                        </Custom:GridViewAlwaysShow>
+                        <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="insertAttachment"
+                            runat="server" ForeColor="Red" />
                     </asp:View>
                     <asp:View ID="View3" runat="server">
                         <asp:Table ID="Table3" runat="server" Style="width: 100%; border-width: 1px; border-color: #666;
@@ -221,34 +228,38 @@
                             </asp:TableRow>
                             <asp:TableRow>
                                 <asp:TableCell>
-                                    <asp:Label ID="lblEmailToHeading" runat="server" Text="To" /></asp:TableCell><asp:TableCell
-                                        ColumnSpan="2">
+                                    <asp:Label ID="lblEmailToHeading" runat="server" Text="To" /></asp:TableCell>
+                                    <asp:TableCell ColumnSpan="2">
                                         <asp:Label ID="lblEmailTo" runat="server" /><asp:TextBox ID="txtEmailTo" runat="server"
-                                            Width="550" /></asp:TableCell><asp:TableCell>
+                                            Width="550" /><asp:Label ID="lblEmailToRFC" runat="server" Width="15"/></asp:TableCell><asp:TableCell>
                                                 <asp:Label ID="lblEmailDateHeading" runat="server" Text="Email Trigger Date" /></asp:TableCell><asp:TableCell>
                                                     <asp:Label ID="lblEmailDate" runat="server" /><asp:TextBox ID="txtEmailDate" runat="server"
-                                                        Width="75" CssClass="txtEmailDate" /></asp:TableCell></asp:TableRow>
+                                                        Width="75" CssClass="txtEmailDate" /><asp:Label ID="lblEmailDateRFC" runat="server" Width="15"/></asp:TableCell></asp:TableRow>
                             <asp:TableRow>
                                 <asp:TableCell>
-                                    <asp:Label ID="lblEmailSubjectHeading" runat="server" Text="Subject" /></asp:TableCell><asp:TableCell
-                                        ColumnSpan="4">
-                                        <asp:Label ID="lblEmailSubject" runat="server" /><asp:TextBox ID="txtEmailSubject"
-                                            runat="server" Width="550" /></asp:TableCell></asp:TableRow>
+                                    <asp:Label ID="lblEmailSubjectHeading" runat="server" Text="Subject" /></asp:TableCell>
+                                <asp:TableCell ColumnSpan="2">
+                                    <asp:Label ID="lblEmailSubject" runat="server" /><asp:TextBox ID="txtEmailSubject"
+                                        runat="server" Width="550" /><asp:Label ID="lblEmailSubjectRFC" runat="server" Width="15"/></asp:TableCell><asp:TableCell>
+                                         <asp:Label ID="lblEmailStatusHeading" runat="server" Text="STATUS" /></asp:TableCell>
+                                <asp:TableCell>
+                                                    <asp:Label ID="lblEmailStatus" runat="server" /></asp:TableCell>
+                                         </asp:TableRow>
                             <asp:TableRow>
                                 <asp:TableCell>
                                     <asp:Label ID="lblEmailContentHeading" runat="server" Text="Content" /></asp:TableCell><asp:TableCell
                                         ColumnSpan="4">
                                         <asp:Label ID="lblEmailContent" runat="server" /><asp:TextBox ID="txtEmailContent"
-                                            runat="server" Width="550" /></asp:TableCell></asp:TableRow>
+                                            runat="server" Width="550" /><asp:Label ID="lblEmailContentRFC" runat="server" Width="15"/></asp:TableCell></asp:TableRow>
                             <asp:TableRow>
                                 <asp:TableCell CssClass="5"></asp:TableCell></asp:TableRow>
                         </asp:Table>
                         <br />
-                        <asp:GridView ID="GridView3" runat="server" AllowSorting="True" OnSorting="SortRecordsNote"
+                        <Custom:GridViewAlwaysShow ID="GridView3" runat="server" AllowSorting="True" OnSorting="SortRecordsNote"
                             AutoGenerateColumns="False" ShowFooter="True" BackColor="White" BorderColor="#999999"
                             DataKeyNames="NoteID" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical"
                             AlternatingRowStyles-CssClass="alt" CssClass="mGrid" PagerStyle-CssClass="pgr"
-                            ForeColor="Black" Width="100%">
+                            ForeColor="Black" Width="100%" OnMustAddARow="GridView3_MustAddARow" EmptyDataText="There are no data records to display.">
                             <Columns>
                                 <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle"
                                     ItemStyle-Wrap="false">
@@ -260,7 +271,7 @@
                                     <ItemTemplate>
                                         <asp:Label ID="LblNoteID" runat="server" Text='<%# Bind("[NoteID]") %>'></asp:Label></ItemTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Title" SortExpression="NoteTitle">
+                                <asp:TemplateField HeaderText="Note Title" SortExpression="NoteTitle">
                                     <ItemTemplate>
                                         <asp:Label ID="lblTitle" runat="server" Text='<%# Bind("[NoteTitle]") %>'></asp:Label></ItemTemplate>
                                     <FooterTemplate>
@@ -270,7 +281,7 @@
                                         </asp:RequiredFieldValidator></FooterTemplate>
                                     <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Description" SortExpression="NoteDescription">
+                                <asp:TemplateField HeaderText="Note Description" SortExpression="NoteDescription">
                                     <ItemTemplate>
                                         <asp:Label ID="lblNoteDescription" runat="server" Text='<%# Bind("[NoteDescription]") %>'></asp:Label></ItemTemplate>
                                     <FooterTemplate>
@@ -299,7 +310,7 @@
                             <SortedAscendingHeaderStyle BackColor="#808080" />
                             <SortedDescendingCellStyle BackColor="#CAC9C9" />
                             <SortedDescendingHeaderStyle BackColor="#383838" />
-                        </asp:GridView>
+                        </Custom:GridViewAlwaysShow>
                         <asp:ValidationSummary ID="ValidationSummary3" ValidationGroup="insertNote" runat="server"
                             ForeColor="Red" />
                     </asp:View>
@@ -319,7 +330,7 @@
                                     <asp:Button ID="Button1" runat="server" Text="Go" OnClick="Button_Price" />
                                 </asp:TableCell></asp:TableRow>
                         </asp:Table>
-                        <asp:GridView ID="GridView4" runat="server" AllowSorting="True" OnSorting="SortRecordsPrice"
+                        <Custom:GridViewAlwaysShow ID="GridView4" runat="server" AllowSorting="True" OnSorting="SortRecordsPrice"
                             AutoGenerateColumns="False" ShowFooter="True" BackColor="White" BorderColor="#999999"
                             DataKeyNames="PriceID" BorderStyle="Solid" BorderWidth="1px" CellPadding="3"
                             GridLines="Vertical" AlternatingRowStyles-CssClass="alt" CssClass="mGrid" PagerStyle-CssClass="pgr"
@@ -329,7 +340,7 @@
                                 <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle"
                                     ItemStyle-Wrap="false">
                                     <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_Price">Insert</asp:LinkButton></FooterTemplate>
+                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertPrice" OnClick="lbInsert_Price">Insert</asp:LinkButton></FooterTemplate>
                                     <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
                                 </asp:TemplateField>
                                 <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />
@@ -339,7 +350,7 @@
                                     <EditItemTemplate>
                                         <asp:Label ID="lblPriceID" runat="server" Text='<%# Eval("[PriceID]") %>'></asp:Label></EditItemTemplate>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Subject" SortExpression="Subject">
+                                <asp:TemplateField HeaderText="Price Subject" SortExpression="Subject">
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtSubject" runat="server" Text='<%# Bind("[Subject]") %>'></asp:TextBox></EditItemTemplate>
                                     <ItemTemplate>
@@ -351,7 +362,7 @@
                                         </asp:RequiredFieldValidator></FooterTemplate>
                                     <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
                                 </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Description" SortExpression="Description">
+                                <asp:TemplateField HeaderText="Price Description" SortExpression="Description">
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtDescription" runat="server" Text='<%# Bind("[Description]") %>'></asp:TextBox></EditItemTemplate>
                                     <ItemTemplate>
@@ -365,25 +376,28 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Price" SortExpression="Price">
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="txtPrice" runat="server" Text='<%# Bind("[Price]") %>'></asp:TextBox><asp:RegularExpressionValidator
-                                            ID="revUpdatePrice" runat="server" ErrorMessage="Only Decimal Value Allowed"
-                                            ValidationExpression="^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$" ControlToValidate="txtPrice"
+                                        <asp:TextBox ID="txtPrice" runat="server" Text='<%# Bind("[Price]") %>'></asp:TextBox>
+                                        <asp:RegularExpressionValidator ID="revUpdatePrice" runat="server" ErrorMessage="Only Decimal Value Allowed"
+                                            ValidationExpression="^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$" ControlToValidate="txtPriceInsert"
                                             Text="*" ForeColor="Red">
-                                        </asp:RegularExpressionValidator><asp:RequiredFieldValidator ID="rfcUpdatePrice"
-                                            runat="server" ErrorMessage="Price is a required field!" ControlToValidate="txtPrice"
+                                        </asp:RegularExpressionValidator>
+                                        <asp:RequiredFieldValidator ID="rfcUpdatePrice"
+                                            runat="server" ErrorMessage="Price is a required field!" ControlToValidate="txtPriceInsert"
                                             Text="*" ForeColor="Red">
-                                        </asp:RequiredFieldValidator></EditItemTemplate>
+                                        </asp:RequiredFieldValidator>
+                                    </EditItemTemplate>
                                     <ItemTemplate>
                                         <asp:Label ID="Label5" runat="server" Text='<%# Bind("[Price]") %>'></asp:Label></ItemTemplate>
                                     <FooterTemplate>
                                         <asp:TextBox ID="txtPriceInsert" runat="server" Width="60"></asp:TextBox><asp:RegularExpressionValidator
-                                            ValidationGroup="insert" ID="revInsertPrice" runat="server" ErrorMessage="Only Decimal Value Allowed"
+                                            ValidationGroup="insertPrice" ID="revInsertPrice" runat="server" ErrorMessage="Only Decimal Value Allowed"
                                             ValidationExpression="^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$" ControlToValidate="txtPriceInsert"
                                             Text="*" ForeColor="Red">
                                         </asp:RegularExpressionValidator><asp:RequiredFieldValidator ValidationGroup="insertPrice"
                                             ID="rfcInsertPrice" runat="server" ErrorMessage="Price is a required field!"
                                             ControlToValidate="txtPriceInsert" Text="*" ForeColor="Red">
-                                        </asp:RequiredFieldValidator></FooterTemplate>
+                                        </asp:RequiredFieldValidator>
+                                    </FooterTemplate>
                                     <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Date Uploaded">
@@ -410,7 +424,7 @@
                             <SortedAscendingHeaderStyle BackColor="#808080" />
                             <SortedDescendingCellStyle BackColor="#CAC9C9" />
                             <SortedDescendingHeaderStyle BackColor="#383838" />
-                        </asp:GridView>
+                        </Custom:GridViewAlwaysShow>
                         <asp:ValidationSummary ID="ValidationSummary41" ValidationGroup="insertPrice" runat="server"
                             ForeColor="Red" />
                         <asp:ValidationSummary ID="ValidationSummary42" runat="server" ForeColor="Red" />
@@ -435,7 +449,7 @@
                         <asp:SqlDataSource ID="sdsHospitalName" runat="server" ConnectionString="<%$ ConnectionStrings:SQLConnectionString %>"
                             SelectCommand="SELECT [HospitalID], [HospitalName], [AccountNumber] FROM [Hospitals]">
                         </asp:SqlDataSource>
-                        <asp:GridView ID="GridView5" runat="server" AllowSorting="True" OnSorting="SortRecordsAccountNumber"
+                        <Custom:GridViewAlwaysShow ID="GridView5" runat="server" AllowSorting="True" OnSorting="SortRecordsAccountNumber"
                             AutoGenerateColumns="False" ShowFooter="True" BackColor="White" BorderColor="#999999"
                             DataKeyNames="HospitalID" BorderStyle="Solid" BorderWidth="1px" CellPadding="3"
                             GridLines="Vertical" AlternatingRowStyles-CssClass="alt" CssClass="mGrid" PagerStyle-CssClass="pgr"
@@ -500,7 +514,7 @@
                             <SortedAscendingHeaderStyle BackColor="#808080" />
                             <SortedDescendingCellStyle BackColor="#CAC9C9" />
                             <SortedDescendingHeaderStyle BackColor="#383838" />
-                        </asp:GridView>
+                        </Custom:GridViewAlwaysShow>
                         <asp:ValidationSummary ID="ValidationSummary5" ValidationGroup="insertAccountNumber"
                             runat="server" ForeColor="Red" />
                     </asp:View>
@@ -510,7 +524,7 @@
     </table>
     <script language="javascript" type="text/javascript">
         $(function () {
-            $(".txtEmailDate").datepicker({ dateFormat: 'dd/mm/yy' }); ;
+            $(".txtEmailDate").datepicker({ dateFormat: 'dd/mm/yy', minDate: '0' }); ;
         });
     </script>
 </asp:Content>
