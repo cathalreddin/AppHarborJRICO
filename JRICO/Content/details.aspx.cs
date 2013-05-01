@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -12,6 +11,10 @@ using SendGridMail;
 using SendGridMail.Transport;
 using System.Net.Mail;
 using System.Net;
+using System.Diagnostics;
+using System.IO;
+using Amazon.S3.Model;
+using Amazon.S3;
 
 namespace JRICO.Content
 {
@@ -19,6 +22,8 @@ namespace JRICO.Content
     {
         string _connStr = ConfigurationManager.ConnectionStrings["SQLConnectionString"].ConnectionString;
         WriteToLog writeToLog = new WriteToLog();
+        private const string accessKey = "AKIAI6URINAZNMO2P3CQ";
+        private const string secretKey = "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";
         int id = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -32,6 +37,7 @@ namespace JRICO.Content
                     getSingleContract(id);
                     BindDataPrice(id, "none", " ");
                     BindDataAccountNumber(id, "none", " ");
+                    BindDataAttachment(id, "none", " ");
                     BindDataNote(id);
                     EmailViewData();
                     getEmailDetails(id);
@@ -52,6 +58,161 @@ namespace JRICO.Content
                 }
             }
         }
+
+        //******************************************************************************************************************
+        // *** START OF TAB 2 ***
+        private void BindDataAttachment(int contractID, string column, string textSearch)
+        {
+            GridView2.DataSource = this.GetDataAttachment(contractID, column, textSearch);
+            GridView2.DataBind();
+        }
+
+        private DataTable GetDataAttachment(int contractID, string column, string textSearch)
+        {
+            DataTable table = new DataTable();
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                string sqlSP = "sp_getAttachmentList";
+
+                try
+                {
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
+                        cmd.Parameters.Add(new SqlParameter("@Column", column));
+                        cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                        {
+                            ad.Fill(table);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write(ex.Message);
+                }
+            }
+            return table;
+        }
+
+        protected void Button_Attachment(object sender, EventArgs e)
+        {
+            BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
+            //writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
+        }
+        protected void SortRecordsAttachment(object sender, GridViewSortEventArgs e)
+        {
+            string sortExpressionAttachment = e.SortExpression;
+            string directionAttachment = string.Empty;
+            if (sortDirectionAttachment == SortDirection.Ascending)
+            {
+                sortDirectionAttachment = SortDirection.Descending;
+                directionAttachment = " DESC ";
+            }
+            else
+            {
+                sortDirectionAttachment = SortDirection.Ascending;
+                directionAttachment = " ASC ";
+            }
+            DataTable table = this.GetDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
+            table.DefaultView.Sort = sortExpressionAttachment + directionAttachment;
+
+            GridView2.DataSource = table;
+            GridView2.DataBind();
+
+            //writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
+        }
+        public SortDirection sortDirectionAttachment
+        {
+            get
+            {
+                if (ViewState["SortDirectionAttachment"] == null)
+                {
+                    ViewState["SortDirectionAttachment"] = SortDirection.Ascending;
+                }
+                return (SortDirection)ViewState["SortDirectionAttachment"];
+            }
+            set
+            {
+                ViewState["SortDirectionAttachment"] = value;
+            }
+        }
+
+        protected void DownloadApplicationFile(object sender, CommandEventArgs e)
+        {
+            string keyn = "333-" + id.ToString() + "/";
+            string attachment = e.CommandArgument.ToString();
+            string dest = Path.Combine(HttpRuntime.CodegenDir, attachment);
+           
+            AmazonS3 client = Amazon.AWSClientFactory.CreateAmazonS3Client(
+                    accessKey, secretKey);
+            keyn = keyn + attachment;
+            GetObjectRequest request = new GetObjectRequest()
+                        .WithBucketName("JRIFiles").WithKey(keyn);
+
+            using (GetObjectResponse response = client.GetObject(request))
+            {
+                response.WriteResponseStreamToFile(dest, false);
+            }
+            HttpContext.Current.Response.Clear();
+            HttpContext.Current.Response.AppendHeader("content-disposition", "attachment; filename=" + attachment);
+            HttpContext.Current.Response.ContentType = "application/octet-stream";
+            HttpContext.Current.Response.TransmitFile(dest);
+            HttpContext.Current.Response.Flush();
+            HttpContext.Current.Response.End();
+
+            // Clean up temporary file.
+            System.IO.File.Delete(dest);
+        }
+        protected void lbInsert_Attachment(object sender, EventArgs e)
+        {
+            string query = "sp_insertAttachmentList: ";
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                string sqlSP = "sp_insertAttachmentList";
+
+                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.Add("@AttachmentTitle", SqlDbType.NVarChar).Value = ((TextBox)GridView2.FooterRow.FindControl("txtAttachmentTitleInsert")).Text;
+                    cmd.Parameters.Add("@AttachmentName", SqlDbType.NVarChar).Value = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
+                    cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalAttachmentinsert";
+                    cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
+                    conn.Open();
+                    cmd.ExecuteNonQuery();
+                    foreach (SqlParameter p in cmd.Parameters)
+                    {
+                        query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                    }
+                   
+                    if (((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileContent.Length > 0) // accept the file
+                    {
+                        AmazonS3 client;
+                        using (client = Amazon.AWSClientFactory.CreateAmazonS3Client(accessKey, secretKey))
+                        {
+                            //int c = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName.LastIndexOf('\\');
+                            //string AName = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName.Substring(c + 1);
+                            string AName = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
+                            MemoryStream ms = new MemoryStream();
+                            PutObjectRequest request = new PutObjectRequest();
+                            request.WithBucketName("JRIFiles")
+                           .WithCannedACL(S3CannedACL.PublicRead)
+                           .WithKey("333-"+id.ToString() + "/" + AName).InputStream = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).PostedFile.InputStream;
+                            S3Response response = client.PutObject(request);
+                        }
+                    }
+                    GridView2.EditIndex = -1;
+                    BindDataAttachment(id, "none", " ");
+                    conn.Close();
+                    writeToLog.WriteLog("Attachment Row inserted with SP : " + query, "cathal");
+                }
+            }
+        }
+       
+
+        // *** END OF TAB 2 ***
+
 
         //******************************************************************************************************************
         // *** START OF TAB 3 ***
