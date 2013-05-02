@@ -17,11 +17,11 @@ namespace JRICO.Content
         WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
-            writeToLog.WriteLog("Add New Contract Selected ", "cathal");            
+            writeToLog.WriteLog("Add New Contract Selected ", Page.User.Identity.Name);            
         }
         protected void Cancel(object sender, EventArgs e)
         {
-            writeToLog.WriteLog("Add New Contract Cancelled: ", "cathal");
+            writeToLog.WriteLog("Add New Contract Cancelled: ", Page.User.Identity.Name);
             Response.Redirect("/content/contractList.aspx");
         }
         protected void AddContract(object sender, EventArgs e)
@@ -46,7 +46,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtStartDate.Text);
                         cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEndDate.Text);
                         cmd.Parameters.Add("@ContractStatus", SqlDbType.Int).Value = Convert.ToInt32(ddlContractStatus.SelectedValue);
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal R";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         conn.Close();
@@ -56,7 +56,7 @@ namespace JRICO.Content
                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                         }
                         conn.Close();
-                        writeToLog.WriteLog("Contract Row inserted with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Contract Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
                 }
             }

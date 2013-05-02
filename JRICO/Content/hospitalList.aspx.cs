@@ -20,7 +20,7 @@ namespace JRICO.Content
             if (!IsPostBack)
             {
                 BindData("none", " ");
-                writeToLog.WriteLog("Hospital List populated on first page", "cathal");
+                writeToLog.WriteLog("Hospital List populated on first page", Page.User.Identity.Name);
             }
         }
         private void BindData(string column, string textSearch)
@@ -31,7 +31,7 @@ namespace JRICO.Content
         protected void Button1_Click(object sender, EventArgs e)
         {
             BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
+            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, Page.User.Identity.Name);
         }
 
         private DataTable GetData(string column, string textSearch)
@@ -71,13 +71,13 @@ namespace JRICO.Content
         {
             GridView1.EditIndex = e.NewEditIndex;
             BindData("none", " ");
-            writeToLog.WriteLog("Hospital Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
+            writeToLog.WriteLog("Hospital Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
         }
         protected void RowEditCancel(object sender, GridViewCancelEditEventArgs e)
         {
             GridView1.EditIndex = -1; // reseting grid view
             BindData("none", " ");
-            writeToLog.WriteLog("Hospital Row cancelled for edit", "cathal");
+            writeToLog.WriteLog("Hospital Row cancelled for edit", Page.User.Identity.Name);
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)
         {
@@ -102,7 +102,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@Address1", SqlDbType.NVarChar).Value = Address1.Text;
                         cmd.Parameters.Add("@Postcode", SqlDbType.NVarChar).Value = Postcode.Text;
                         cmd.Parameters.Add("@AccountNumber", SqlDbType.NVarChar).Value = AccountNumber.Text;
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal Rehhupdate";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         cmd.Parameters.Add("@HospitalID", SqlDbType.Int).Value = Convert.ToInt32(HospitalID);
                         conn.Open();
                         cmd.ExecuteNonQuery();
@@ -114,7 +114,7 @@ namespace JRICO.Content
                         GridView1.EditIndex = -1;
                         BindData("none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Hospital Row updated with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Hospital Row updated with SP : " + query, Page.User.Identity.Name);
                     }
                 }
                 catch (Exception ex)
@@ -152,7 +152,7 @@ namespace JRICO.Content
             GridView1.DataSource = table;
             GridView1.DataBind();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, Page.User.Identity.Name);
         }
 
         public SortDirection sortDirection
@@ -186,7 +186,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@Address1", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtAddress1Insert")).Text;
                         cmd.Parameters.Add("@Postcode", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtPostcodeInsert")).Text;
                         cmd.Parameters.Add("@AccountNumber", SqlDbType.NVarChar).Value = ((TextBox)GridView1.FooterRow.FindControl("txtAccountNumberInsert")).Text;
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal Rehhinsert";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         foreach (SqlParameter p in cmd.Parameters)
@@ -196,7 +196,7 @@ namespace JRICO.Content
                         GridView1.EditIndex = -1;
                         BindData("none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Hospital Row inserted with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Hospital Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
                 }
                 catch (Exception ex)

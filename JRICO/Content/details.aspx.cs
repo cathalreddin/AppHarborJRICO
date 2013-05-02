@@ -44,7 +44,7 @@ namespace JRICO.Content
                     EmailViewData();
                     getEmailDetails(id);
                     hlMessage.Visible = false;
-                    writeToLog.WriteLog("Contract ID: "+id.ToString()+" selected", "cathal");
+                    writeToLog.WriteLog("Contract ID: " + id.ToString() + " selected", Page.User.Identity.Name);
                 }
                 else
                 {
@@ -154,7 +154,7 @@ namespace JRICO.Content
         protected void Button_Attachment(object sender, EventArgs e)
         {
             BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
-            writeToLog.WriteLog("Attachment Row returned results for dropdwn: " + DropDownListAttachment.SelectedValue + " and for TextSearch: " + txtAttachmentSearch.Text, "cathal");
+            writeToLog.WriteLog("Attachment Row returned results for dropdwn: " + DropDownListAttachment.SelectedValue + " and for TextSearch: " + txtAttachmentSearch.Text, Page.User.Identity.Name);
         }
         protected void SortRecordsAttachment(object sender, GridViewSortEventArgs e)
         {
@@ -176,7 +176,7 @@ namespace JRICO.Content
             GridView2.DataSource = table;
             GridView2.DataBind();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionAttachment + " " + directionAttachment, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionAttachment + " " + directionAttachment, Page.User.Identity.Name);
         }
         public SortDirection sortDirectionAttachment
         {
@@ -221,7 +221,7 @@ namespace JRICO.Content
 
                 // Clean up temporary file.
                 System.IO.File.Delete(dest);
-                writeToLog.WriteLog("file " + keyn + attachment + " downloaded", "cathal");        
+                writeToLog.WriteLog("file " + keyn + attachment + " downloaded", Page.User.Identity.Name);        
             }
             catch (Exception ex)
             {
@@ -241,7 +241,7 @@ namespace JRICO.Content
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@AttachmentTitle", SqlDbType.NVarChar).Value = ((TextBox)GridView2.FooterRow.FindControl("txtAttachmentTitleInsert")).Text;
                         cmd.Parameters.Add("@AttachmentName", SqlDbType.NVarChar).Value = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).FileName;
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalAttachmentinsert";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
                         conn.Open();
                         cmd.ExecuteNonQuery();
@@ -264,13 +264,13 @@ namespace JRICO.Content
                                .WithCannedACL(S3CannedACL.PublicRead)
                                .WithKey("333-" + id.ToString() + "/" + AName).InputStream = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).PostedFile.InputStream;
                                 S3Response response = client.PutObject(request);
-                                writeToLog.WriteLog("file 333-" + id.ToString() + "/" + AName  +" uploaded", "cathal");  
+                                writeToLog.WriteLog("file 333-" + id.ToString() + "/" + AName  +" uploaded", Page.User.Identity.Name);  
                             }
                         }
                         GridView2.EditIndex = -1;
                         BindDataAttachment(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Attachment Row inserted with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Attachment Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
                 }
                 catch (Exception ex)
@@ -355,7 +355,7 @@ namespace JRICO.Content
                                 cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
                                 cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
                                 cmd.Parameters.Add("@EmailID", SqlDbType.Int).Value = Convert.ToInt32(lblEmailID.Text);
-                                cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalEmailUpdate";
+                                cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                                 conn.Open();
                                 cmd.ExecuteNonQuery();
                                 string query = "sp_updateEmail:";
@@ -366,8 +366,8 @@ namespace JRICO.Content
                                 conn.Close();
                                 getEmailDetails(id);
                                 EmailViewData();
-                                writeToLog.WriteLog("Update Email Row with SP : " + query, "cathal");
-                                writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, "cathal");
+                                writeToLog.WriteLog("Update Email Row with SP : " + query, Page.User.Identity.Name);
+                                writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, Page.User.Identity.Name);
                             }
                         }
                         else
@@ -382,7 +382,7 @@ namespace JRICO.Content
                                 cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
                                 cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
                                 cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
-                                cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalEmailInsert";
+                                cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                                 conn.Open();
                                 cmd.ExecuteNonQuery();
                                 string query = "sp_insertEmail:";
@@ -393,8 +393,8 @@ namespace JRICO.Content
                                 conn.Close();
                                 getEmailDetails(id);
                                 EmailViewData();
-                                writeToLog.WriteLog("Insert Email Row with SP : " + query, "cathal");
-                                writeToLog.WriteLog("Admin New Email attempted - result : " + result, "cathal");
+                                writeToLog.WriteLog("Insert Email Row with SP : " + query, Page.User.Identity.Name);
+                                writeToLog.WriteLog("Admin New Email attempted - result : " + result, Page.User.Identity.Name);
                             }
                         }
                     }
@@ -522,7 +522,7 @@ namespace JRICO.Content
         protected void Button_Note(object sender, EventArgs e)
         {
             BindDataNote(id, DropDownListNote.SelectedValue, txtNoteSearch.Text);
-            writeToLog.WriteLog("Note Row returned results for dropdwn: " + DropDownListNote.SelectedValue + " and for TextSearch: " + txtNoteSearch.Text, "cathal");
+            writeToLog.WriteLog("Note Row returned results for dropdwn: " + DropDownListNote.SelectedValue + " and for TextSearch: " + txtNoteSearch.Text, Page.User.Identity.Name);
         }
         private void BindDataNote(int contractID, string column, string textSearch)
         {
@@ -589,7 +589,7 @@ namespace JRICO.Content
             GridView3.DataSource = table;
             GridView3.DataBind();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionNote + " " + directionNote, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionNote + " " + directionNote, Page.User.Identity.Name);
         }
         public SortDirection sortDirectionNote
         {
@@ -619,7 +619,7 @@ namespace JRICO.Content
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@Title", SqlDbType.NVarChar).Value = ((TextBox)GridView3.FooterRow.FindControl("txtNoteTitleInsert")).Text;
                         cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = ((TextBox)GridView3.FooterRow.FindControl("txtNoteDescriptionInsert")).Text;
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalNoteinsert";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
                         conn.Open();
                         cmd.ExecuteNonQuery();
@@ -630,7 +630,7 @@ namespace JRICO.Content
                         GridView3.EditIndex = -1;
                         BindDataNote(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Note Row inserted with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Note Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
                 }
 
@@ -692,13 +692,13 @@ namespace JRICO.Content
         {
             GridView4.EditIndex = e.NewEditIndex;
             BindDataPrice(id, "none", " ");
-            writeToLog.WriteLog("Price Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
+            writeToLog.WriteLog("Price Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
         }
         protected void RowEditCancelPrice(object sender, GridViewCancelEditEventArgs e)
         {
             GridView4.EditIndex = -1; // reseting grid view
             BindDataPrice(id, "none", " ");
-            writeToLog.WriteLog("Price Row cancelled for edit", "cathal");
+            writeToLog.WriteLog("Price Row cancelled for edit", Page.User.Identity.Name);
         }
 
         protected void RowUpdatePrice(object sender, GridViewUpdateEventArgs e)
@@ -725,7 +725,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = Description.Text;
                         cmd.Parameters.Add("@Price", SqlDbType.NVarChar).Value = Price.Text;
                         cmd.Parameters.Add("@PriceID", SqlDbType.Decimal).Value = Convert.ToDecimal(PriceID);
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalPriceUpdate";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         string query = "sp_updatePriceList:";
@@ -736,7 +736,7 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Price Row updated with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Price Row updated with SP : " + query, Page.User.Identity.Name);
                     }
                 }
                 catch (Exception ex)
@@ -755,7 +755,7 @@ namespace JRICO.Content
         protected void Button_Price(object sender, EventArgs e)
         {
             BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
-            writeToLog.WriteLog("Price Row returned results for dropdwn: " + DropDownListPrice.SelectedValue + " and for TextSearch: " + txtPriceSearch.Text, "cathal");
+            writeToLog.WriteLog("Price Row returned results for dropdwn: " + DropDownListPrice.SelectedValue + " and for TextSearch: " + txtPriceSearch.Text, Page.User.Identity.Name);
         }
         protected void SortRecordsPrice(object sender, GridViewSortEventArgs e)
         {
@@ -775,7 +775,7 @@ namespace JRICO.Content
             table.DefaultView.Sort = sortExpressionPrice + directionPrice;
             GridView4.DataSource = table;
             GridView4.DataBind();
-            writeToLog.WriteLog("User Sorts on " + sortExpressionPrice + " " + directionPrice, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionPrice + " " + directionPrice, Page.User.Identity.Name);
         }
         public SortDirection sortDirectionPrice
         {
@@ -806,7 +806,7 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@Subject", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtSubjectInsert")).Text;
                         cmd.Parameters.Add("@Description", SqlDbType.NVarChar).Value = ((TextBox)GridView4.FooterRow.FindControl("txtDescriptionInsert")).Text;
                         cmd.Parameters.Add("@Price", SqlDbType.Decimal).Value = Convert.ToDecimal(((TextBox)GridView4.FooterRow.FindControl("txtPriceInsert")).Text);
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathalPriceinsert";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
                         conn.Open();
                         cmd.ExecuteNonQuery();
@@ -817,7 +817,7 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Price Row inserted with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Price Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
                 }
                 catch (Exception ex)
@@ -904,7 +904,7 @@ namespace JRICO.Content
             GridView5.DataSource = table;
             GridView5.DataBind();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionAccountNumber + " " + directionAccountNumber, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpressionAccountNumber + " " + directionAccountNumber, Page.User.Identity.Name);
         }
 
         public SortDirection sortDirectionAccountNumber
@@ -936,7 +936,7 @@ namespace JRICO.Content
                         cmd.CommandType = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@HospitalID", SqlDbType.Int).Value = Convert.ToInt32(((DropDownList)GridView5.FooterRow.FindControl("ddlHospitalName")).SelectedItem.Value);
                         cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = id;
-                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal insert CH";
+                        cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         conn.Open();
                         cmd.ExecuteNonQuery();
                         foreach (SqlParameter p in cmd.Parameters)
@@ -946,7 +946,7 @@ namespace JRICO.Content
                         GridView5.EditIndex = -1;
                         BindDataAccountNumber(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Hospital / AccountNumber Row inserted with SP : " + query, "cathal");
+                        writeToLog.WriteLog("Hospital / AccountNumber Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
                 }
                 catch (Exception ex)
@@ -965,7 +965,7 @@ namespace JRICO.Content
         protected void Button_AccountNumber(object sender, EventArgs e)
         {
             BindDataAccountNumber(id, DropDownListAccountNumber.SelectedValue, txtAccountNumberSearch.Text);
-            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownListAccountNumber.SelectedValue + " and for TextSearch: " + txtAccountNumberSearch.Text, "cathal");
+            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownListAccountNumber.SelectedValue + " and for TextSearch: " + txtAccountNumberSearch.Text, Page.User.Identity.Name);
         }
         //*** END OF TAB 5 ***
 

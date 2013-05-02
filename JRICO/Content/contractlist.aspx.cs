@@ -21,7 +21,7 @@ namespace JRICO.Content
             if (!IsPostBack)
             {
                 BindData("none", " ");
-                writeToLog.WriteLog("List populated on first page", "cathal");
+                writeToLog.WriteLog("List populated on first page", Page.User.Identity.Name);
                 CheckForEmailTriggers();                
             }
         }
@@ -68,7 +68,7 @@ namespace JRICO.Content
                                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                                         }
                                         connEmail.Close();
-                                        writeToLog.WriteLog("Trigger Email attempted to Send : " + query, "cathal");
+                                        writeToLog.WriteLog("Trigger Email attempted to Send : " + query, Page.User.Identity.Name);
                                         connEmail.Close();
                                     }
                                     catch (Exception ex)
@@ -102,7 +102,7 @@ namespace JRICO.Content
         protected void Button1_Click(object sender, EventArgs e)
         {
             BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            writeToLog.WriteLog("Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, "cathal");
+            writeToLog.WriteLog("Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, Page.User.Identity.Name);
         }
         private void BindData(string column, string textSearch)
         {
@@ -147,13 +147,13 @@ namespace JRICO.Content
         {
             GridView1.EditIndex = e.NewEditIndex;
             BindData("none", " ");
-            writeToLog.WriteLog("Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", "cathal");
+            writeToLog.WriteLog("Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
         }
         protected void RowEditCancel(object sender, GridViewCancelEditEventArgs e)
         {
             GridView1.EditIndex = -1; // reseting grid view
             BindData("none", " "); 
-            writeToLog.WriteLog("Row cancelled for edit", "cathal");      
+            writeToLog.WriteLog("Row cancelled for edit", Page.User.Identity.Name);      
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)
         {
@@ -193,7 +193,7 @@ namespace JRICO.Content
                             cmd.Parameters.Add("@StartDate", SqlDbType.DateTime).Value = Convert.ToDateTime(StartDate.Text);
                             cmd.Parameters.Add("@EndDate", SqlDbType.DateTime).Value = Convert.ToDateTime(EndDate.Text);
                             cmd.Parameters.Add("@ContractStatus", SqlDbType.Int).Value = Convert.ToInt32(ContractStatus.Text);
-                            cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = "cathal Re";
+                            cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                             cmd.Parameters.Add("@ContractID", SqlDbType.Int).Value = Convert.ToInt32(ContractID);
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -205,7 +205,7 @@ namespace JRICO.Content
                             GridView1.EditIndex = -1;
                             BindData("none", " ");
                             conn.Close();
-                            writeToLog.WriteLog("Row updated with SP : " + query, "cathal");
+                            writeToLog.WriteLog("Row updated with SP : " + query, Page.User.Identity.Name);
                         }
                     }
                     catch (Exception ex)
@@ -243,7 +243,7 @@ namespace JRICO.Content
             GridView1.DataSource = table;
             GridView1.DataBind();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, "cathal");
+            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, Page.User.Identity.Name);
         }
 
         public SortDirection sortDirection
