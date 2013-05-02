@@ -48,7 +48,7 @@ namespace JRICO.Content
                             string EmailSubject = dr["EmailSubject"].ToString();
                             string EmailContent = dr["EmailContent"].ToString();
                             int ContractID = Convert.ToInt32(dr["ContractID"]);
-                            string result = newEmail.SendEmail(emailTo, EmailSubject, EmailContent, ContractID);
+                            string result = newEmail.SendEmail(emailTo, "[Contract Title: " + dr["ContractTitle"].ToString() + "] " +EmailSubject, EmailContent, ContractID);
 
                             using (SqlConnection connEmail = new SqlConnection(_connStr))
                             {
