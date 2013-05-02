@@ -255,6 +255,21 @@
                                 <asp:TableCell CssClass="5"></asp:TableCell></asp:TableRow>
                         </asp:Table>
                         <br />
+                        <asp:Table ID="Table33" runat="server" Style="width: 100%; border-width: 1px; border-color: #666;
+                            border-style: solid; vertical-align: middle;">
+                            <asp:TableRow>
+                                <asp:TableCell>
+                                    &nbsp;&nbsp; Search &nbsp;&nbsp;
+                                    <asp:DropDownList ID="DropDownListNote" runat="server">
+                                        <asp:ListItem Value="NoteTitle">Title</asp:ListItem>
+                                        <asp:ListItem Value="NoteDescription">Description</asp:ListItem>
+                                    </asp:DropDownList>
+                                    &nbsp;&nbsp;for&nbsp;&nbsp;
+                                    <asp:TextBox ID="txtNoteSearch" runat="server"></asp:TextBox>
+                                    <asp:Button ID="Button4" runat="server" Text="Go" OnClick="Button_Note" />
+                                </asp:TableCell>
+                            </asp:TableRow>
+                        </asp:Table>
                         <Custom:GridViewAlwaysShow ID="GridView3" runat="server" AllowSorting="True" OnSorting="SortRecordsNote"
                             AutoGenerateColumns="False" ShowFooter="True" BackColor="White" BorderColor="#999999"
                             DataKeyNames="NoteID" BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical"
@@ -378,11 +393,11 @@
                                     <EditItemTemplate>
                                         <asp:TextBox ID="txtPrice" runat="server" Text='<%# Bind("[Price]") %>'></asp:TextBox>
                                         <asp:RegularExpressionValidator ID="revUpdatePrice" runat="server" ErrorMessage="Only Decimal Value Allowed"
-                                            ValidationExpression="^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$" ControlToValidate="txtPriceInsert"
+                                            ValidationExpression="^\d*[0-9](|.\d*[0-9]|,\d*[0-9])?$" ControlToValidate="txtPrice"
                                             Text="*" ForeColor="Red">
                                         </asp:RegularExpressionValidator>
                                         <asp:RequiredFieldValidator ID="rfcUpdatePrice"
-                                            runat="server" ErrorMessage="Price is a required field!" ControlToValidate="txtPriceInsert"
+                                            runat="server" ErrorMessage="Price is a required field!" ControlToValidate="txtPrice"
                                             Text="*" ForeColor="Red">
                                         </asp:RequiredFieldValidator>
                                     </EditItemTemplate>

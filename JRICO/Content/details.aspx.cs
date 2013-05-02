@@ -40,7 +40,7 @@ namespace JRICO.Content
                     BindDataPrice(id, "none", " ");
                     BindDataAccountNumber(id, "none", " ");
                     BindDataAttachment(id, "none", " ");
-                    BindDataNote(id);
+                    BindDataNote(id, "none", " ");
                     EmailViewData();
                     getEmailDetails(id);
                     hlMessage.Visible = false;
@@ -519,9 +519,14 @@ namespace JRICO.Content
                 }
             }
         }
-        private void BindDataNote(int contractID)
+        protected void Button_Note(object sender, EventArgs e)
         {
-            GridView3.DataSource = this.GetDataNote(contractID);
+            BindDataNote(id, DropDownListNote.SelectedValue, txtNoteSearch.Text);
+            writeToLog.WriteLog("Note Row returned results for dropdwn: " + DropDownListNote.SelectedValue + " and for TextSearch: " + txtNoteSearch.Text, "cathal");
+        }
+        private void BindDataNote(int contractID, string column, string textSearch)
+        {
+            GridView3.DataSource = this.GetDataNote(contractID, column, textSearch);
             GridView3.DataBind();
         }
         protected IEnumerable GridView3_MustAddARow(IEnumerable data) 
@@ -530,7 +535,7 @@ namespace JRICO.Content
 		    dds.Add(new int());
 		    return dds;
 	    }
-        private DataTable GetDataNote(int contractID)
+        private DataTable GetDataNote(int contractID, string column, string textSearch)
         {
             DataTable table = new DataTable();
             using (SqlConnection conn = new SqlConnection(_connStr))
@@ -541,6 +546,8 @@ namespace JRICO.Content
                     using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
                     {
                         cmd.Parameters.Add(new SqlParameter("@ContractID", contractID));
+                        cmd.Parameters.Add(new SqlParameter("@Column", column));
+                        cmd.Parameters.Add(new SqlParameter("@TextSearch", textSearch));
                         cmd.CommandType = CommandType.StoredProcedure;
                         using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
                         {
@@ -576,7 +583,7 @@ namespace JRICO.Content
                 sortDirectionNote = SortDirection.Ascending;
                 directionNote = " ASC ";
             }
-            DataTable table = this.GetDataNote(id);
+            DataTable table = this.GetDataNote(id, DropDownListNote.SelectedValue, txtNoteSearch.Text);
             table.DefaultView.Sort = sortExpressionNote + directionNote;
 
             GridView3.DataSource = table;
@@ -621,7 +628,7 @@ namespace JRICO.Content
                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                         }
                         GridView3.EditIndex = -1;
-                        BindDataNote(id);
+                        BindDataNote(id, "none", " ");
                         conn.Close();
                         writeToLog.WriteLog("Note Row inserted with SP : " + query, "cathal");
                     }
