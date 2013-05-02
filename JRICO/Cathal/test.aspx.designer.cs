@@ -7,11 +7,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace JRICO
+namespace JRICO.Cathal
 {
 
 
-    public partial class _Default
+    public partial class test
     {
     }
 }

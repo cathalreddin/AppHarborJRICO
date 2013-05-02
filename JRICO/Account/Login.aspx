@@ -9,7 +9,6 @@
     </h2>
     <p>
         Please enter your username and password.
-        <asp:HyperLink ID="RegisterHyperLink" runat="server" EnableViewState="false">Register</asp:HyperLink> if you don't have an account.
     </p>
     <asp:Login ID="LoginUser" runat="server" EnableViewState="false" RenderOuterTable="false">
         <LayoutTemplate>
@@ -20,7 +19,7 @@
                  ValidationGroup="LoginUserValidationGroup"/>
             <div class="accountInfo">
                 <fieldset class="login">
-                    <legend>Account Informationx</legend>
+                    <legend>Account Information</legend>
                     <p>
                         <asp:Label ID="UserNameLabel" runat="server" AssociatedControlID="UserName">Username:</asp:Label>
                         <asp:TextBox ID="UserName" runat="server" CssClass="textEntry"></asp:TextBox>

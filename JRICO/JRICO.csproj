@@ -86,6 +86,7 @@
     <Content Include="Account\ChangePasswordSuccess.aspx" />
     <Content Include="Account\Login.aspx" />
     <Content Include="Account\Register.aspx" />
+    <Content Include="Cathal\test.aspx" />
     <Content Include="Content\addContract.aspx" />
     <Content Include="Content\contractList.aspx" />
     <Content Include="Content\details.aspx" />
@@ -97,7 +98,6 @@
     <Content Include="Scripts\jquery-ui-1.10.2.custom.min.js" />
     <Content Include="Styles\jquery-ui-1.10.2.custom.css" />
     <Content Include="Styles\Site.css" />
-    <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\jquery-1.4.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.4.1.js" />
@@ -141,6 +141,13 @@
     <Compile Include="Account\Register.aspx.designer.cs">
       <DependentUpon>Register.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Cathal\test.aspx.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Cathal\test.aspx.designer.cs">
+      <DependentUpon>test.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CodeArea\Email.cs" />
     <Compile Include="CodeArea\GridViewAlwaysShow.cs" />
     <Compile Include="CodeArea\WriteToLog.cs" />
@@ -171,13 +178,6 @@
     </Compile>
     <Compile Include="Content\hospitalList.aspx.designer.cs">
       <DependentUpon>hospitalList.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Default.aspx.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Default.aspx.designer.cs">
-      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

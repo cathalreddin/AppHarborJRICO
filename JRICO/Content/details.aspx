@@ -231,7 +231,7 @@
                                     <asp:Label ID="lblEmailToHeading" runat="server" Text="To" /></asp:TableCell>
                                     <asp:TableCell ColumnSpan="2">
                                         <asp:Label ID="lblEmailTo" runat="server" /><asp:TextBox ID="txtEmailTo" runat="server"
-                                            Width="550" /><asp:Label ID="lblEmailToRFC" runat="server" Width="15"/></asp:TableCell><asp:TableCell>
+                                            Width="550" type="email" /><asp:Label ID="lblEmailToRFC" runat="server" Width="15"/></asp:TableCell><asp:TableCell>
                                                 <asp:Label ID="lblEmailDateHeading" runat="server" Text="Email Trigger Date" /></asp:TableCell><asp:TableCell>
                                                     <asp:Label ID="lblEmailDate" runat="server" /><asp:TextBox ID="txtEmailDate" runat="server"
                                                         Width="75" CssClass="txtEmailDate" /><asp:Label ID="lblEmailDateRFC" runat="server" Width="15"/></asp:TableCell></asp:TableRow>
