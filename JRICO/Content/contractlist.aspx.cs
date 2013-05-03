@@ -21,7 +21,7 @@ namespace JRICO.Content
             if (!(User.Identity.IsAuthenticated))
             {
                writeToLog.WriteLog("Redirected to login from contractList page: No authentication ", Page.User.Identity.Name);
-               Response.Redirect("../Account/Login.aspx");
+               Response.Redirect("~/Account/Login.aspx");
             }
             else
             {
@@ -134,8 +134,8 @@ namespace JRICO.Content
             else
             {
                 GridView1.DataSource = this.GetData(column, textSearch);
-                GridView1.DataBind();
-            }
+            GridView1.DataBind();
+                }
         }
 
 
