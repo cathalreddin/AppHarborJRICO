@@ -91,6 +91,7 @@
     <Content Include="Content\contractList.aspx" />
     <Content Include="Content\details.aspx" />
     <Content Include="Content\hospitalList.aspx" />
+    <Content Include="default.aspx" />
     <Content Include="Images\InitialImage.png" />
     <Content Include="Images\SelectedButton.png" />
     <Content Include="Scripts\jquery-1.9.1.js" />
@@ -178,6 +179,13 @@
     </Compile>
     <Compile Include="Content\hospitalList.aspx.designer.cs">
       <DependentUpon>hospitalList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="default.aspx.cs">
+      <DependentUpon>default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="default.aspx.designer.cs">
+      <DependentUpon>default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
