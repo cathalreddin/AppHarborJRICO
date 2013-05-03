@@ -8,7 +8,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 using JRICO.CodeArea;
-
+using System.Web.Security;
 
 namespace JRICO.Content
 {
@@ -18,11 +18,20 @@ namespace JRICO.Content
         WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (!(User.Identity.IsAuthenticated))
             {
-                BindData("none", " ");
-                writeToLog.WriteLog("List populated on first page", Page.User.Identity.Name);
-                CheckForEmailTriggers();                
+               writeToLog.WriteLog("Redirected to login from contractList page: No authentication ", Page.User.Identity.Name);
+               Response.Redirect("../Account/Login.aspx");
+            }
+            else
+            {
+                writeToLog.WriteLog("Accessed the contractList Page ", Page.User.Identity.Name);
+                if (!IsPostBack)
+                {
+                    BindData("none", " ");
+                    writeToLog.WriteLog("List populated on first page", Page.User.Identity.Name);
+                    CheckForEmailTriggers();
+                }
             }
         }
         protected void CheckForEmailTriggers()

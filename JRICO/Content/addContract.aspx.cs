@@ -17,7 +17,12 @@ namespace JRICO.Content
         WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
-            writeToLog.WriteLog("Add New Contract Selected ", Page.User.Identity.Name);            
+            if (!(User.Identity.IsAuthenticated)) 
+            {
+                writeToLog.WriteLog("Redirected to login from addContract page: No authentication ", Page.User.Identity.Name);
+                Response.Redirect("../Account/Login.aspx");
+            }          
+            writeToLog.WriteLog("Accessed the New Contract page ", Page.User.Identity.Name);            
         }
         protected void Cancel(object sender, EventArgs e)
         {

@@ -28,36 +28,45 @@ namespace JRICO.Content
         int id = 0;
         
         protected void Page_Load(object sender, EventArgs e)
-        {            
-            id = Convert.ToInt32(Request.QueryString["id"]);
-            if (!IsPostBack)
+        {
+            if (!(User.Identity.IsAuthenticated))
             {
-                Tab1.CssClass = "Clicked";
-                MainView.ActiveViewIndex = 0;
-                if (id != 0)
+                writeToLog.WriteLog("Redirected to login from details page: No authentication ", Page.User.Identity.Name);
+                Response.Redirect("../Account/Login.aspx");
+            }
+            else
+            {
+                writeToLog.WriteLog("Accessed the details Page ", Page.User.Identity.Name);
+                id = Convert.ToInt32(Request.QueryString["id"]);
+                if (!IsPostBack)
                 {
-                    getSingleContract(id);
-                    BindDataPrice(id, "none", " ");
-                    BindDataAccountNumber(id, "none", " ");
-                    BindDataAttachment(id, "none", " ");
-                    BindDataNote(id, "none", " ");
-                    EmailViewData();
-                    getEmailDetails(id);
-                    hlMessage.Visible = false;
-                    writeToLog.WriteLog("Contract ID: " + id.ToString() + " selected", Page.User.Identity.Name);
-                }
-                else
-                {
-                    hlMessage.Text = "OOOOPS... NO DATA SELECTED PLEASE CLICK HERE AND SELECT DATA AGAIN";
-                    hlMessage.Visible = true;
-                    hlMessage.Font.Italic = true;
-                    hlMessage.Font.Bold = true;
-                    hlMessage.ForeColor = System.Drawing.Color.Red;
-                    hlMessage.NavigateUrl = "contractList.aspx";
-                    lblContractReferenceHeading.Visible = false;
-                    lblContractTitleHeading.Visible = false;
-                    lblContractReferenceLabel.Visible = false;
-                    lblContractTitleLabel.Visible = false;
+                    Tab1.CssClass = "Clicked";
+                    MainView.ActiveViewIndex = 0;
+                    if (id != 0)
+                    {
+                        getSingleContract(id);
+                        BindDataPrice(id, "none", " ");
+                        BindDataAccountNumber(id, "none", " ");
+                        BindDataAttachment(id, "none", " ");
+                        BindDataNote(id, "none", " ");
+                        EmailViewData();
+                        getEmailDetails(id);
+                        hlMessage.Visible = false;
+                        writeToLog.WriteLog("Contract ID: " + id.ToString() + " selected", Page.User.Identity.Name);
+                    }
+                    else
+                    {
+                        hlMessage.Text = "OOOOPS... NO DATA SELECTED PLEASE CLICK HERE AND SELECT DATA AGAIN";
+                        hlMessage.Visible = true;
+                        hlMessage.Font.Italic = true;
+                        hlMessage.Font.Bold = true;
+                        hlMessage.ForeColor = System.Drawing.Color.Red;
+                        hlMessage.NavigateUrl = "contractList.aspx";
+                        lblContractReferenceHeading.Visible = false;
+                        lblContractTitleHeading.Visible = false;
+                        lblContractReferenceLabel.Visible = false;
+                        lblContractTitleLabel.Visible = false;
+                    }
                 }
             }
         }

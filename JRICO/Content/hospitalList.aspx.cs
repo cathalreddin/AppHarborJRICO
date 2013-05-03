@@ -17,10 +17,19 @@ namespace JRICO.Content
         WriteToLog writeToLog = new WriteToLog();
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (!(User.Identity.IsAuthenticated))
             {
-                BindData("none", " ");
-                writeToLog.WriteLog("Hospital List populated on first page", Page.User.Identity.Name);
+                writeToLog.WriteLog("Redirected to login from hospitalList page: No authentication ", Page.User.Identity.Name);
+                Response.Redirect("../Account/Login.aspx");
+            }
+            else
+            {
+                writeToLog.WriteLog("Accessed the hospitalList Page ", Page.User.Identity.Name);      
+                if (!IsPostBack)
+                {
+                    BindData("none", " ");
+                    writeToLog.WriteLog("Hospital List populated on first page", Page.User.Identity.Name);
+                }
             }
         }
         private void BindData(string column, string textSearch)
