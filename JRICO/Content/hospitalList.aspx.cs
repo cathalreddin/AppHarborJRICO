@@ -79,13 +79,13 @@ namespace JRICO.Content
         protected void RowEdit(object sender, GridViewEditEventArgs e)
         {
             GridView1.EditIndex = e.NewEditIndex;
-            BindData("none", " ");
+            BindData(DropDownList1.SelectedValue, TextSearch.Text);
             writeToLog.WriteLog("Hospital Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
         }
         protected void RowEditCancel(object sender, GridViewCancelEditEventArgs e)
         {
             GridView1.EditIndex = -1; // reseting grid view
-            BindData("none", " ");
+            BindData(DropDownList1.SelectedValue, TextSearch.Text);
             writeToLog.WriteLog("Hospital Row cancelled for edit", Page.User.Identity.Name);
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)

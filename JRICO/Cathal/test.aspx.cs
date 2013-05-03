@@ -16,8 +16,8 @@ namespace JRICO.Cathal
         {
             if (!(Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")))
             {
-                Response.Redirect("../Account/Login.aspx");
                 writeToLog.WriteLog("Redirected to login from SuperUser page: No authentication ", Page.User.Identity.Name);
+                Response.Redirect("../Account/Login.aspx");
             }
             writeToLog.WriteLog("Accessed the SuperUser Page ", Page.User.Identity.Name);            
         }

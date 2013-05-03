@@ -15,7 +15,7 @@ namespace JRICO.Account
         protected void Page_Load(object sender, EventArgs e)
         {
             RegisterUser.ContinueDestinationPageUrl = Request.QueryString["ReturnUrl"];
-            if ((!(Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser"))) || (!(Roles.IsUserInRole(Page.User.Identity.Name, "Admin"))))
+            if ((!(Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser"))) && (!(Roles.IsUserInRole(Page.User.Identity.Name, "Admin"))))
             {
                 writeToLog.WriteLog("Redirected to login from register page: No authentication ", Page.User.Identity.Name);
                 Response.Redirect("Login.aspx");
