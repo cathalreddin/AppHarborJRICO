@@ -34,8 +34,19 @@ namespace JRICO.Content
         }
         private void BindData(string column, string textSearch)
         {
-            GridView1.DataSource = this.GetData(column, textSearch);
-            GridView1.DataBind();
+            //Sorting Issue #1
+            if (ViewState["sortExpression"] != null)
+            {
+                DataTable table = this.GetData(column, textSearch);
+                table.DefaultView.Sort = ViewState["sortExpression"].ToString() + ViewState["direction"].ToString();
+                GridView1.DataSource = table;
+                GridView1.DataBind();
+            }
+            else
+            {
+                GridView1.DataSource = this.GetData(column, textSearch);
+                GridView1.DataBind();
+            }            
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
@@ -121,7 +132,7 @@ namespace JRICO.Content
                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                         }
                         GridView1.EditIndex = -1;
-                        BindData("none", " ");
+                        BindData(DropDownList1.SelectedValue, TextSearch.Text);
                         conn.Close();
                         writeToLog.WriteLog("Hospital Row updated with SP : " + query, Page.User.Identity.Name);
                     }
@@ -160,6 +171,9 @@ namespace JRICO.Content
 
             GridView1.DataSource = table;
             GridView1.DataBind();
+            //Sorting Issue #1
+            ViewState["sortExpression"] = sortExpression.ToString();
+            ViewState["direction"] = direction.ToString();
 
             writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, Page.User.Identity.Name);
         }

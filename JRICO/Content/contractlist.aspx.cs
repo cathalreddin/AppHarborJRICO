@@ -31,6 +31,14 @@ namespace JRICO.Content
                     BindData("none", " ");
                     writeToLog.WriteLog("List populated on first page", Page.User.Identity.Name);
                     CheckForEmailTriggers();
+                    if ((Request.QueryString["m"] != null) && (Request.QueryString["m"] == "new"))
+                    {
+                        lblNewUser.Visible = true;
+                        lblNewUser.Text = "Success - New User Added";
+                        lblNewUser.Font.Italic = true;
+                        lblNewUser.Font.Bold = true;
+                        lblNewUser.ForeColor = System.Drawing.Color.Red;
+                    }
                 }
             }
         }
@@ -115,8 +123,19 @@ namespace JRICO.Content
         }
         private void BindData(string column, string textSearch)
         {
-            GridView1.DataSource = this.GetData(column, textSearch);
-            GridView1.DataBind();
+             //Sorting Issue #1
+            if (ViewState["sortExpression"] != null)
+            {
+                DataTable table = this.GetData(column, textSearch);
+                table.DefaultView.Sort = ViewState["sortExpression"].ToString() + ViewState["direction"].ToString();
+                GridView1.DataSource = table;
+                GridView1.DataBind();
+            }
+            else
+            {
+                GridView1.DataSource = this.GetData(column, textSearch);
+                GridView1.DataBind();
+            }
         }
 
 
@@ -155,13 +174,13 @@ namespace JRICO.Content
         protected void RowEdit(object sender, GridViewEditEventArgs e)
         {
             GridView1.EditIndex = e.NewEditIndex;
-            BindData("none", " ");
+            BindData(DropDownList1.SelectedValue, TextSearch.Text);
             writeToLog.WriteLog("Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
         }
         protected void RowEditCancel(object sender, GridViewCancelEditEventArgs e)
         {
             GridView1.EditIndex = -1; // reseting grid view
-            BindData("none", " "); 
+            BindData(DropDownList1.SelectedValue, TextSearch.Text); 
             writeToLog.WriteLog("Row cancelled for edit", Page.User.Identity.Name);      
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)
@@ -212,7 +231,7 @@ namespace JRICO.Content
                                 query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                             }
                             GridView1.EditIndex = -1;
-                            BindData("none", " ");
+                            BindData(DropDownList1.SelectedValue, TextSearch.Text);
                             conn.Close();
                             writeToLog.WriteLog("Row updated with SP : " + query, Page.User.Identity.Name);
                         }
@@ -251,6 +270,9 @@ namespace JRICO.Content
 
             GridView1.DataSource = table;
             GridView1.DataBind();
+            //Sorting Issue #1
+            ViewState["sortExpression"] = sortExpression.ToString();
+            ViewState["direction"] = direction.ToString();
 
             writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, Page.User.Identity.Name);
         }

@@ -30,7 +30,7 @@ namespace JRICO.Account
             string continueUrl = RegisterUser.ContinueDestinationPageUrl;
             if (String.IsNullOrEmpty(continueUrl))
             {
-                continueUrl = "~/";
+                continueUrl = "~/Content/contractList.aspx?m=new";
             }
             Response.Redirect(continueUrl);
         }

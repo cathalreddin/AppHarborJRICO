@@ -24,7 +24,8 @@ CodeBehind="contractList.aspx.cs" Inherits="JRICO.Content.contractList" %>
                 </asp:DropDownList>
                 &nbsp;&nbsp;for&nbsp;&nbsp;
                 <asp:TextBox ID="TextSearch" runat="server"></asp:TextBox>
-                <asp:Button ID="Button1" runat="server" Text="Go" OnClick="Button1_Click" />
+                <asp:Button ID="Button1" runat="server" Text="Go" OnClick="Button1_Click" />                
+                <asp:Label ID="lblNewUser" runat="server" Visible="false" />
            </td>
            <td align="right">
                <a href="hospitalList.aspx">Hospital Admin</a>

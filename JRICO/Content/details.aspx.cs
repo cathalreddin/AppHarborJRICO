@@ -122,8 +122,19 @@ namespace JRICO.Content
         // *** START OF TAB 2 ***
         private void BindDataAttachment(int contractID, string column, string textSearch)
         {
-            GridView2.DataSource = this.GetDataAttachment(contractID, column, textSearch);
-            GridView2.DataBind();
+            //Sorting Issue #1
+            if (ViewState["sortExpressionAttachment"] != null)
+            {
+                DataTable table = this.GetDataAttachment(contractID, column, textSearch);
+                table.DefaultView.Sort = ViewState["sortExpressionAttachment"].ToString() + ViewState["directionAttachment"].ToString();
+                GridView2.DataSource = table;
+                GridView2.DataBind();
+            }
+            else
+            {
+                GridView2.DataSource = this.GetDataAttachment(contractID, column, textSearch);
+                GridView2.DataBind();
+            }
         }
 
         private DataTable GetDataAttachment(int contractID, string column, string textSearch)
@@ -184,6 +195,11 @@ namespace JRICO.Content
 
             GridView2.DataSource = table;
             GridView2.DataBind();
+
+            //Sorting Issue #1
+            ViewState["sortExpressionAttachment"] = sortExpressionAttachment.ToString();
+            ViewState["directionAttachment"] = directionAttachment.ToString();
+
 
             writeToLog.WriteLog("User Sorts on " + sortExpressionAttachment + " " + directionAttachment, Page.User.Identity.Name);
         }
@@ -277,7 +293,7 @@ namespace JRICO.Content
                             }
                         }
                         GridView2.EditIndex = -1;
-                        BindDataAttachment(id, "none", " ");
+                        BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
                         conn.Close();
                         writeToLog.WriteLog("Attachment Row inserted with SP : " + query, Page.User.Identity.Name);
                     }
@@ -535,8 +551,19 @@ namespace JRICO.Content
         }
         private void BindDataNote(int contractID, string column, string textSearch)
         {
-            GridView3.DataSource = this.GetDataNote(contractID, column, textSearch);
-            GridView3.DataBind();
+             //Sorting Issue #1
+            if (ViewState["sortExpressionNote"] != null)
+            {
+                DataTable table = this.GetDataNote(contractID, column, textSearch);
+                table.DefaultView.Sort = ViewState["sortExpressionNote"].ToString() + ViewState["directionNote"].ToString();
+                GridView3.DataSource = table;
+                GridView3.DataBind();
+            }
+            else
+            {
+                GridView3.DataSource = this.GetDataNote(contractID, column, textSearch);
+                GridView3.DataBind();
+            }
         }
         protected IEnumerable GridView3_MustAddARow(IEnumerable data) 
         {
@@ -597,6 +624,9 @@ namespace JRICO.Content
 
             GridView3.DataSource = table;
             GridView3.DataBind();
+            //Sorting Issue #1
+            ViewState["sortExpressionNote"] = sortExpressionNote.ToString();
+            ViewState["directionNote"] = directionNote.ToString();
 
             writeToLog.WriteLog("User Sorts on " + sortExpressionNote + " " + directionNote, Page.User.Identity.Name);
         }
@@ -660,8 +690,19 @@ namespace JRICO.Content
         // *** START OF TAB 4 ***
         private void BindDataPrice(int contractID, string column, string textSearch)
         {
-            GridView4.DataSource = this.GetDataPrice(contractID, column, textSearch);
-            GridView4.DataBind();
+            //Sorting Issue #1
+            if (ViewState["sortExpressionPrice"] != null)
+            {
+                DataTable table = this.GetDataPrice(contractID, column, textSearch);
+                table.DefaultView.Sort = ViewState["sortExpressionPrice"].ToString() + ViewState["directionPrice"].ToString();
+                GridView4.DataSource = table;
+                GridView4.DataBind();
+            }
+            else
+            {
+                GridView4.DataSource = this.GetDataPrice(contractID, column, textSearch);
+                GridView4.DataBind();
+            }
         }
 
         private DataTable GetDataPrice(int contractID, string column, string textSearch)
@@ -700,13 +741,13 @@ namespace JRICO.Content
         protected void RowEditPrice(object sender, GridViewEditEventArgs e)
         {
             GridView4.EditIndex = e.NewEditIndex;
-            BindDataPrice(id, "none", " ");
+            BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
             writeToLog.WriteLog("Price Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
         }
         protected void RowEditCancelPrice(object sender, GridViewCancelEditEventArgs e)
         {
             GridView4.EditIndex = -1; // reseting grid view
-            BindDataPrice(id, "none", " ");
+            BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
             writeToLog.WriteLog("Price Row cancelled for edit", Page.User.Identity.Name);
         }
 
@@ -743,7 +784,7 @@ namespace JRICO.Content
                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                         }
                         GridView4.EditIndex = -1;
-                        BindDataPrice(id, "none", " ");
+                        BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
                         conn.Close();
                         writeToLog.WriteLog("Price Row updated with SP : " + query, Page.User.Identity.Name);
                     }
@@ -784,6 +825,10 @@ namespace JRICO.Content
             table.DefaultView.Sort = sortExpressionPrice + directionPrice;
             GridView4.DataSource = table;
             GridView4.DataBind();
+            //Sorting Issue #1
+            ViewState["sortExpressionPrice"] = sortExpressionPrice.ToString();
+            ViewState["directionPrice"] = directionPrice.ToString();
+
             writeToLog.WriteLog("User Sorts on " + sortExpressionPrice + " " + directionPrice, Page.User.Identity.Name);
         }
         public SortDirection sortDirectionPrice
@@ -856,8 +901,19 @@ namespace JRICO.Content
         }
         private void BindDataAccountNumber(int contractID, string column, string textSearch)
         {
-            GridView5.DataSource = this.GetDataAccountNumber(contractID, column, textSearch);
-            GridView5.DataBind();
+            //Sorting Issue #1
+            if (ViewState["sortExpressionAccountNumber"] != null)
+            {
+                DataTable table = this.GetDataAccountNumber(contractID, column, textSearch);
+                table.DefaultView.Sort = ViewState["sortExpressionAccountNumber"].ToString() + ViewState["directionAccountNumber"].ToString();
+                GridView5.DataSource = table;
+                GridView5.DataBind();
+            }
+            else
+            {
+                GridView5.DataSource = this.GetDataAccountNumber(contractID, column, textSearch);
+                GridView5.DataBind();
+            }
         }
         private DataTable GetDataAccountNumber(int contractID, string column, string textSearch)
         {
@@ -912,6 +968,11 @@ namespace JRICO.Content
 
             GridView5.DataSource = table;
             GridView5.DataBind();
+
+            //Sorting Issue #1
+            ViewState["sortExpressionAccountNumber"] = sortExpressionAccountNumber.ToString();
+            ViewState["directionAccountNumber"] = directionAccountNumber.ToString();
+
 
             writeToLog.WriteLog("User Sorts on " + sortExpressionAccountNumber + " " + directionAccountNumber, Page.User.Identity.Name);
         }
