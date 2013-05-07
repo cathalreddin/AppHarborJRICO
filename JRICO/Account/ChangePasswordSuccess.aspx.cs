@@ -15,10 +15,10 @@ namespace JRICO.Account
         {
             if (!(User.Identity.IsAuthenticated))
             {
-                writeToLog.WriteLog("Redirected to login from change password success page: No authentication ", Page.User.Identity.Name);
+                writeToLog.WriteLog("Redirected to login from change password success page: No authentication ", Page.User.Identity.Name, 0);
                 Response.Redirect("../Account/Login.aspx");
             }
-            writeToLog.WriteLog("Accessed the Change Password Success Page ", Page.User.Identity.Name);                
+            writeToLog.WriteLog("Accessed the Change Password Success Page ", Page.User.Identity.Name, 0);                
         }
     }
 }

@@ -19,14 +19,14 @@ namespace JRICO.Content
         {
             if (!(User.Identity.IsAuthenticated)) 
             {
-                writeToLog.WriteLog("Redirected to login from addContract page: No authentication ", Page.User.Identity.Name);
+                writeToLog.WriteLog("Redirected to login from addContract page: No authentication ", Page.User.Identity.Name, 0);
                 Response.Redirect("../Account/Login.aspx");
             }          
-            writeToLog.WriteLog("Accessed the New Contract page ", Page.User.Identity.Name);            
+            writeToLog.WriteLog("Accessed the New Contract page ", Page.User.Identity.Name, 0);            
         }
         protected void Cancel(object sender, EventArgs e)
         {
-            writeToLog.WriteLog("Add New Contract Cancelled: ", Page.User.Identity.Name);
+            writeToLog.WriteLog("Add New Contract Cancelled: ", Page.User.Identity.Name, 0);
             Response.Redirect("/content/contractList.aspx");
         }
         protected void AddContract(object sender, EventArgs e)
@@ -61,7 +61,7 @@ namespace JRICO.Content
                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                         }
                         conn.Close();
-                        writeToLog.WriteLog("Contract Row inserted with SP : " + query, Page.User.Identity.Name);
+                        writeToLog.WriteLog("Contract Row inserted with SP : " + query, Page.User.Identity.Name, 1);
                     }
                 }
             }

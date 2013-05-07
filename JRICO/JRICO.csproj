@@ -91,6 +91,7 @@
     <Content Include="Content\contractList.aspx" />
     <Content Include="Content\details.aspx" />
     <Content Include="Content\hospitalList.aspx" />
+    <Content Include="Content\logDetails.aspx" />
     <Content Include="default.aspx" />
     <Content Include="Images\InitialImage.png" />
     <Content Include="Images\SelectedButton.png" />
@@ -179,6 +180,13 @@
     </Compile>
     <Compile Include="Content\hospitalList.aspx.designer.cs">
       <DependentUpon>hospitalList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Content\logDetails.aspx.cs">
+      <DependentUpon>logDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\logDetails.aspx.designer.cs">
+      <DependentUpon>logDetails.aspx</DependentUpon>
     </Compile>
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>

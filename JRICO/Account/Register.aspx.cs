@@ -17,10 +17,10 @@ namespace JRICO.Account
             RegisterUser.ContinueDestinationPageUrl = Request.QueryString["ReturnUrl"];
             if ((!(Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser"))) && (!(Roles.IsUserInRole(Page.User.Identity.Name, "Admin"))))
             {
-                writeToLog.WriteLog("Redirected to login from register page: No authentication ", Page.User.Identity.Name);
+                writeToLog.WriteLog("Redirected to login from register page: No authentication ", Page.User.Identity.Name, 0);
                 Response.Redirect("Login.aspx");
             }
-            writeToLog.WriteLog("Accessed the Register Page ", Page.User.Identity.Name);                   
+            writeToLog.WriteLog("Accessed the Register User Page ", Page.User.Identity.Name, 1);                   
         }
 
         protected void RegisterUser_CreatedUser(object sender, EventArgs e)

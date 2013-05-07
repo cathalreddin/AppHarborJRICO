@@ -31,12 +31,12 @@ namespace JRICO.Content
         {
             if (!(User.Identity.IsAuthenticated))
             {
-                writeToLog.WriteLog("Redirected to login from details page: No authentication ", Page.User.Identity.Name);
+                writeToLog.WriteLog("Redirected to login from details page: No authentication ", Page.User.Identity.Name, 0);
                 Response.Redirect("../Account/Login.aspx");
             }
             else
             {
-                writeToLog.WriteLog("Accessed the details Page ", Page.User.Identity.Name);
+                writeToLog.WriteLog("Accessed the details Page ", Page.User.Identity.Name, 0);
                 id = Convert.ToInt32(Request.QueryString["id"]);
                 if (!IsPostBack)
                 {
@@ -52,7 +52,7 @@ namespace JRICO.Content
                         EmailViewData();
                         getEmailDetails(id);
                         hlMessage.Visible = false;
-                        writeToLog.WriteLog("Contract ID: " + id.ToString() + " selected", Page.User.Identity.Name);
+                        writeToLog.WriteLog("Contract ID: " + id.ToString() + " selected", Page.User.Identity.Name, 1);
                     }
                     else
                     {
@@ -174,7 +174,7 @@ namespace JRICO.Content
         protected void Button_Attachment(object sender, EventArgs e)
         {
             BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
-            writeToLog.WriteLog("Attachment Row returned results for dropdwn: " + DropDownListAttachment.SelectedValue + " and for TextSearch: " + txtAttachmentSearch.Text, Page.User.Identity.Name);
+            writeToLog.WriteLog("Attachment Row returned results for dropdwn: " + DropDownListAttachment.SelectedValue + " and for TextSearch: " + txtAttachmentSearch.Text, Page.User.Identity.Name, 0);
         }
         protected void SortRecordsAttachment(object sender, GridViewSortEventArgs e)
         {
@@ -201,7 +201,7 @@ namespace JRICO.Content
             ViewState["directionAttachment"] = directionAttachment.ToString();
 
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionAttachment + " " + directionAttachment, Page.User.Identity.Name);
+            writeToLog.WriteLog("User Sorts on " + sortExpressionAttachment + " " + directionAttachment, Page.User.Identity.Name, 0);
         }
         public SortDirection sortDirectionAttachment
         {
@@ -246,7 +246,7 @@ namespace JRICO.Content
 
                 // Clean up temporary file.
                 System.IO.File.Delete(dest);
-                writeToLog.WriteLog("file " + keyn + attachment + " downloaded", Page.User.Identity.Name);        
+                writeToLog.WriteLog("file " + keyn + attachment + " downloaded", Page.User.Identity.Name, 1);        
             }
             catch (Exception ex)
             {
@@ -289,13 +289,13 @@ namespace JRICO.Content
                                .WithCannedACL(S3CannedACL.PublicRead)
                                .WithKey("333-" + id.ToString() + "/" + AName).InputStream = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).PostedFile.InputStream;
                                 S3Response response = client.PutObject(request);
-                                writeToLog.WriteLog("file 333-" + id.ToString() + "/" + AName  +" uploaded", Page.User.Identity.Name);  
+                                writeToLog.WriteLog("file 333-" + id.ToString() + "/" + AName  +" uploaded", Page.User.Identity.Name, 1);  
                             }
                         }
                         GridView2.EditIndex = -1;
                         BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
                         conn.Close();
-                        writeToLog.WriteLog("Attachment Row inserted with SP : " + query, Page.User.Identity.Name);
+                        writeToLog.WriteLog("Attachment Row inserted with SP : " + query, Page.User.Identity.Name, 0);
                     }
                 }
                 catch (Exception ex)
@@ -391,8 +391,8 @@ namespace JRICO.Content
                                 conn.Close();
                                 getEmailDetails(id);
                                 EmailViewData();
-                                writeToLog.WriteLog("Update Email Row with SP : " + query, Page.User.Identity.Name);
-                                writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, Page.User.Identity.Name);
+                                writeToLog.WriteLog("Update Email with SP : " + query, Page.User.Identity.Name, 1);
+                                writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, Page.User.Identity.Name, 0);
                             }
                         }
                         else
@@ -418,8 +418,8 @@ namespace JRICO.Content
                                 conn.Close();
                                 getEmailDetails(id);
                                 EmailViewData();
-                                writeToLog.WriteLog("Insert Email Row with SP : " + query, Page.User.Identity.Name);
-                                writeToLog.WriteLog("Admin New Email attempted - result : " + result, Page.User.Identity.Name);
+                                writeToLog.WriteLog("Insert Email with SP : " + query, Page.User.Identity.Name, 1);
+                                writeToLog.WriteLog("Admin New Email attempted - result : " + result, Page.User.Identity.Name, 0);
                             }
                         }
                     }
@@ -547,7 +547,7 @@ namespace JRICO.Content
         protected void Button_Note(object sender, EventArgs e)
         {
             BindDataNote(id, DropDownListNote.SelectedValue, txtNoteSearch.Text);
-            writeToLog.WriteLog("Note Row returned results for dropdwn: " + DropDownListNote.SelectedValue + " and for TextSearch: " + txtNoteSearch.Text, Page.User.Identity.Name);
+            writeToLog.WriteLog("Note Row returned results for dropdwn: " + DropDownListNote.SelectedValue + " and for TextSearch: " + txtNoteSearch.Text, Page.User.Identity.Name, 0);
         }
         private void BindDataNote(int contractID, string column, string textSearch)
         {
@@ -628,7 +628,7 @@ namespace JRICO.Content
             ViewState["sortExpressionNote"] = sortExpressionNote.ToString();
             ViewState["directionNote"] = directionNote.ToString();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionNote + " " + directionNote, Page.User.Identity.Name);
+            writeToLog.WriteLog("User Sorts on " + sortExpressionNote + " " + directionNote, Page.User.Identity.Name, 0);
         }
         public SortDirection sortDirectionNote
         {
@@ -669,7 +669,7 @@ namespace JRICO.Content
                         GridView3.EditIndex = -1;
                         BindDataNote(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Note Row inserted with SP : " + query, Page.User.Identity.Name);
+                        writeToLog.WriteLog("Note inserted with SP : " + query, Page.User.Identity.Name, 1);
                     }
                 }
 
@@ -742,13 +742,13 @@ namespace JRICO.Content
         {
             GridView4.EditIndex = e.NewEditIndex;
             BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
-            writeToLog.WriteLog("Price Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
+            writeToLog.WriteLog("Price Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name, 0);
         }
         protected void RowEditCancelPrice(object sender, GridViewCancelEditEventArgs e)
         {
             GridView4.EditIndex = -1; // reseting grid view
             BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
-            writeToLog.WriteLog("Price Row cancelled for edit", Page.User.Identity.Name);
+            writeToLog.WriteLog("Price Row cancelled for edit", Page.User.Identity.Name, 0);
         }
 
         protected void RowUpdatePrice(object sender, GridViewUpdateEventArgs e)
@@ -786,7 +786,7 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
                         conn.Close();
-                        writeToLog.WriteLog("Price Row updated with SP : " + query, Page.User.Identity.Name);
+                        writeToLog.WriteLog("Price updated with SP : " + query, Page.User.Identity.Name, 1);
                     }
                 }
                 catch (Exception ex)
@@ -805,7 +805,7 @@ namespace JRICO.Content
         protected void Button_Price(object sender, EventArgs e)
         {
             BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
-            writeToLog.WriteLog("Price Row returned results for dropdwn: " + DropDownListPrice.SelectedValue + " and for TextSearch: " + txtPriceSearch.Text, Page.User.Identity.Name);
+            writeToLog.WriteLog("Price Row returned results for dropdwn: " + DropDownListPrice.SelectedValue + " and for TextSearch: " + txtPriceSearch.Text, Page.User.Identity.Name, 0);
         }
         protected void SortRecordsPrice(object sender, GridViewSortEventArgs e)
         {
@@ -829,7 +829,7 @@ namespace JRICO.Content
             ViewState["sortExpressionPrice"] = sortExpressionPrice.ToString();
             ViewState["directionPrice"] = directionPrice.ToString();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionPrice + " " + directionPrice, Page.User.Identity.Name);
+            writeToLog.WriteLog("User Sorts on " + sortExpressionPrice + " " + directionPrice, Page.User.Identity.Name, 0);
         }
         public SortDirection sortDirectionPrice
         {
@@ -871,7 +871,7 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Price Row inserted with SP : " + query, Page.User.Identity.Name);
+                        writeToLog.WriteLog("Price inserted with SP : " + query, Page.User.Identity.Name, 1);
                     }
                 }
                 catch (Exception ex)
@@ -974,7 +974,7 @@ namespace JRICO.Content
             ViewState["directionAccountNumber"] = directionAccountNumber.ToString();
 
 
-            writeToLog.WriteLog("User Sorts on " + sortExpressionAccountNumber + " " + directionAccountNumber, Page.User.Identity.Name);
+            writeToLog.WriteLog("User Sorts on " + sortExpressionAccountNumber + " " + directionAccountNumber, Page.User.Identity.Name, 0);
         }
 
         public SortDirection sortDirectionAccountNumber
@@ -1016,7 +1016,7 @@ namespace JRICO.Content
                         GridView5.EditIndex = -1;
                         BindDataAccountNumber(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Hospital / AccountNumber Row inserted with SP : " + query, Page.User.Identity.Name);
+                        writeToLog.WriteLog("Hospital / Account Number inserted with SP : " + query, Page.User.Identity.Name, 1);
                     }
                 }
                 catch (Exception ex)
@@ -1035,7 +1035,7 @@ namespace JRICO.Content
         protected void Button_AccountNumber(object sender, EventArgs e)
         {
             BindDataAccountNumber(id, DropDownListAccountNumber.SelectedValue, txtAccountNumberSearch.Text);
-            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownListAccountNumber.SelectedValue + " and for TextSearch: " + txtAccountNumberSearch.Text, Page.User.Identity.Name);
+            writeToLog.WriteLog("Hospital Row returned results for dropdwn: " + DropDownListAccountNumber.SelectedValue + " and for TextSearch: " + txtAccountNumberSearch.Text, Page.User.Identity.Name, 0);
         }
         //*** END OF TAB 5 ***
 

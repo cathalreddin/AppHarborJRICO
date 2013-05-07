@@ -20,16 +20,16 @@ namespace JRICO.Content
         {
             if (!(User.Identity.IsAuthenticated))
             {
-               writeToLog.WriteLog("Redirected to login from contractList page: No authentication ", Page.User.Identity.Name);
+               writeToLog.WriteLog("Redirected to login from contractList page: No authentication ", Page.User.Identity.Name, 0);
                Response.Redirect("/Account/Login.aspx");
             }
             else
             {
-                writeToLog.WriteLog("Accessed the contractList Page ", Page.User.Identity.Name);
+                writeToLog.WriteLog("Accessed the contractList Page ", Page.User.Identity.Name, 0);
                 if (!IsPostBack)
                 {
                     BindData("none", " ");
-                    writeToLog.WriteLog("List populated on first page", Page.User.Identity.Name);
+                    writeToLog.WriteLog("Contract List Page Accessed", Page.User.Identity.Name, 1);
                     CheckForEmailTriggers();
                     if ((Request.QueryString["m"] != null) && (Request.QueryString["m"] == "new"))
                     {
@@ -85,7 +85,7 @@ namespace JRICO.Content
                                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                                         }
                                         connEmail.Close();
-                                        writeToLog.WriteLog("Trigger Email attempted to Send : " + query, Page.User.Identity.Name);
+                                        writeToLog.WriteLog("Trigger Email attempted to Send : " + query, Page.User.Identity.Name, 1);
                                         connEmail.Close();
                                     }
                                     catch (Exception ex)
@@ -119,7 +119,7 @@ namespace JRICO.Content
         protected void Button1_Click(object sender, EventArgs e)
         {
             BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            writeToLog.WriteLog("Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, Page.User.Identity.Name);
+            writeToLog.WriteLog("Row returned results for dropdwn: " + DropDownList1.SelectedValue + " and for TextSearch: " + TextSearch.Text, Page.User.Identity.Name, 0);
         }
         private void BindData(string column, string textSearch)
         {
@@ -175,13 +175,13 @@ namespace JRICO.Content
         {
             GridView1.EditIndex = e.NewEditIndex;
             BindData(DropDownList1.SelectedValue, TextSearch.Text);
-            writeToLog.WriteLog("Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name);
+            writeToLog.WriteLog("Row with Index:" + e.NewEditIndex.ToString() + " edit link clicked", Page.User.Identity.Name, 0);
         }
         protected void RowEditCancel(object sender, GridViewCancelEditEventArgs e)
         {
             GridView1.EditIndex = -1; // reseting grid view
             BindData(DropDownList1.SelectedValue, TextSearch.Text); 
-            writeToLog.WriteLog("Row cancelled for edit", Page.User.Identity.Name);      
+            writeToLog.WriteLog("Row cancelled for edit", Page.User.Identity.Name, 0);      
         }
         protected void RowUpdate(object sender, GridViewUpdateEventArgs e)
         {
@@ -233,7 +233,7 @@ namespace JRICO.Content
                             GridView1.EditIndex = -1;
                             BindData(DropDownList1.SelectedValue, TextSearch.Text);
                             conn.Close();
-                            writeToLog.WriteLog("Row updated with SP : " + query, Page.User.Identity.Name);
+                            writeToLog.WriteLog("Row updated with SP : " + query, Page.User.Identity.Name, 1);
                         }
                     }
                     catch (Exception ex)
@@ -274,7 +274,7 @@ namespace JRICO.Content
             ViewState["sortExpression"] = sortExpression.ToString();
             ViewState["direction"] = direction.ToString();
 
-            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, Page.User.Identity.Name);
+            writeToLog.WriteLog("User Sorts on " + sortExpression + " " + direction, Page.User.Identity.Name, 0);
         }
 
         public SortDirection sortDirection

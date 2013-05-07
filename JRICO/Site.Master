@@ -16,7 +16,7 @@
             <a href="/Content/contractList.aspx">JRI</a>
             </div>
             <div class="loginDisplay">
-                <asp:HyperLink ID="hlSuperUser" runat="server" NavigateUrl="~/Cathal/test.aspx">SuperUser</asp:HyperLink>
+                <asp:HyperLink ID="hlLogs" runat="server" NavigateUrl="~/Content/logDetails.aspx">Logs</asp:HyperLink>
                 &nbsp;&nbsp;&nbsp;<asp:HyperLink ID="RegisterHyperLink" runat="server" EnableViewState="false">Register a New User</asp:HyperLink>
                 &nbsp;&nbsp;&nbsp;   <asp:LoginView ID="HeadLoginView" runat="server" EnableViewState="false">
                     <AnonymousTemplate>

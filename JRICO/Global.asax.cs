@@ -4,15 +4,18 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using JRICO.CodeArea;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace JRICO
 {
     public class Global : System.Web.HttpApplication
-    {           
+    {
+        WriteToLog writeToLog = new WriteToLog();
         void Application_Start(object sender, EventArgs e)
         {
-            // Code that runs on application startup        
-
+            // Code that runs on application startup
         }
 
         void Application_End(object sender, EventArgs e)
@@ -30,7 +33,7 @@ namespace JRICO
         void Session_Start(object sender, EventArgs e)
         {
             // Code that runs when a new session is started
-
+            //writeToLog.WriteLog("On Session startup ", HttpContext.Current.User.Identity.Name, 1);        
         }
 
         void Session_End(object sender, EventArgs e)
