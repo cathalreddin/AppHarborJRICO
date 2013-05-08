@@ -7,12 +7,13 @@ using System.Web.SessionState;
 using JRICO.CodeArea;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using System.Web.Caching;
 
 namespace JRICO
 {
     public class Global : System.Web.HttpApplication
     {
-        WriteToLog writeToLog = new WriteToLog();
+       // WriteToLog writeToLog = new WriteToLog();
         void Application_Start(object sender, EventArgs e)
         {
             // Code that runs on application startup

@@ -16,7 +16,7 @@ namespace JRICO.CodeArea
             try
             {
                 conn.Open();
-                String MySql = @"INSERT INTO Log(LogData, LogUser, LogActive) VALUES('" + LogData + "','" + LogUser + "'," + LogActive + ")";
+                String MySql = @"INSERT INTO Log(LogData, LogUser, LogActive, LogDate) VALUES('" + LogData + "','" + LogUser + "'," + LogActive + ",'"+DateTime.Now+"')";
                 SqlCommand MyCmd = new SqlCommand(MySql, conn);
                 MyCmd.ExecuteScalar();
                 conn.Close();                
