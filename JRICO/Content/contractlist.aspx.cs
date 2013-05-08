@@ -65,7 +65,8 @@ namespace JRICO.Content
                             string EmailSubject = dr["EmailSubject"].ToString();
                             string EmailContent = dr["EmailContent"].ToString();
                             int ContractID = Convert.ToInt32(dr["ContractID"]);
-                            string result = newEmail.SendEmail(emailTo, "[Contract Title: " + dr["ContractTitle"].ToString() + "] " +EmailSubject, EmailContent, ContractID);
+                            string contractTitle = dr["ContractTitle"].ToString();
+                            string result = newEmail.SendEmail(emailTo, "[Contract Title: " + contractTitle + "] " + EmailSubject, EmailContent, ContractID);
 
                             using (SqlConnection connEmail = new SqlConnection(_connStr))
                             {
@@ -80,12 +81,13 @@ namespace JRICO.Content
                                         connEmail.Open();
                                         cmdEmail.ExecuteNonQuery();
                                         string query = "sp_updateTriggerEmailSent: ";
-                                        foreach (SqlParameter p in cmd.Parameters)
+                                        foreach (SqlParameter p in cmdEmail.Parameters)
                                         {
                                             query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
                                         }
                                         connEmail.Close();
-                                        writeToLog.WriteLog("Trigger Email attempted to Send : " + query, Page.User.Identity.Name, 1);
+                                        writeToLog.WriteLog("Trigger Email attempted to Send : " + query, Page.User.Identity.Name, 0);
+                                        writeToLog.WriteLog("Send Email for [" + contractTitle + "] result: " + result, Page.User.Identity.Name, 0);
                                         connEmail.Close();
                                     }
                                     catch (Exception ex)

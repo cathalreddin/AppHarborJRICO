@@ -39,12 +39,12 @@
                 </ItemTemplate>
                 <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Date Uploaded" SortExpression="LogDate">
+            <asp:TemplateField HeaderText="Timestamp" SortExpression="LogDate">
                 <ItemTemplate>
-                    <asp:Label ID="Label11" runat="server" Text='<%# Bind("[LogDate]", "{0:dd/MM/yyyy}") %>'></asp:Label>
+                    <asp:Label ID="Label11" runat="server" Text='<%# Bind("[LogDate]") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
-            <asp:TemplateField HeaderText="Uploaded By" SortExpression="LogUser">
+            <asp:TemplateField HeaderText="User" SortExpression="LogUser">
                 <ItemTemplate>
                     <asp:Label ID="Label6" runat="server" Text='<%# Bind("[LogUser]") %>'></asp:Label>
                 </ItemTemplate>
