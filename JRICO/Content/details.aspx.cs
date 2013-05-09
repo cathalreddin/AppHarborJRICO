@@ -16,6 +16,7 @@ using System.Diagnostics;
 using System.IO;
 using Amazon.S3.Model;
 using Amazon.S3;
+using System.Web.Security;
 
 namespace JRICO.Content
 {
@@ -171,11 +172,70 @@ namespace JRICO.Content
             return table;
         }
 
+        public void deleteAttachmentRow(Object sender, GridViewDeleteEventArgs e)
+        {
+            GridViewRow row = (GridViewRow)GridView2.Rows[e.RowIndex];
+            Label lbldeleteid = (Label)row.FindControl("lblAttachmentID");
+            Label AttachmentTitle = (Label)row.FindControl("lblAttachmentTitle");
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                try
+                {
+                    string sqlSP = "sp_deleteAttachmentRow";
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@AttachmentID", SqlDbType.Int).Value = Convert.ToInt32(lbldeleteid.Text);
+                        cmd.Parameters.Add("@DeletedUser", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
+                        cmd.Parameters.Add("@DeletedDate", SqlDbType.DateTime).Value = DateTime.Now;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        string query = sqlSP;
+                        foreach (SqlParameter p in cmd.Parameters)
+                            {
+                                query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                            }
+                        conn.Close();
+                        writeToLog.WriteLog("Attachment with title: " + AttachmentTitle.Text + " deleted from contract "+lblContractTitle.Text+".", Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Attachment deleted [" + AttachmentTitle.Text + "] from contract "+lblContractTitle.Text+". Query: " + query, Page.User.Identity.Name, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 107: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
+            }
+            BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);              
+        }
+
+        protected void GridView2_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
+                {
+                    //Make delete link visible
+                    e.Row.Cells[6].Visible = true;   
+                }
+                else
+                {
+                    e.Row.Cells[6].Visible = false;
+                }
+            }
+        }
+
         protected void Button_Attachment(object sender, EventArgs e)
         {
             BindDataAttachment(id, DropDownListAttachment.SelectedValue, txtAttachmentSearch.Text);
             writeToLog.WriteLog("Attachment Row returned results for dropdwn: " + DropDownListAttachment.SelectedValue + " and for TextSearch: " + txtAttachmentSearch.Text, Page.User.Identity.Name, 0);
         }
+
         protected void SortRecordsAttachment(object sender, GridViewSortEventArgs e)
         {
             string sortExpressionAttachment = e.SortExpression;
@@ -289,7 +349,7 @@ namespace JRICO.Content
                                .WithCannedACL(S3CannedACL.PublicRead)
                                .WithKey("333-" + id.ToString() + "/" + AName).InputStream = ((FileUpload)GridView2.FooterRow.FindControl("fAttachmentNameInsert")).PostedFile.InputStream;
                                 S3Response response = client.PutObject(request);
-                                writeToLog.WriteLog("file 333-" + id.ToString() + "/" + AName  +" uploaded", Page.User.Identity.Name, 1);  
+                                writeToLog.WriteLog("Attachment " +AName  +" uploaded to "+lblContractTitle.Text, Page.User.Identity.Name, 1);  
                             }
                         }
                         GridView2.EditIndex = -1;
@@ -391,7 +451,8 @@ namespace JRICO.Content
                                 conn.Close();
                                 getEmailDetails(id);
                                 EmailViewData();
-                                writeToLog.WriteLog("Update Email with SP : " + query, Page.User.Identity.Name, 1);
+                                writeToLog.WriteLog("Update Email for Contract : " + lblContractTitle.Text, Page.User.Identity.Name, 1);
+                                writeToLog.WriteLog("Update Email with SP : " + query, Page.User.Identity.Name, 0);
                                 writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, Page.User.Identity.Name, 0);
                             }
                         }
@@ -418,7 +479,8 @@ namespace JRICO.Content
                                 conn.Close();
                                 getEmailDetails(id);
                                 EmailViewData();
-                                writeToLog.WriteLog("Insert Email with SP : " + query, Page.User.Identity.Name, 1);
+                                writeToLog.WriteLog("Insert Email for Contract : " + lblContractTitle.Text, Page.User.Identity.Name, 1);
+                                writeToLog.WriteLog("Insert Email with SP : " + query, Page.User.Identity.Name, 0);
                                 writeToLog.WriteLog("Admin New Email attempted - result : " + result, Page.User.Identity.Name, 0);
                             }
                         }
@@ -468,8 +530,64 @@ namespace JRICO.Content
                 }
             }
         }
-       
 
+        public void deleteNoteRow(Object sender, GridViewDeleteEventArgs e)
+        {
+            GridViewRow row = (GridViewRow)GridView3.Rows[e.RowIndex];
+            Label lbldeleteid = (Label)row.FindControl("lblNoteID");
+            Label NoteTitle = (Label)row.FindControl("lblTitle");
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                try
+                {
+                    string sqlSP = "sp_deleteNoteRow";
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@NoteID", SqlDbType.Int).Value = Convert.ToInt32(lbldeleteid.Text);
+                        cmd.Parameters.Add("@DeletedUser", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
+                        cmd.Parameters.Add("@DeletedDate", SqlDbType.DateTime).Value = DateTime.Now;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        string query = sqlSP;
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
+                        conn.Close();
+                        writeToLog.WriteLog("Note with title: " + NoteTitle.Text + " deleted for contract: "+lblContractTitle.Text, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Note deleted [" + NoteTitle.Text + "] for contract "+lblContractTitle.Text+" query: " + query, Page.User.Identity.Name, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 307: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
+            }
+            BindDataNote(id, DropDownListNote.SelectedValue, txtNoteSearch.Text);
+        }
+
+        protected void GridView3_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
+                {
+                    //Make delete link visible
+                    e.Row.Cells[4].Visible = true;
+                }
+                else
+                {
+                    e.Row.Cells[4].Visible = false;
+                }
+            }
+        }
         protected void lbCancel_Email(object sender, EventArgs e)
         {
             getEmailDetails(id);
@@ -669,7 +787,8 @@ namespace JRICO.Content
                         GridView3.EditIndex = -1;
                         BindDataNote(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Note inserted with SP : " + query, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Note inserted for Contract : " + lblContractTitle.Text, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Note inserted with SP : " + query, Page.User.Identity.Name, 0);
                     }
                 }
 
@@ -705,6 +824,63 @@ namespace JRICO.Content
             }
         }
 
+        public void deletePriceRow(Object sender, GridViewDeleteEventArgs e)
+        {
+            GridViewRow row = (GridViewRow)GridView4.Rows[e.RowIndex];
+            Label lbldeleteid = (Label)row.FindControl("lblPriceID");
+            Label PriceTitle = (Label)row.FindControl("lblSubject");
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                try
+                {
+                    string sqlSP = "sp_deletePriceRow";
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@PriceID", SqlDbType.Int).Value = Convert.ToInt32(lbldeleteid.Text);
+                        cmd.Parameters.Add("@DeletedUser", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
+                        cmd.Parameters.Add("@DeletedDate", SqlDbType.DateTime).Value = DateTime.Now;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        string query = sqlSP;
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
+                        conn.Close();
+                        writeToLog.WriteLog("Price with title: " + PriceTitle.Text + " deleted for contract: " + lblContractTitle.Text, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Price deleted [" + PriceTitle.Text + " deleted for contract: "+lblContractTitle.Text+"] query: " + query, Page.User.Identity.Name, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 407: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
+            }
+            BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
+        }
+
+        protected void GridView4_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
+                {
+                    //Make delete link visible
+                    e.Row.Cells[6].Visible = true;
+                }
+                else
+                {
+                    e.Row.Cells[6].Visible = false;
+                }
+            }
+        }
         private DataTable GetDataPrice(int contractID, string column, string textSearch)
         {
             DataTable table = new DataTable();
@@ -786,7 +962,8 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, DropDownListPrice.SelectedValue, txtPriceSearch.Text);
                         conn.Close();
-                        writeToLog.WriteLog("Price updated with SP : " + query, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Price updated for Contract: "+lblContractTitle.Text + query, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Price updated with SP : " + query, Page.User.Identity.Name, 0);
                     }
                 }
                 catch (Exception ex)
@@ -871,7 +1048,8 @@ namespace JRICO.Content
                         GridView4.EditIndex = -1;
                         BindDataPrice(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Price inserted with SP : " + query, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Price inserted for Contract: " + lblContractTitle.Text + query, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Price inserted with SP : " + query, Page.User.Identity.Name, 0);
                     }
                 }
                 catch (Exception ex)
@@ -913,6 +1091,63 @@ namespace JRICO.Content
             {
                 GridView5.DataSource = this.GetDataAccountNumber(contractID, column, textSearch);
                 GridView5.DataBind();
+            }
+        }
+        public void deleteHospitalRow(Object sender, GridViewDeleteEventArgs e)
+        {
+            GridViewRow row = (GridViewRow)GridView5.Rows[e.RowIndex];
+            Label lbldeleteid = (Label)row.FindControl("lblContractHospitalID");
+            Label HospitalTitle = (Label)row.FindControl("lblHospitalName");
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                try
+                {
+                    string sqlSP = "sp_deleteContractHospitalRow";
+                    using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.Add("@ContractHospitalID", SqlDbType.Int).Value = Convert.ToInt32(lbldeleteid.Text);
+                        cmd.Parameters.Add("@DeletedUser", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
+                        cmd.Parameters.Add("@DeletedDate", SqlDbType.DateTime).Value = DateTime.Now;
+                        conn.Open();
+                        cmd.ExecuteNonQuery();
+                        string query = sqlSP;
+                        foreach (SqlParameter p in cmd.Parameters)
+                        {
+                            query = query + p.ParameterName + "=" + p.Value.ToString() + "; ";
+                        }
+                        conn.Close();
+                        writeToLog.WriteLog("Hospital/Account Number with title: " + HospitalTitle.Text + " deleted for Contract: "+lblContractTitle.Text, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Hospital/Account Number deleted [" + HospitalTitle.Text + " for Contract " +lblContractTitle.Text+"] query: " + query, Page.User.Identity.Name, 0);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Response.Write("ERROR 507: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                }
+                finally
+                {
+                    // Close data reader object and database connection
+                    if (conn != null)
+                        conn.Close();
+                }
+            }
+            BindDataAccountNumber(id, DropDownListAccountNumber.SelectedValue, txtAccountNumberSearch.Text);
+        }
+
+        protected void GridView5_RowDataBound(object sender, GridViewRowEventArgs e)
+        {
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
+                {
+                    //Make delete link visible
+                    e.Row.Cells[6].Visible = true;
+                }
+                else
+                {
+                    e.Row.Cells[6].Visible = false;
+                }
             }
         }
         private DataTable GetDataAccountNumber(int contractID, string column, string textSearch)
@@ -1016,7 +1251,8 @@ namespace JRICO.Content
                         GridView5.EditIndex = -1;
                         BindDataAccountNumber(id, "none", " ");
                         conn.Close();
-                        writeToLog.WriteLog("Hospital / Account Number inserted with SP : " + query, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Hospital / Account Number inserted for Contract : "+lblContractTitle.Text, Page.User.Identity.Name, 1);
+                        writeToLog.WriteLog("Hospital / Account Number inserted with SP : " + query, Page.User.Identity.Name, 0);
                     }
                 }
                 catch (Exception ex)
