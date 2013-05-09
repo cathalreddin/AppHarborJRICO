@@ -1,8 +1,12 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="hospitalList.aspx.cs" Inherits="JRICO.Content.hospitalList" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="server">
+
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-     <table border="0" width="100%">
+     <asp:ScriptManager ID="ScriptManager1" runat="server"> 
+    </asp:ScriptManager>
+<table border="0" width="100%">
         <tr>
           <td>
               <a href="contractList.aspx">Contract List</a> &nbsp;&nbsp;|&nbsp;&nbsp; Search &nbsp;&nbsp;
@@ -25,7 +29,7 @@
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="HospitalID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%"> 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%" onrowcreated="GridView1_RowCreated"> 
         <Columns>
            <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle" ItemStyle-Wrap="false">
                 <footertemplate>
@@ -78,6 +82,10 @@
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label5" runat="server" Text='<%# Bind("[Postcode]") %>'></asp:Label>
+                    <ajax:PopupControlExtender id="PopupControlExtender1" runat="server" popupcontrolid="Panel1"
+                        targetcontrolid="Label5" dynamiccontextkey='<%# Eval("Postcode") %>' dynamiccontrolid="Panel1"
+                        dynamicservicemethod="GetDynamicContent" position="Bottom"> 
+            </ajax:PopupControlExtender>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtPostcodeInsert" runat="server" Width="60"></asp:TextBox>
@@ -92,7 +100,7 @@
                     <asp:TextBox ID="txtAccountNumber" runat="server" Text='<%# Bind("[Account Number]") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Account Number]") %>'></asp:Label>
+                    <asp:Label ID="lblAccountNumber" runat="server" Text='<%# Bind("[Account Number]") %>'></asp:Label>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtAccountNumberInsert" runat="server" Width="60"></asp:TextBox>
@@ -115,7 +123,7 @@
                     <asp:TextBox ID="TextBox6" visible="false" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:Label>
+                    <asp:Label ID="lblUploadedBy" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:Label>
                 </ItemTemplate>
             </asp:TemplateField>
         </Columns>
@@ -130,6 +138,7 @@
         <SortedDescendingCellStyle BackColor="#CAC9C9" />
         <SortedDescendingHeaderStyle BackColor="#383838" />
     </asp:GridView>
+    <asp:Panel ID="Panel1" runat="server"> </asp:Panel> 
     <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="insert" runat="server" ForeColor="Red" />
     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ForeColor="Red" />
 </asp:Content>
