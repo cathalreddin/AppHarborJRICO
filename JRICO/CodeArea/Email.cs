@@ -44,7 +44,7 @@ namespace JRICO.CodeArea
             return result;
         }
         //Send Email when Email Details Updated or Inserted
-        public string SendEmailToCathal(string EmailTo, string EmailSubject, string EmailContent, DateTime SendDate, int ContractID = 0)
+        public string SendEmailToCathal(string EmailTo, string EmailSubject, string EmailContent, DateTime TriggerDate, int ContractID = 0)
         {
             string result;
             try

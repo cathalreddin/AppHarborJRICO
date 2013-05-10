@@ -4,8 +4,8 @@
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
-     <asp:ScriptManager ID="ScriptManager1" runat="server"> 
-    </asp:ScriptManager>
+     <%--<asp:ScriptManager ID="ScriptManager1" runat="server"> 
+    </asp:ScriptManager>--%>
 <table border="0" width="100%">
         <tr>
           <td>
@@ -29,7 +29,7 @@
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="HospitalID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%" onrowcreated="GridView1_RowCreated"> 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%" > 
         <Columns>
            <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle" ItemStyle-Wrap="false">
                 <footertemplate>
@@ -82,10 +82,10 @@
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label5" runat="server" Text='<%# Bind("[Postcode]") %>'></asp:Label>
-                    <ajax:PopupControlExtender id="PopupControlExtender1" runat="server" popupcontrolid="Panel1"
+                    <%--<ajax:PopupControlExtender id="PopupControlExtender1" runat="server" popupcontrolid="Panel1"
                         targetcontrolid="Label5" dynamiccontextkey='<%# Eval("Postcode") %>' dynamiccontrolid="Panel1"
                         dynamicservicemethod="GetDynamicContent" position="Bottom"> 
-            </ajax:PopupControlExtender>
+            </ajax:PopupControlExtender>--%>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtPostcodeInsert" runat="server" Width="60"></asp:TextBox>
@@ -138,7 +138,7 @@
         <SortedDescendingCellStyle BackColor="#CAC9C9" />
         <SortedDescendingHeaderStyle BackColor="#383838" />
     </asp:GridView>
-    <asp:Panel ID="Panel1" runat="server"> </asp:Panel> 
+   <%-- <asp:Panel ID="Panel1" runat="server"> </asp:Panel> --%>
     <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="insert" runat="server" ForeColor="Red" />
     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ForeColor="Red" />
 </asp:Content>

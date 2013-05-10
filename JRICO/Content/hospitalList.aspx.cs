@@ -35,42 +35,45 @@ namespace JRICO.Content
             }
         }
         //popup
-        protected void GridView1_RowCreated(object sender, GridViewRowEventArgs e)
-        {
-            if (e.Row.RowType == DataControlRowType.DataRow)
-            {
-                PopupControlExtender pce = e.Row.FindControl("PopupControlExtender1") as PopupControlExtender;
+   //     protected void GridView1_RowCreated(object sender, GridViewRowEventArgs e)
+   //     {
+   //         if (e.Row.RowType == DataControlRowType.DataRow)
+   //         {
+   //             PopupControlExtender pce = e.Row.FindControl("PopupControlExtender1") as PopupControlExtender;
 
-                string behaviorID = "pce_" + e.Row.RowIndex;
-                pce.BehaviorID = behaviorID;
+   //             string behaviorID = "pce_" + e.Row.RowIndex;
+   //             pce.BehaviorID = behaviorID;
 
-                Label lblPostCode = (Label)e.Row.FindControl("Label5");
+   //             Label lblPostCode = (Label)e.Row.FindControl("Label5");
 
-                string OnMouseOverScript = string.Format("$find('{0}').showPopup();", behaviorID);
-                string OnMouseOutScript = string.Format("$find('{0}').hidePopup();", behaviorID);
+   //             string OnMouseOverScript = string.Format("$find('{0}').showPopup();", behaviorID);
+   //             string OnMouseOutScript = string.Format("$find('{0}').hidePopup();", behaviorID);
 
-                lblPostCode.Attributes.Add("onmouseover", OnMouseOverScript);
-                lblPostCode.Attributes.Add("onmouseout", OnMouseOutScript);
-            }
-        }
-        [System.Web.Services.WebMethodAttribute(),
-   System.Web.Script.Services.ScriptMethodAttribute()]
-        public static string GetDynamicContent(string contextKey)
-        {
-            StringBuilder b = new StringBuilder();
+   //             lblPostCode.Attributes.Add("onmouseover", OnMouseOverScript);
+   //             lblPostCode.Attributes.Add("onmouseout", OnMouseOutScript);
+   //         }
+   //     }
+   //     [System.Web.Services.WebMethodAttribute(),
+   //System.Web.Script.Services.ScriptMethodAttribute()]
+   //     public static string GetDynamicContent(string contextKey)
+   //     {
+   //         StringBuilder b = new StringBuilder();
 
-            b.Append("<table style='width:350px; font-size:10pt; font-family:Verdana;'>");
+   //         b.Append("<table style='width:350px; font-size:10pt; font-family:Verdana; border=1;'>");
 
-            b.Append("<tr><td colspan='3' style='background-color:#336699; color:white;'>");
-            b.Append("<b>MAP</b>"); 
-            b.Append("</td></tr>");
-            b.Append("<tr><td colspan='3' style='background-color:#336699; color:white;'>");
-            b.Append("<b>In construction - show map here</b>");
-            b.Append("</td></tr>");
-            b.Append("</table>");
+   //         b.Append("<tr><td colspan='3'>");
+   //         b.Append("<b>MAP</b>"); 
+   //         b.Append("</td></tr>");
+   //         b.Append("<tr><td colspan='3'>");
+   //         b.Append("<b>In construction - show map here</b>");
+   //         b.Append("</td></tr>");
+   //         b.Append("<tr><td colspan='3'>");
+   //         b.Append("<a href='map.aspx?id=1' target='_blank'>Open in New Window</a href>");
+   //         b.Append("</td></tr>");
+   //         b.Append("</table>");
 
-            return b.ToString();
-        }
+   //         return b.ToString();
+   //     }
         private void BindData(string column, string textSearch)
         {
             //Sorting Issue #1

@@ -435,7 +435,7 @@ namespace JRICO.Content
                             {
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("@EmailTo", SqlDbType.NVarChar).Value = txtEmailTo.Text;
-                                cmd.Parameters.Add("@EmailDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
+                                cmd.Parameters.Add("@TriggerDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
                                 cmd.Parameters.Add("@EmailSubject", SqlDbType.NVarChar).Value = txtEmailSubject.Text;
                                 cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
                                 cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
@@ -463,7 +463,7 @@ namespace JRICO.Content
                             {
                                 cmd.CommandType = CommandType.StoredProcedure;
                                 cmd.Parameters.Add("@EmailTo", SqlDbType.NVarChar).Value = txtEmailTo.Text;
-                                cmd.Parameters.Add("@EmailDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
+                                cmd.Parameters.Add("@TriggerDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtEmailDate.Text);
                                 cmd.Parameters.Add("@EmailSubject", SqlDbType.NVarChar).Value = txtEmailSubject.Text;
                                 cmd.Parameters.Add("@EmailContent", SqlDbType.NVarChar).Value = txtEmailContent.Text;
                                 cmd.Parameters.Add("@AdminSentMessage", SqlDbType.NVarChar).Value = result;
@@ -612,11 +612,11 @@ namespace JRICO.Content
                         {
                             lblEmailID.Text = dr["EmailID"].ToString();
                             lblEmailTo.Text = dr["EmailTo"].ToString();
-                            lblEmailDate.Text = Convert.ToDateTime(dr["EmailDate"].ToString()).ToShortDateString();
+                            lblEmailDate.Text = Convert.ToDateTime(dr["TriggerDate"].ToString()).ToShortDateString();
                             lblEmailSubject.Text = dr["EmailSubject"].ToString();
                             lblEmailContent.Text = dr["EmailContent"].ToString();
                             txtEmailTo.Text = dr["EmailTo"].ToString();
-                            txtEmailDate.Text = Convert.ToDateTime(dr["EmailDate"].ToString()).ToShortDateString();
+                            txtEmailDate.Text = Convert.ToDateTime(dr["TriggerDate"].ToString()).ToShortDateString();
                             txtEmailSubject.Text = dr["EmailSubject"].ToString();
                             txtEmailContent.Text = dr["EmailContent"].ToString();
                             string emailStatus = dr["SentMessage"].ToString();
