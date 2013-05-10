@@ -51,7 +51,7 @@
                     <asp:TextBox ID="txtHospitalName" runat="server" Text='<%# Bind("[Hospital Name]") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                   <asp:Label ID="lblHospitalName" runat="server" Text='<%# Bind("[Hospital Name]") %>'></asp:Label>
+                   <asp:HyperLink ID="hlHospitalName" runat="server" NavigateUrl='<%# String.Format("map.aspx?lat={0}&lon={1}", Eval("lat"), Eval("lon")) %>' Text='<%# Eval("[Hospital Name]") %>' Target="_blank"></asp:HyperLink>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtHospitalNameInsert" runat="server"></asp:TextBox>
