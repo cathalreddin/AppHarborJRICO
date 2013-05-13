@@ -183,7 +183,8 @@ namespace JRICO.Content
                 return; 
             if ((e.Row.RowState == DataControlRowState.Normal || e.Row.RowState == DataControlRowState.Alternate)
                 && (e.Row.RowType == DataControlRowType.DataRow || e.Row.RowType == DataControlRowType.Header || e.Row.RowType == DataControlRowType.Footer)) 
-            { 
+            {
+                e.Row.Cells[0].Visible = false;
                 e.Row.Cells[7].Visible = false; 
                 e.Row.Cells[8].Visible = false; 
             } 

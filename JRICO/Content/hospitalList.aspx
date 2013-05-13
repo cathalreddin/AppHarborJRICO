@@ -32,9 +32,6 @@
         OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%" OnRowDataBound="GridView1_RowDataBound"> 
         <Columns>
            <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle" ItemStyle-Wrap="false">
-                <footertemplate>
-                    <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_Click">Insert</asp:LinkButton>
-                </footertemplate>
               <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
             </asp:TemplateField>
             <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />                  
@@ -44,14 +41,14 @@
                 </ItemTemplate>
                 <EditItemTemplate>
                     <asp:Label ID="lblHospitalID" runat="server" Text='<%# Eval("[HospitalID]") %>'></asp:Label>
-                </EditItemTemplate>
+                </EditItemTemplate> 
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Hospital Name" SortExpression="Hospital Name">
                 <EditItemTemplate>
                     <asp:TextBox ID="txtHospitalName" runat="server" Text='<%# Bind("[Hospital Name]") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                   <asp:HyperLink ID="hlHospitalName" runat="server" NavigateUrl='<%# String.Format("map.aspx?lat={0}&lon={1}", Eval("Latitude"), Eval("Longitude")) %>' Text='<%# Eval("[Hospital Name]") %>' Target="_blank" ToolTip="Click for Map"></asp:HyperLink>
+                   <asp:HyperLink ID="hlHospitalName" runat="server" NavigateUrl='<%# String.Format("map.aspx?id={0}", Eval("HospitalID")) %>' Text='<%# Eval("[Hospital Name]") %>' Target="_blank" ToolTip="Click for Map"></asp:HyperLink>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtHospitalNameInsert" runat="server"></asp:TextBox>
@@ -114,6 +111,9 @@
                         Text="*" ForeColor="Red">
                     </asp:RegularExpressionValidator>
                 </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblLatitude" runat="server" Text='<%# Bind("[Latitude]") %>'></asp:Label>
+                </ItemTemplate>
                 <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Longitude" SortExpression="Longitude" HeaderStyle-Width="90">
@@ -124,6 +124,9 @@
                         Text="*" ForeColor="Red">
                     </asp:RegularExpressionValidator>
                 </EditItemTemplate>
+                <ItemTemplate>
+                    <asp:Label ID="lblLongitude" runat="server" Text='<%# Bind("[Latitude]") %>'></asp:Label>
+                </ItemTemplate>
                 <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Date Uploaded">
@@ -133,6 +136,9 @@
                 <ItemTemplate>
                     <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label>
                 </ItemTemplate>
+                <footertemplate>
+                    <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_Click">Insert</asp:LinkButton>
+                </footertemplate>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Uploaded By" SortExpression="Uploaded By">
                 <EditItemTemplate>

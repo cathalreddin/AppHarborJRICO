@@ -221,11 +221,11 @@ namespace JRICO.Content
                 if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
                 {
                     //Make delete link visible
-                    e.Row.Cells[6].Visible = true;   
+                    e.Row.Cells[5].Visible = true;   
                 }
                 else
                 {
-                    e.Row.Cells[6].Visible = false;
+                    e.Row.Cells[5].Visible = false;
                 }
             }
         }
@@ -580,11 +580,11 @@ namespace JRICO.Content
                 if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
                 {
                     //Make delete link visible
-                    e.Row.Cells[4].Visible = true;
+                    e.Row.Cells[3].Visible = true;
                 }
                 else
                 {
-                    e.Row.Cells[4].Visible = false;
+                    e.Row.Cells[3].Visible = false;
                 }
             }
         }
@@ -873,11 +873,11 @@ namespace JRICO.Content
                 if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
                 {
                     //Make delete link visible
-                    e.Row.Cells[6].Visible = true;
+                    e.Row.Cells[5].Visible = true;
                 }
                 else
                 {
-                    e.Row.Cells[6].Visible = false;
+                    e.Row.Cells[5].Visible = false;
                 }
             }
         }
@@ -1142,11 +1142,11 @@ namespace JRICO.Content
                 if ((Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser")) || (Roles.IsUserInRole(Page.User.Identity.Name, "Admin")))
                 {
                     //Make delete link visible
-                    e.Row.Cells[6].Visible = true;
+                    e.Row.Cells[5].Visible = true;
                 }
                 else
                 {
-                    e.Row.Cells[6].Visible = false;
+                    e.Row.Cells[5].Visible = false;
                 }
             }
         }

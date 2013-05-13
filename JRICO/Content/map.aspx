@@ -1,10 +1,33 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="map.aspx.cs" Inherits="JRICO.Content.map" %>
 
+
 <!DOCTYPE html>
 <html>
+<head>
+<link href="../Styles/Site.css" rel="stylesheet" type="text/css" />
+</head>
 <body onload="getLocation()">
-<a href="javascript: window.close()">Close Window</a>
-<div id="mapholder" align="center"></div>
+<form id="Form1" runat="server">
+
+<table>
+<tr>
+<td></td>
+<td valign="top"><br />
+    <b>Hospital Details</b><br />
+    <asp:Label ID="lblHospitalName" runat="server"></asp:Label><br />
+    <asp:Label ID="lblAddress1" runat="server"></asp:Label><br />
+    <asp:Label ID="lblPostcode" runat="server"></asp:Label><br /><br />
+    Account Number: <asp:Label ID="lblAccountNumber" runat="server"></asp:Label>
+</td>
+<td><div id="mapholder" align="center"></div></td>
+</tr>
+<tr>
+<td colspan="3" align="right">
+    <asp:TextBox ID="txtlat" runat="server"></asp:TextBox>
+    <asp:TextBox ID="txtlon" runat="server"></asp:TextBox>
+    <a href="javascript: window.close()">Close Window</a></td></tr>
+</table>
+
 <script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script>
 
@@ -30,26 +53,22 @@
     }
 
     function showPosition(position) {
-        lat = qsParm["lat"];
-        lon = qsParm["lon"];
-        if (lat != "0.00000000" && lon != "0.00000000") {
-            latlon = new google.maps.LatLng(lat, lon)
-            mapholder = document.getElementById('mapholder')
-            mapholder.style.height = '300px';
-            mapholder.style.width = '700px';
+        id = qsParm["id"];
+        latlon = new google.maps.LatLng(document.getElementById("txtlat").value, document.getElementById("txtlon").value)
+        document.getElementById("txtlat").style.visibility = 'hidden';
+        document.getElementById("txtlon").style.visibility = 'hidden';
+        mapholder = document.getElementById('mapholder')
+        mapholder.style.height = '300px';
+        mapholder.style.width = '700px';
 
-            var myOptions = {
-                center: latlon, zoom: 14,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                mapTypeControl: false,
-                navigationControlOptions: { style: google.maps.NavigationControlStyle.SMALL }
-            };
-            var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
-            var marker = new google.maps.Marker({ position: latlon, map: map, title: "location is here!" });
-        }
-        else {
-            alert("Co-ordinates not mapped!");
-        }
+        var myOptions = {
+            center: latlon, zoom: 14,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            mapTypeControl: false,
+            navigationControlOptions: { style: google.maps.NavigationControlStyle.SMALL }
+        };
+        var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+        var marker = new google.maps.Marker({ position: latlon, map: map, title: "location is here!" });
     }
 
     function showError(error) {
@@ -69,6 +88,7 @@
         }
     }
 </script>
+</form>
 </body>
 </html>
 

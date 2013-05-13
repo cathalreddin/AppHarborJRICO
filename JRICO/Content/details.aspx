@@ -152,13 +152,6 @@
                             GridLines="Vertical" AlternatingRowStyles-CssClass="alt" CssClass="mGrid" PagerStyle-CssClass="pgr"
                             ForeColor="Black" Width="100%" OnRowDeleting="deleteAttachmentRow" OnRowDataBound="GridView2_RowDataBound">
                             <Columns>
-                                <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle"
-                                    ItemStyle-Wrap="false">
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertAttachment" OnClick="lbInsert_Attachment">Insert</asp:LinkButton>
-                                    </FooterTemplate>
-                                    <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
-                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="AttachmentID" Visible="false">
                                     <ItemTemplate>
                                         <asp:Label ID="lblAttachmentID" runat="server" Text='<%# Bind("[AttachmentID]") %>'></asp:Label>
@@ -194,6 +187,9 @@
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Attachment Date Uploaded">
                                     <ItemTemplate>
                                         <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Attachment Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate>
+                                        <FooterTemplate>
+                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertAttachment" OnClick="lbInsert_Attachment">Insert</asp:LinkButton>
+                                    </FooterTemplate>
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Uploaded By" SortExpression="Attachment Uploaded By">
                                     <ItemTemplate>
@@ -270,11 +266,6 @@
                             ForeColor="Black" Width="100%" OnMustAddARow="GridView3_MustAddARow" EmptyDataText="There are no data records to display."
                              OnRowDeleting="deleteNoteRow" OnRowDataBound="GridView3_RowDataBound">
                             <Columns>
-                                <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle"
-                                    ItemStyle-Wrap="false">
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsertNote" runat="server" ValidationGroup="insertNote" OnClick="lbInsert_Note">Insert</asp:LinkButton></FooterTemplate><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
-                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="NoteID" Visible="false">
                                     <ItemTemplate>
                                         <asp:Label ID="LblNoteID" runat="server" Text='<%# Bind("[NoteID]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField HeaderText="Note Title" SortExpression="NoteTitle">
@@ -295,7 +286,10 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Note Date Uploaded">
                                     <ItemTemplate>
-                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Note Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="Note Uploaded By">
+                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Note Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate>
+                                        <FooterTemplate>
+                                        <asp:LinkButton ID="lbInsertNote" runat="server" ValidationGroup="insertNote" OnClick="lbInsert_Note">Insert</asp:LinkButton></FooterTemplate>
+                                        </asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="Note Uploaded By">
                                     <ItemTemplate>
                                         <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Note Uploaded By]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField ShowHeader="False">
                                     <ItemTemplate>
@@ -335,11 +329,6 @@
                             ForeColor="Black" OnRowEditing="RowEditPrice" OnRowUpdating="RowUpdatePrice"
                             OnRowCancelingEdit="RowEditCancelPrice" Width="100%" OnRowDeleting="deletePriceRow" OnRowDataBound="GridView4_RowDataBound">
                             <Columns>
-                                <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle"
-                                    ItemStyle-Wrap="false">
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertPrice" OnClick="lbInsert_Price">Insert</asp:LinkButton></FooterTemplate><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
-                                </asp:TemplateField>
                                 <asp:CommandField ShowEditButton="True" ShowCancelButton="true" />
                                 <asp:TemplateField HeaderText="PriceID" Visible="false">
                                     <ItemTemplate>
@@ -383,14 +372,27 @@
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Date Uploaded">
                                     <EditItemTemplate>
                                         <asp:TextBox ID="TextBox11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'
-                                            Visible="false"></asp:TextBox></EditItemTemplate><ItemTemplate>
-                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="Uploaded By">
-                                    <EditItemTemplate>
-                                        <asp:TextBox ID="TextBox6" Visible="false" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:TextBox></EditItemTemplate><ItemTemplate>
-                                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField ShowHeader="False">
+                                            Visible="false"></asp:TextBox></EditItemTemplate>
                                     <ItemTemplate>
-                                        <asp:LinkButton ID="DeletePriceButton" runat="server" 
-                                            CommandName="Delete" Text="Delete"  OnClientClick="return confirm('Are you sure you want to delete this price?');"></asp:LinkButton></ItemTemplate></asp:TemplateField></Columns><AlternatingRowStyle BackColor="#e2e2e2" />
+                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label>
+                                    </ItemTemplate>
+                                    <FooterTemplate>
+                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertPrice" OnClick="lbInsert_Price">Insert</asp:LinkButton>
+                                    </FooterTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField HeaderText="Uploaded By" SortExpression="Uploaded By">
+                                    <EditItemTemplate>
+                                        <asp:TextBox ID="TextBox6" Visible="false" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:TextBox></EditItemTemplate>
+                                    <ItemTemplate>
+                                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:Label></ItemTemplate>
+                                </asp:TemplateField>
+                                <asp:TemplateField ShowHeader="False">
+                                    <ItemTemplate>
+                                        <asp:LinkButton ID="DeletePriceButton" runat="server" CommandName="Delete" Text="Delete"
+                                            OnClientClick="return confirm('Are you sure you want to delete this price?');"></asp:LinkButton></ItemTemplate>
+                                </asp:TemplateField>
+                            </Columns>
+                                    <AlternatingRowStyle BackColor="#e2e2e2" />
                             <FooterStyle BackColor="#CCCCCC" />
                             <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
                             <PagerStyle CssClass="pgr" BackColor="#999999" ForeColor="Black" HorizontalAlign="Center">
@@ -429,11 +431,6 @@
                             GridLines="Vertical" AlternatingRowStyles-CssClass="alt" CssClass="mGrid" PagerStyle-CssClass="pgr"
                             ForeColor="Black" Width="100%" OnRowDeleting="deleteHospitalRow" OnRowDataBound="GridView5_RowDataBound">
                             <Columns>
-                                <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle"
-                                    ItemStyle-Wrap="false">
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_AccountNumber">Insert</asp:LinkButton></FooterTemplate><ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
-                                </asp:TemplateField>
                                 <asp:TemplateField HeaderText="ContractHospitalID" Visible="false">
                                     <ItemTemplate>
                                         <asp:Label ID="lblContractHospitalID" runat="server" Text='<%# Bind("[ContractHospitalID]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField HeaderText="Hospital Name" SortExpression="Hospital Name">
@@ -464,7 +461,10 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="ContractHospital Date Uploaded">
                                     <ItemTemplate>
-                                        <asp:Label ID="lblDateUploaded" runat="server" Text='<%# Bind("[ContractHospital Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="ContractHospital Uploaded By">
+                                        <asp:Label ID="lblDateUploaded" runat="server" Text='<%# Bind("[ContractHospital Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate>
+                                        <FooterTemplate>
+                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_AccountNumber">Insert</asp:LinkButton></FooterTemplate>
+                                        </asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="ContractHospital Uploaded By">
                                     <ItemTemplate>
                                         <asp:Label ID="lblUploadedBy" runat="server" Text='<%# Bind("[ContractHospital Uploaded By]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField ShowHeader="False">
                                     <ItemTemplate>
