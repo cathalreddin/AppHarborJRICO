@@ -29,7 +29,7 @@
         ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="HospitalID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black"  
-        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%" > 
+        OnRowEditing="RowEdit" OnRowUpdating="RowUpdate" OnRowCancelingEdit="RowEditCancel" Width="100%" OnRowDataBound="GridView1_RowDataBound"> 
         <Columns>
            <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle" ItemStyle-Wrap="false">
                 <footertemplate>
@@ -51,7 +51,7 @@
                     <asp:TextBox ID="txtHospitalName" runat="server" Text='<%# Bind("[Hospital Name]") %>'></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
-                   <asp:HyperLink ID="hlHospitalName" runat="server" NavigateUrl='<%# String.Format("map.aspx?lat={0}&lon={1}", Eval("lat"), Eval("lon")) %>' Text='<%# Eval("[Hospital Name]") %>' Target="_blank"></asp:HyperLink>
+                   <asp:HyperLink ID="hlHospitalName" runat="server" NavigateUrl='<%# String.Format("map.aspx?lat={0}&lon={1}", Eval("Latitude"), Eval("Longitude")) %>' Text='<%# Eval("[Hospital Name]") %>' Target="_blank" ToolTip="Click for Map"></asp:HyperLink>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtHospitalNameInsert" runat="server"></asp:TextBox>
@@ -78,14 +78,10 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Postcode" SortExpression="Postcode">
                 <EditItemTemplate>
-                    <asp:TextBox ID="txtpostcode" runat="server" Text='<%# Bind("[Postcode]") %>'></asp:TextBox>
+                    <asp:TextBox ID="txtpostcode" runat="server" Text='<%# Bind("[Postcode]") %>' Width="90"></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="Label5" runat="server" Text='<%# Bind("[Postcode]") %>'></asp:Label>
-                    <%--<ajax:PopupControlExtender id="PopupControlExtender1" runat="server" popupcontrolid="Panel1"
-                        targetcontrolid="Label5" dynamiccontextkey='<%# Eval("Postcode") %>' dynamiccontrolid="Panel1"
-                        dynamicservicemethod="GetDynamicContent" position="Bottom"> 
-            </ajax:PopupControlExtender>--%>
                 </ItemTemplate>
                 <FooterTemplate>
                     <asp:TextBox ID="txtPostcodeInsert" runat="server" Width="60"></asp:TextBox>
@@ -97,7 +93,7 @@
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Account Number" SortExpression="Account Number">
                 <EditItemTemplate>
-                    <asp:TextBox ID="txtAccountNumber" runat="server" Text='<%# Bind("[Account Number]") %>'></asp:TextBox>
+                    <asp:TextBox ID="txtAccountNumber" runat="server" Text='<%# Bind("[Account Number]") %>' Width="90"></asp:TextBox>
                 </EditItemTemplate>
                 <ItemTemplate>
                     <asp:Label ID="lblAccountNumber" runat="server" Text='<%# Bind("[Account Number]") %>'></asp:Label>
@@ -108,6 +104,26 @@
                         ControlToValidate="txtAccountNumberInsert" Text="*" ForeColor="Red">
                     </asp:RequiredFieldValidator>
                 </FooterTemplate>
+                <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Latitude" SortExpression="Latitude" HeaderStyle-Width="90">
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtLatitude" runat="server" Text='<%# Bind("[Latitude]") %>' Width="70"></asp:TextBox>
+                    <asp:RegularExpressionValidator ID="revUpdateLatitude" runat="server" ErrorMessage="Only Decimal Value Allowed"
+                        ValidationExpression="^([-+]?\d{1,2}[.]\d+)$" ControlToValidate="txtLatitude"
+                        Text="*" ForeColor="Red">
+                    </asp:RegularExpressionValidator>
+                </EditItemTemplate>
+                <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
+            </asp:TemplateField>
+            <asp:TemplateField HeaderText="Longitude" SortExpression="Longitude" HeaderStyle-Width="90">
+                <EditItemTemplate>
+                    <asp:TextBox ID="txtLongitude" runat="server" Text='<%# Bind("[Longitude]") %>' Width="70"></asp:TextBox>
+                    <asp:RegularExpressionValidator ID="revUpdateLongitude" runat="server" ErrorMessage="Only Decimal Value Allowed"
+                        ValidationExpression="^([-+]?\d{1,3}[.]\d+)$" ControlToValidate="txtLongitude"
+                        Text="*" ForeColor="Red">
+                    </asp:RegularExpressionValidator>
+                </EditItemTemplate>
                 <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
             <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Date Uploaded">
@@ -138,7 +154,6 @@
         <SortedDescendingCellStyle BackColor="#CAC9C9" />
         <SortedDescendingHeaderStyle BackColor="#383838" />
     </asp:GridView>
-   <%-- <asp:Panel ID="Panel1" runat="server"> </asp:Panel> --%>
     <asp:ValidationSummary ID="ValidationSummary1" ValidationGroup="insert" runat="server" ForeColor="Red" />
     <asp:ValidationSummary ID="ValidationSummary2" runat="server" ForeColor="Red" />
 </asp:Content>

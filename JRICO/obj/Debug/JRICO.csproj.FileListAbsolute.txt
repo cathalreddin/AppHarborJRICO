@@ -41,3 +41,6 @@ C:\JRICO\JRICO\bin\ru\AjaxControlToolkit.resources.dll
 C:\JRICO\JRICO\bin\tr-TR\AjaxControlToolkit.resources.dll
 C:\JRICO\JRICO\bin\zh-CHS\AjaxControlToolkit.resources.dll
 C:\JRICO\JRICO\bin\zh-CHT\AjaxControlToolkit.resources.dll
+C:\JRICO\JRICO\bin\Artem.Google.dll
+C:\JRICO\JRICO\bin\Artem.Google.pdb
+C:\JRICO\JRICO\bin\Artem.Google.xml

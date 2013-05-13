@@ -36,6 +36,9 @@
     <Reference Include="AjaxControlToolkit">
       <HintPath>..\packages\AjaxControlToolkit.7.0429\lib\40\AjaxControlToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="Artem.Google">
+      <HintPath>..\packages\GoogleMapControl.6.1.12290.1016\lib\net40\Artem.Google.dll</HintPath>
+    </Reference>
     <Reference Include="AWSSDK, Version=1.5.19.0, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\AWSSDK.1.5.19.0\lib\AWSSDK.dll</HintPath>

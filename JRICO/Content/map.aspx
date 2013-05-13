@@ -32,19 +32,24 @@
     function showPosition(position) {
         lat = qsParm["lat"];
         lon = qsParm["lon"];
-        latlon = new google.maps.LatLng(lat, lon)
-        mapholder = document.getElementById('mapholder')
-        mapholder.style.height = '300px';
-        mapholder.style.width = '700px';
+        if (lat != "0.00000000" && lon != "0.00000000") {
+            latlon = new google.maps.LatLng(lat, lon)
+            mapholder = document.getElementById('mapholder')
+            mapholder.style.height = '300px';
+            mapholder.style.width = '700px';
 
-        var myOptions = {
-            center: latlon, zoom: 14,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            mapTypeControl: false,
-            navigationControlOptions: { style: google.maps.NavigationControlStyle.SMALL }
-        };
-        var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
-        var marker = new google.maps.Marker({ position: latlon, map: map, title: "location is here!" });
+            var myOptions = {
+                center: latlon, zoom: 14,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: false,
+                navigationControlOptions: { style: google.maps.NavigationControlStyle.SMALL }
+            };
+            var map = new google.maps.Map(document.getElementById("mapholder"), myOptions);
+            var marker = new google.maps.Marker({ position: latlon, map: map, title: "location is here!" });
+        }
+        else {
+            alert("Co-ordinates not mapped!");
+        }
     }
 
     function showError(error) {

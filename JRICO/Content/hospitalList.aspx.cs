@@ -26,7 +26,7 @@ namespace JRICO.Content
             }
             else
             {
-                writeToLog.WriteLog("Accessed the hospitalList Page ", Page.User.Identity.Name, 0);      
+                writeToLog.WriteLog("Accessed the hospitalList Page ", Page.User.Identity.Name, 0);
                 if (!IsPostBack)
                 {
                     BindData("none", " ");
@@ -34,46 +34,7 @@ namespace JRICO.Content
                 }
             }
         }
-        //popup
-   //     protected void GridView1_RowCreated(object sender, GridViewRowEventArgs e)
-   //     {
-   //         if (e.Row.RowType == DataControlRowType.DataRow)
-   //         {
-   //             PopupControlExtender pce = e.Row.FindControl("PopupControlExtender1") as PopupControlExtender;
 
-   //             string behaviorID = "pce_" + e.Row.RowIndex;
-   //             pce.BehaviorID = behaviorID;
-
-   //             Label lblPostCode = (Label)e.Row.FindControl("Label5");
-
-   //             string OnMouseOverScript = string.Format("$find('{0}').showPopup();", behaviorID);
-   //             string OnMouseOutScript = string.Format("$find('{0}').hidePopup();", behaviorID);
-
-   //             lblPostCode.Attributes.Add("onmouseover", OnMouseOverScript);
-   //             lblPostCode.Attributes.Add("onmouseout", OnMouseOutScript);
-   //         }
-   //     }
-   //     [System.Web.Services.WebMethodAttribute(),
-   //System.Web.Script.Services.ScriptMethodAttribute()]
-   //     public static string GetDynamicContent(string contextKey)
-   //     {
-   //         StringBuilder b = new StringBuilder();
-
-   //         b.Append("<table style='width:350px; font-size:10pt; font-family:Verdana; border=1;'>");
-
-   //         b.Append("<tr><td colspan='3'>");
-   //         b.Append("<b>MAP</b>"); 
-   //         b.Append("</td></tr>");
-   //         b.Append("<tr><td colspan='3'>");
-   //         b.Append("<b>In construction - show map here</b>");
-   //         b.Append("</td></tr>");
-   //         b.Append("<tr><td colspan='3'>");
-   //         b.Append("<a href='map.aspx?id=1' target='_blank'>Open in New Window</a href>");
-   //         b.Append("</td></tr>");
-   //         b.Append("</table>");
-
-   //         return b.ToString();
-   //     }
         private void BindData(string column, string textSearch)
         {
             //Sorting Issue #1
@@ -88,7 +49,7 @@ namespace JRICO.Content
             {
                 GridView1.DataSource = this.GetData(column, textSearch);
                 GridView1.DataBind();
-            }            
+            }
         }
         protected void Button1_Click(object sender, EventArgs e)
         {
@@ -150,7 +111,28 @@ namespace JRICO.Content
             TextBox Address1 = row.FindControl("txtAddress1") as TextBox;
             TextBox Postcode = row.FindControl("txtPostcode") as TextBox;
             TextBox AccountNumber = row.FindControl("txtAccountNumber") as TextBox;
+            TextBox Latitude = row.FindControl("txtLatitude") as TextBox;
+            TextBox Longitude = row.FindControl("txtLongitude") as TextBox;
             string HospitalID = GridView1.DataKeys[e.RowIndex].Value.ToString();
+
+            string strLatitude, strLongitude;
+            if (Latitude.Text == "")
+            {
+                strLatitude = "0";
+            }
+            else
+            {
+                strLatitude = Latitude.Text;
+            }
+            if (Longitude.Text == "")
+            {
+                strLongitude = "0";
+            }
+            else
+            {
+                strLongitude = Longitude.Text;
+            }
+
 
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
@@ -164,6 +146,8 @@ namespace JRICO.Content
                         cmd.Parameters.Add("@Address1", SqlDbType.NVarChar).Value = Address1.Text;
                         cmd.Parameters.Add("@Postcode", SqlDbType.NVarChar).Value = Postcode.Text;
                         cmd.Parameters.Add("@AccountNumber", SqlDbType.NVarChar).Value = AccountNumber.Text;
+                        cmd.Parameters.Add("@Latitude", SqlDbType.NVarChar).Value = strLatitude;
+                        cmd.Parameters.Add("@Longitude", SqlDbType.NVarChar).Value = strLongitude;
                         cmd.Parameters.Add("@User", SqlDbType.NVarChar).Value = Page.User.Identity.Name;
                         cmd.Parameters.Add("@HospitalID", SqlDbType.Int).Value = Convert.ToInt32(HospitalID);
                         conn.Open();
@@ -192,7 +176,18 @@ namespace JRICO.Content
             }
         }
 
-
+        //Hide Longitude && Latitude in normal view mode
+        protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e) 
+        { 
+            if (GridView1.EditIndex >= 0)  
+                return; 
+            if ((e.Row.RowState == DataControlRowState.Normal || e.Row.RowState == DataControlRowState.Alternate)
+                && (e.Row.RowType == DataControlRowType.DataRow || e.Row.RowType == DataControlRowType.Header || e.Row.RowType == DataControlRowType.Footer)) 
+            { 
+                e.Row.Cells[7].Visible = false; 
+                e.Row.Cells[8].Visible = false; 
+            } 
+        }
 
         protected void SortRecords(object sender, GridViewSortEventArgs e)
         {
@@ -238,7 +233,7 @@ namespace JRICO.Content
 
         protected void lbInsert_Click(object sender, EventArgs e)
         {
-            string query = "sp_insertHospitalList: "; 
+            string query = "sp_insertHospitalList: ";
             using (SqlConnection conn = new SqlConnection(_connStr))
             {
                 string sqlSP = "sp_insertHospitalList";
@@ -275,6 +270,6 @@ namespace JRICO.Content
                         conn.Close();
                 }
             }
-        }     
+        }
     }
 }
