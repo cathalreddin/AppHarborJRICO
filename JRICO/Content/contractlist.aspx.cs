@@ -67,6 +67,7 @@ namespace JRICO.Content
                             string EmailFrom = dr["EmailFrom"].ToString();
                             string EmailSubject = dr["EmailSubject"].ToString();
                             string EmailContent = dr["EmailContent"].ToString();
+                            string TriggerDate = dr["TriggerDate"].ToString();
                             int ContractID = Convert.ToInt32(dr["ContractID"]);
                             string contractTitle = dr["ContractTitle"].ToString();
                             using (SqlConnection connEmail = new SqlConnection(_connStr))
@@ -94,7 +95,7 @@ namespace JRICO.Content
                                     }
                                 }
                             }
-                            result += "Contract Title=" + contractTitle + ", EmailID=" + EmailID + ", emailTo=" + emailTo + ", EmailFrom=" + EmailFrom + ", EmailSubject=" + EmailSubject + ", EmailContent=" + EmailContent;
+                            result += "Contract Title=" + contractTitle + ",TriggerDate=" +TriggerDate+ ", EmailID=" + EmailID + ", emailTo=" + emailTo + ", EmailFrom=" + EmailFrom + ", EmailSubject=" + EmailSubject + ", EmailContent=" + EmailContent+ "<br />";
                         }
                         if (result != "start")
                         {
