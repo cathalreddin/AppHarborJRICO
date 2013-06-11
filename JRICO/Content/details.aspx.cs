@@ -426,7 +426,7 @@ namespace JRICO.Content
                     try
                     {
                         Email newEmail = new Email();
-                        string result = newEmail.SendEmailToCathal(txtEmailTo.Text, "[New Email Trigger Set for Contract Title: " +lblContractTitle.Text+ "] ", "EmailID: [" + lblEmailID.Text + " ]: " + txtEmailContent.Text, Convert.ToDateTime(txtEmailDate.Text), id);
+                        string result = newEmail.SendEmailToCathal(txtEmailTo.Text, "[New Email Trigger Set for Contract Title: " + lblContractTitle.Text + "] ", "EmailID: [" + lblEmailID.Text + " ]: " + txtEmailContent.Text + " Trigger Date: " + txtEmailDate.Text + " Contract Reference: " + lblContractReference.Text, Convert.ToDateTime(txtEmailDate.Text), id);
                         string sqlSP = "sp_updateEmail"; 
 
                         if (lblEmailID.Text != "")

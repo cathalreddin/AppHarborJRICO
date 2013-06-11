@@ -21,13 +21,10 @@
         </tr>
     </table>
 <asp:GridView ID="GridView1" runat="server" AllowSorting="True" OnSorting="SortRecords" AutoGenerateColumns="False"
-        ShowFooter="True" BackColor="White" BorderColor="#999999" DataKeyNames="LogID"
+        BackColor="White" BorderColor="#999999" DataKeyNames="LogID"
         BorderStyle="Solid" BorderWidth="1px" CellPadding="3" GridLines="Vertical" AlternatingRowStyles-CssClass="alt"
         CssClass="mGrid" PagerStyle-CssClass="pgr" ForeColor="Black" Width="100%"> 
-        <Columns>
-           <asp:TemplateField ShowHeader="False" ItemStyle-HorizontalAlign="Left" ItemStyle-VerticalAlign="Middle" ItemStyle-Wrap="false">
-               <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle" Wrap="False"></ItemStyle>
-            </asp:TemplateField>
+        <Columns>           
             <asp:TemplateField HeaderText="LogID" Visible="false">
                 <ItemTemplate>
                     <asp:Label ID="Label1" runat="server" Text='<%# Bind("[LogID]") %>'></asp:Label>

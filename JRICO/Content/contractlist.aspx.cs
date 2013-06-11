@@ -31,6 +31,7 @@ namespace JRICO.Content
                     BindData("none", " ");
                     writeToLog.WriteLog("Contract List Page Accessed", Page.User.Identity.Name, 1);
                     CheckForEmailTriggers();
+                    CheckForEmailTriggersinNext30DaysAndSentToCathal();
                     if ((Request.QueryString["m"] != null) && (Request.QueryString["m"] == "new"))
                     {
                         lblNewUser.Visible = true;
@@ -42,6 +43,78 @@ namespace JRICO.Content
                 }
             }
         }
+
+        protected void CheckForEmailTriggersinNext30DaysAndSentToCathal()
+        {
+            Email newEmail = new Email();
+            //loop through sending emails
+            using (SqlConnection conn = new SqlConnection(_connStr))
+            {
+                string sqlSP = "sp_getListEmailsWhichWillBeSentInNext30Days";
+                using (SqlCommand cmd = new SqlCommand(sqlSP, conn))
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    try
+                    {
+                        conn.Open();
+                        SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+                        string result = "start";
+                        while (dr.Read())
+                        {
+                            //Send Email                            
+                            int EmailID = Convert.ToInt32(dr["EmailID"]);
+                            string emailTo = dr["EmailTo"].ToString();
+                            string EmailFrom = dr["EmailFrom"].ToString();
+                            string EmailSubject = dr["EmailSubject"].ToString();
+                            string EmailContent = dr["EmailContent"].ToString();
+                            int ContractID = Convert.ToInt32(dr["ContractID"]);
+                            string contractTitle = dr["ContractTitle"].ToString();
+                            using (SqlConnection connEmail = new SqlConnection(_connStr))
+                            {
+                                using (SqlCommand cmdEmail = new SqlCommand("sp_updateOverviewEmailSent", connEmail))
+                                {
+                                    try
+                                    {
+                                        //Update Sent Status
+                                        cmdEmail.CommandType = CommandType.StoredProcedure;
+                                        cmdEmail.Parameters.Add("@EmailID", SqlDbType.Int).Value = Convert.ToInt32(EmailID);
+                                        connEmail.Open();
+                                        cmdEmail.ExecuteNonQuery();
+                                        connEmail.Close();
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        Response.Write("ERROR 222: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                                    }
+                                    finally
+                                    {
+                                        // Close data reader object and database connection
+                                        if (connEmail != null)
+                                            connEmail.Close();
+                                    }
+                                }
+                            }
+                            result += "Contract Title=" + contractTitle + ", EmailID=" + EmailID + ", emailTo=" + emailTo + ", EmailFrom=" + EmailFrom + ", EmailSubject=" + EmailSubject + ", EmailContent=" + EmailContent;
+                        }
+                        if (result != "start")
+                        {
+                            newEmail.SendEmailToCathal("prefilled", "Email Overview", result, DateTime.Now, 0);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Response.Write("ERROR 333: " + ex.Message + " : Please email this error to cathal@techsupportit.co.uk");
+                    }
+                    finally
+                    {
+                        // Close data reader object and database connection
+                        if (conn != null)
+                            conn.Close();
+                    }
+                }
+            }
+        }
+
         protected void CheckForEmailTriggers()
         {       
             Email newEmail = new Email();

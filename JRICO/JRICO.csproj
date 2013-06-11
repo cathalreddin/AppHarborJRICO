@@ -102,6 +102,7 @@
     <Content Include="Content\addContract.aspx" />
     <Content Include="Content\contractList.aspx" />
     <Content Include="Content\details.aspx" />
+    <Content Include="Content\emailOverview.aspx" />
     <Content Include="Content\hospitalList.aspx" />
     <Content Include="Content\logDetails.aspx" />
     <Content Include="Content\map.aspx" />
@@ -186,6 +187,13 @@
     </Compile>
     <Compile Include="Content\details.aspx.designer.cs">
       <DependentUpon>details.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Content\emailOverview.aspx.cs">
+      <DependentUpon>emailOverview.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Content\emailOverview.aspx.designer.cs">
+      <DependentUpon>emailOverview.aspx</DependentUpon>
     </Compile>
     <Compile Include="Content\hospitalList.aspx.cs">
       <DependentUpon>hospitalList.aspx</DependentUpon>

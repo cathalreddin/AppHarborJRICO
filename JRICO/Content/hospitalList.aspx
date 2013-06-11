@@ -125,7 +125,7 @@
                     </asp:RegularExpressionValidator>
                 </EditItemTemplate>
                 <ItemTemplate>
-                    <asp:Label ID="lblLongitude" runat="server" Text='<%# Bind("[Latitude]") %>'></asp:Label>
+                    <asp:Label ID="lblLongitude" runat="server" Text='<%# Bind("[Longitude]") %>'></asp:Label>
                 </ItemTemplate>
                 <ItemStyle HorizontalAlign="Left" VerticalAlign="Middle"></ItemStyle>
             </asp:TemplateField>
