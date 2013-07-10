@@ -55,15 +55,15 @@
     <table width="100%" align="center">
         <tr>
             <td>
-                <asp:Button Text="Tab 1" BorderStyle="None" ID="Tab1" CssClass="Initial" runat="server"
+                <asp:Button Text="Record Overview" BorderStyle="None" ID="Tab1" CssClass="Initial" runat="server"
                     OnClick="Tab1_Click" />
-                <asp:Button Text="Tab 2" BorderStyle="None" ID="Tab2" CssClass="Initial" runat="server"
+                <asp:Button Text="Associated Documentation" BorderStyle="None" ID="Tab2" CssClass="Initial" runat="server"
                     OnClick="Tab2_Click" />
-                <asp:Button Text="Tab 3" BorderStyle="None" ID="Tab3" CssClass="Initial" runat="server"
+                <asp:Button Text="Email Alerts & Notes" BorderStyle="None" ID="Tab3" CssClass="Initial" runat="server"
                     OnClick="Tab3_Click" />
-                <asp:Button Text="Tab 4" BorderStyle="None" ID="Tab4" CssClass="Initial" runat="server"
+                <asp:Button Text="System Prices" BorderStyle="None" ID="Tab4" CssClass="Initial" runat="server"
                     OnClick="Tab4_Click" />
-                <asp:Button Text="Tab 5" BorderStyle="None" ID="Tab5" CssClass="Initial" runat="server"
+                <asp:Button Text="Hospitals" BorderStyle="None" ID="Tab5" CssClass="Initial" runat="server"
                     OnClick="Tab5_Click" />
                 <asp:MultiView ID="MainView" runat="server">
                     <asp:View ID="View1" runat="server">
@@ -286,10 +286,8 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Note Date Uploaded">
                                     <ItemTemplate>
-                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Note Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate>
-                                        <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsertNote" runat="server" ValidationGroup="insertNote" OnClick="lbInsert_Note">Insert</asp:LinkButton></FooterTemplate>
-                                        </asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="Note Uploaded By">
+                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Note Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate><FooterTemplate>
+                                        <asp:LinkButton ID="lbInsertNote" runat="server" ValidationGroup="insertNote" OnClick="lbInsert_Note">Insert</asp:LinkButton></FooterTemplate></asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="Note Uploaded By">
                                     <ItemTemplate>
                                         <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Note Uploaded By]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField ShowHeader="False">
                                     <ItemTemplate>
@@ -372,27 +370,15 @@
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="Date Uploaded">
                                     <EditItemTemplate>
                                         <asp:TextBox ID="TextBox11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'
-                                            Visible="false"></asp:TextBox></EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label>
-                                    </ItemTemplate>
-                                    <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertPrice" OnClick="lbInsert_Price">Insert</asp:LinkButton>
-                                    </FooterTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField HeaderText="Uploaded By" SortExpression="Uploaded By">
+                                            Visible="false"></asp:TextBox></EditItemTemplate><ItemTemplate>
+                                        <asp:Label ID="Label11" runat="server" Text='<%# Bind("[Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate><FooterTemplate>
+                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insertPrice" OnClick="lbInsert_Price">Insert</asp:LinkButton></FooterTemplate></asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="Uploaded By">
                                     <EditItemTemplate>
-                                        <asp:TextBox ID="TextBox6" Visible="false" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:TextBox></EditItemTemplate>
-                                    <ItemTemplate>
-                                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:Label></ItemTemplate>
-                                </asp:TemplateField>
-                                <asp:TemplateField ShowHeader="False">
+                                        <asp:TextBox ID="TextBox6" Visible="false" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:TextBox></EditItemTemplate><ItemTemplate>
+                                        <asp:Label ID="Label6" runat="server" Text='<%# Bind("[Uploaded By]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField ShowHeader="False">
                                     <ItemTemplate>
                                         <asp:LinkButton ID="DeletePriceButton" runat="server" CommandName="Delete" Text="Delete"
-                                            OnClientClick="return confirm('Are you sure you want to delete this price?');"></asp:LinkButton></ItemTemplate>
-                                </asp:TemplateField>
-                            </Columns>
-                                    <AlternatingRowStyle BackColor="#e2e2e2" />
+                                            OnClientClick="return confirm('Are you sure you want to delete this price?');"></asp:LinkButton></ItemTemplate></asp:TemplateField></Columns><AlternatingRowStyle BackColor="#e2e2e2" />
                             <FooterStyle BackColor="#CCCCCC" />
                             <HeaderStyle BackColor="Black" Font-Bold="True" ForeColor="White" />
                             <PagerStyle CssClass="pgr" BackColor="#999999" ForeColor="Black" HorizontalAlign="Center">
@@ -461,10 +447,8 @@
                                 </asp:TemplateField>
                                 <asp:TemplateField HeaderText="Date Uploaded" SortExpression="ContractHospital Date Uploaded">
                                     <ItemTemplate>
-                                        <asp:Label ID="lblDateUploaded" runat="server" Text='<%# Bind("[ContractHospital Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate>
-                                        <FooterTemplate>
-                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_AccountNumber">Insert</asp:LinkButton></FooterTemplate>
-                                        </asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="ContractHospital Uploaded By">
+                                        <asp:Label ID="lblDateUploaded" runat="server" Text='<%# Bind("[ContractHospital Date Uploaded]", "{0:dd/MM/yyyy}") %>'></asp:Label></ItemTemplate><FooterTemplate>
+                                        <asp:LinkButton ID="lbInsert" runat="server" ValidationGroup="insert" OnClick="lbInsert_AccountNumber">Insert</asp:LinkButton></FooterTemplate></asp:TemplateField><asp:TemplateField HeaderText="Uploaded By" SortExpression="ContractHospital Uploaded By">
                                     <ItemTemplate>
                                         <asp:Label ID="lblUploadedBy" runat="server" Text='<%# Bind("[ContractHospital Uploaded By]") %>'></asp:Label></ItemTemplate></asp:TemplateField><asp:TemplateField ShowHeader="False">
                                     <ItemTemplate>
