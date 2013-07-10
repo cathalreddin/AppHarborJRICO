@@ -57,9 +57,9 @@
             <td>
                 <asp:Button Text="Record Overview" BorderStyle="None" ID="Tab1" CssClass="Initial" runat="server"
                     OnClick="Tab1_Click" />
-                <asp:Button Text="Associated Documentation" BorderStyle="None" ID="Tab2" CssClass="Initial" runat="server"
+                <asp:Button Text="Documentation" BorderStyle="None" ID="Tab2" CssClass="Initial" runat="server"
                     OnClick="Tab2_Click" />
-                <asp:Button Text="Email Alerts & Notes" BorderStyle="None" ID="Tab3" CssClass="Initial" runat="server"
+                <asp:Button Text="Emails & Notes" BorderStyle="None" ID="Tab3" CssClass="Initial" runat="server"
                     OnClick="Tab3_Click" />
                 <asp:Button Text="System Prices" BorderStyle="None" ID="Tab4" CssClass="Initial" runat="server"
                     OnClick="Tab4_Click" />
