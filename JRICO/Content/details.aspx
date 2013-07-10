@@ -13,20 +13,20 @@
             display: block;
             padding: 4px 18px 4px 18px;
             float: left;
-            background: url("../Images/InitialImage.png") no-repeat right top;
+            background: url("../Images/InitialImage1.png") no-repeat right top;
             color: Black;
             font-weight: bold;
         }
         .Initial:hover
         {
             color: White;
-            background: url("../Images/SelectedButton.png") no-repeat right top;
+            background: url("../Images/SelectedButton1.png") no-repeat right top;
         }
         .Clicked
         {
             float: left;
             display: block;
-            background: url("../Images/SelectedButton.png") no-repeat right top;
+            background: url("../Images/SelectedButton1.png") no-repeat right top;
             padding: 4px 18px 4px 18px;
             color: Black;
             font-weight: bold;
@@ -57,9 +57,9 @@
             <td>
                 <asp:Button Text="Record Overview" BorderStyle="None" ID="Tab1" CssClass="Initial" runat="server"
                     OnClick="Tab1_Click" />
-                <asp:Button Text="Documentation" BorderStyle="None" ID="Tab2" CssClass="Initial" runat="server"
+                <asp:Button Text="Associated Documentation" BorderStyle="None" ID="Tab2" CssClass="Initial" runat="server"
                     OnClick="Tab2_Click" />
-                <asp:Button Text="Emails & Notes" BorderStyle="None" ID="Tab3" CssClass="Initial" runat="server"
+                <asp:Button Text="Email Alerts & Notes" BorderStyle="None" ID="Tab3" CssClass="Initial" runat="server"
                     OnClick="Tab3_Click" />
                 <asp:Button Text="System Prices" BorderStyle="None" ID="Tab4" CssClass="Initial" runat="server"
                     OnClick="Tab4_Click" />

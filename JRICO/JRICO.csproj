@@ -108,7 +108,9 @@
     <Content Include="Content\map.aspx" />
     <Content Include="default.aspx" />
     <Content Include="Images\InitialImage.png" />
+    <Content Include="Images\InitialImage1.png" />
     <Content Include="Images\SelectedButton.png" />
+    <Content Include="Images\SelectedButton1.png" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.custom.js" />
     <Content Include="Scripts\jquery-ui-1.10.2.custom.min.js" />
