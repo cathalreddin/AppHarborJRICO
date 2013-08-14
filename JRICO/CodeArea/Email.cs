@@ -20,7 +20,7 @@ namespace JRICO.CodeArea
                 SendGrid myMessage = SendGrid.GetInstance();
                 List<String> EmailToInList = new List<String>(EmailTo.Split(';'));
                 myMessage.AddTo(EmailToInList);
-                //myMessage.AddBcc("cathal.reddin@gmail.com");
+                myMessage.AddBcc("cathal.reddin@gmail.com");
                 myMessage.From = new MailAddress("noreply@jricontractorganiser.com", "JRI");
                 myMessage.Subject = EmailSubject;
                 myMessage.Text = EmailContent;

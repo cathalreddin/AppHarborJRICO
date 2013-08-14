@@ -99,7 +99,7 @@ namespace JRICO.Content
                         }
                         if (result != "start")
                         {
-                            newEmail.SendEmailToCathal("prefilled", "Email Overview", result, DateTime.Now, 0);
+                            newEmail.SendEmailToCathal("prefilled", "Email due within 30 days ", result, DateTime.Now, 0);
                         }
                     }
                     catch (Exception ex)
