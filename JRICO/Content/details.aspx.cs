@@ -17,6 +17,10 @@ using System.IO;
 using Amazon.S3.Model;
 using Amazon.S3;
 using System.Web.Security;
+using DDay.iCal;
+using Google.GData.Calendar;
+using Google.GData.Extensions;
+using Google.GData.Client;
 
 namespace JRICO.Content
 {
@@ -418,6 +422,37 @@ namespace JRICO.Content
 
         protected void lbUpdate_Email(object sender, EventArgs e)
         {
+
+            //Add auto entry to a Google Calendar
+            //START******************************
+
+            // Create a query and service object:
+            Service service = new Service("cl", "TSIT-JRI-1");
+            // Set your credentials:
+            service.setUserCredentials("JRI.Orthopaedics@gmail.com", "sheffield");
+
+            Google.GData.Calendar.EventEntry entry = new Google.GData.Calendar.EventEntry();
+            // Set the title and content of the entry.
+            entry.Title.Text = "JRI EMAIL AUTO INSERT - JRI";
+            entry.Content.Content = "Set JRI Email.";
+            When eventTime = new When(Convert.ToDateTime(txtEmailDate.Text), Convert.ToDateTime(txtEmailDate.Text).AddHours(2));
+            entry.Times.Add(eventTime);
+
+            Reminder OneDayReminder = new Reminder();
+            OneDayReminder.Days = 1;
+            OneDayReminder.Method = Reminder.ReminderMethod.email;
+            entry.Reminders.Add(OneDayReminder);
+
+            Reminder OneHourReminder = new Reminder();
+            OneHourReminder.Hours = 1;
+            OneHourReminder.Method = Reminder.ReminderMethod.sms;
+            entry.Reminders.Add(OneHourReminder);
+
+            Uri postUri = new Uri("http://www.google.com/calendar/feeds/JRI.Orthopaedics@gmail.com/private/full");
+
+            // Send the request and receive the response:
+            AtomEntry insertedEntry = service.Insert(postUri, entry);        
+            
             if ((txtEmailDate.Text != "*") && (txtEmailDate.Text != "") && (txtEmailTo.Text != "") && (txtEmailSubject.Text != "") && (txtEmailContent.Text != ""))
             {
                 // Retrieve the row being edited.                
@@ -454,6 +489,7 @@ namespace JRICO.Content
                                 writeToLog.WriteLog("Update Email for Contract : " + lblContractTitle.Text, Page.User.Identity.Name, 1);
                                 writeToLog.WriteLog("Update Email with SP : " + query, Page.User.Identity.Name, 0);
                                 writeToLog.WriteLog("Admin Updated Email [" + lblEmailID.Text + "] attempted - result : " + result, Page.User.Identity.Name, 0);
+                                
                             }
                         }
                         else
@@ -1323,6 +1359,6 @@ namespace JRICO.Content
             Tab4.CssClass = "Initial";
             Tab5.CssClass = "Clicked";
             MainView.ActiveViewIndex = 4;
-        }
+        }     
     }
 }

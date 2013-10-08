@@ -38,7 +38,7 @@
     <table border="0" width="100%">
         <tr>
             <td>
-                <a href="contractList.aspx">Contract List</a>
+                &nbsp;<a href="contractList.aspx">Contract List</a>
             </td>
             <td align="center">
                 <asp:Label ID="lblContractReferenceLabel" runat="server" Text="&nbsp;&nbsp; Contract Reference: " />
