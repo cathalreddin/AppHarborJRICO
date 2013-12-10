@@ -17,16 +17,19 @@ namespace JRICO
             {
                 RegisterHyperLink.Visible = true;
                 hlLogs.Visible = true;
+                hlEmailOverview.Visible = true;
             }
             else if (Roles.IsUserInRole(Page.User.Identity.Name, "Admin"))
             {
                 RegisterHyperLink.Visible = true;
                 hlLogs.Visible = true;
+                hlEmailOverview.Visible = false;
             }
             else
             {
                 RegisterHyperLink.Visible = false;
                 hlLogs.Visible = false;
+                hlEmailOverview.Visible = false;
             }
         }
     }
