@@ -428,8 +428,9 @@ namespace JRICO.Content
 
             // Create a query and service object:
             Service service = new Service("cl", "TSIT-JRI-1");
+            //Service service = new Service("c1","eco-analog-820");
             // Set your credentials:
-            service.setUserCredentials("JRI.Orthopaedics@gmail.com", "sheffield");
+            service.setUserCredentials("JRI.Orthopaedics@gmail.com", "1sheffield1");
 
             Google.GData.Calendar.EventEntry entry = new Google.GData.Calendar.EventEntry();
             // Set the title and content of the entry.
@@ -449,9 +450,9 @@ namespace JRICO.Content
             entry.Reminders.Add(OneHourReminder);
 
             Uri postUri = new Uri("http://www.google.com/calendar/feeds/JRI.Orthopaedics@gmail.com/private/full");
-
             // Send the request and receive the response:
-            AtomEntry insertedEntry = service.Insert(postUri, entry);        
+            //**** Commented out field below so no data will be saved to calendar
+            //AtomEntry insertedEntry = service.Insert(postUri, entry);        
             
             if ((txtEmailDate.Text != "*") && (txtEmailDate.Text != "") && (txtEmailTo.Text != "") && (txtEmailSubject.Text != "") && (txtEmailContent.Text != ""))
             {
