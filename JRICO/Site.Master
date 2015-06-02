@@ -16,6 +16,7 @@
             <a href="/Content/contractList.aspx">JRI</a>
             </div>
             <div class="loginDisplay">
+                <asp:HyperLink ID="hlReports" runat="server" NavigateUrl="~/Content/Reports.aspx">Reports&nbsp;&nbsp;|&nbsp;&nbsp;</asp:HyperLink>
                 <asp:HyperLink ID="hlEmailOverview" runat="server" NavigateUrl="~/Content/emailOverview.aspx">Email Overview&nbsp;&nbsp;|&nbsp;&nbsp;</asp:HyperLink>
                 <asp:HyperLink ID="hlLogs" runat="server" NavigateUrl="~/Content/logDetails.aspx">Logs&nbsp;&nbsp;|&nbsp;&nbsp;</asp:HyperLink>
                 <asp:HyperLink ID="RegisterHyperLink" runat="server" EnableViewState="false">Register a New User&nbsp;&nbsp;|&nbsp;&nbsp;</asp:HyperLink>

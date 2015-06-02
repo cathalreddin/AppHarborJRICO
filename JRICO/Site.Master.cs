@@ -15,18 +15,21 @@ namespace JRICO
             RegisterHyperLink.NavigateUrl = "/Account/Register.aspx?ReturnUrl=" + HttpUtility.UrlEncode(Request.QueryString["ReturnUrl"]);
             if (Roles.IsUserInRole(Page.User.Identity.Name, "SuperUser"))
             {
+                hlReports.Visible = true;
                 RegisterHyperLink.Visible = true;
                 hlLogs.Visible = true;
                 hlEmailOverview.Visible = true;
             }
             else if (Roles.IsUserInRole(Page.User.Identity.Name, "Admin"))
             {
+                hlReports.Visible = true; 
                 RegisterHyperLink.Visible = true;
                 hlLogs.Visible = true;
                 hlEmailOverview.Visible = false;
             }
             else
             {
+                hlReports.Visible = false;
                 RegisterHyperLink.Visible = false;
                 hlLogs.Visible = false;
                 hlEmailOverview.Visible = false;
